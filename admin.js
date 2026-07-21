@@ -1,29 +1,68 @@
 const cfg=window.APP_CONFIG||{};const sb=(cfg.supabaseUrl&&cfg.supabaseAnonKey)?supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey):null;let state={};
 const $=s=>document.querySelector(s),money=n=>`฿${Number(n||0).toLocaleString()}`;function toast(t){const x=$('#toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2300)}
 async function api(action, payload = {}) {
-  if (!sb) {
-    throw new Error("ยังไม่ได้ตั้งค่า app-config.js");
-  }
+  if (!sb) throw new Error("ยังไม่ได้ตั้งค่า app-config.js");
 
   const {
     data: { session },
     error: sessionError
   } = await sb.auth.getSession();
 
-  if (sessionError) {
-    throw new Error(sessionError.message);
-  }
-
+  if (sessionError) throw new Error(sessionError.message);
   if (!session?.access_token) {
-    throw new Error("กรุณากลับหน้าร้านแล้วเข้าสู่ระบบใหม่");
+    throw new Error("กรุณาเข้าสู่ระบบจากหน้าร้านก่อน");
   }
 
-  const { data, error } = await sb.functions.invoke("admin-api", {
-    body: {
-      action,
-      ...payload
+  const response = await fetch(
+    `${cfg.supabaseUrl}/functions/v1/admin-api`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": cfg.supabaseAnonKey,
+        "Authorization": `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({ action, ...payload })
     }
-  });
+  );
+
+  const text = await response.text();
+  let result = {};
+
+  try {
+    result = text ? JSON.parse(text) : {};
+  } catch {
+    throw new Error(`API ตอบข้อมูลผิดรูปแบบ (${response.status})`);
+  }
+
+  if (!response.ok) {
+    throw new Error(result.detail || result.error || `API Error ${response.status}`);
+  }
+
+  return result;
+}
+
+const responseText = await response.text();
+
+let result = {};
+
+try {
+  result = responseText ? JSON.parse(responseText) : {};
+} catch {
+  throw new Error(
+    `admin-api ตอบข้อมูลผิดรูปแบบ (${response.status}): ${responseText.slice(0, 150)}`
+  );
+}
+
+if (!response.ok) {
+  throw new Error(
+    result.detail ||
+    result.error ||
+    `admin-api error ${response.status}`
+  );
+}
+
+return result;
 
   if (error) {
     console.error("admin-api invoke error:", error);
@@ -50,4 +89,3 @@ async function api(action, payload = {}) {
   }
 
   return data;
-}
