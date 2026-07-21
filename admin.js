@@ -49,17 +49,19 @@ async function boot() {
 
 async function load() {
   try {
-    const [topupResult, profileResult, ledgerResult, withdrawalResult] = await Promise.all([
+    const [topupResult, profileResult, ledgerResult, withdrawalResult, orderResult] = await Promise.all([
       sb.from("topup_requests").select("*").order("created_at", { ascending: false }).limit(200),
       sb.from("profiles").select("id,email,credit_balance,created_at").order("created_at", { ascending: false }).limit(500),
       sb.from("admin_ledger").select("*").order("created_at", { ascending: false }).limit(300),
       sb.from("withdrawal_requests").select("*").order("created_at", { ascending: false }).limit(200),
+      sb.from("service_orders").select("*").order("created_at", { ascending: false }).limit(300),
     ]);
 
     throwIfError(topupResult.error, "โหลดรายการเติมเงินไม่สำเร็จ");
     throwIfError(profileResult.error, "โหลดข้อมูลลูกค้าไม่สำเร็จ");
     throwIfError(ledgerResult.error, "โหลดบัญชีรายรับรายจ่ายไม่สำเร็จ");
     throwIfError(withdrawalResult.error, "โหลดคำขอถอนเงินไม่สำเร็จ");
+    throwIfError(orderResult.error, "โหลดออเดอร์ไม่สำเร็จ");
 
     const profiles = profileResult.data || [];
     const emailById = new Map(profiles.map((item) => [item.id, item.email]));
@@ -103,6 +105,7 @@ async function load() {
       users: profiles,
       ledger: ledgerResult.data || [],
       withdrawals,
+      orders: (orderResult.data || []).map(item => ({...item,email:emailById.get(item.user_id)||null})),
     };
 
     render();
@@ -124,6 +127,7 @@ function render() {
   renderRecent();
   renderTopups();
   renderWithdrawals();
+  renderOrders();
   renderUsers();
   renderLedger();
 }
@@ -181,6 +185,22 @@ async function reviewWithdrawal(id, mode) {
     toast(mode === "approve" ? "อนุมัติและหักเครดิตแล้ว" : "ปฏิเสธคำขอถอนแล้ว");
     await load();
   } catch (error) { toast(error.message); }
+}
+
+
+function renderOrders() {
+  const items = state.orders || [];
+  const box = $("#orderRows"); if (!box) return;
+  const active = items.filter(x => !["completed","cancelled"].includes(x.status)).length;
+  if ($("#orderPendingChip")) $("#orderPendingChip").textContent = `${active} active`;
+  box.innerHTML = items.map(item => {
+    const next = item.status === "pending" ? `<button class="btn good" onclick="setOrderStatus('${item.id}','accepted')">รับงาน</button>` : item.status === "accepted" ? `<button class="btn primary" onclick="setOrderStatus('${item.id}','working')">เริ่มทำ</button>` : item.status === "working" ? `<button class="btn good" onclick="setOrderStatus('${item.id}','completed')">เสร็จแล้ว</button>` : "-";
+    return `<tr><td><b>#${String(item.id).slice(0,8)}</b><small>${new Date(item.created_at).toLocaleString("th-TH")}</small></td><td>${item.email||"-"}<small>${item.customer_name||"-"} • ${item.contact||"-"}</small></td><td>${item.service_name||item.service_id}</td><td><b>${money(item.price)}</b></td><td style="max-width:280px;white-space:normal">${item.details||"-"}<small>${item.deadline?`กำหนด ${item.deadline}`:""}</small></td><td><span class="status ${item.status==='completed'?'approved':item.status==='cancelled'?'rejected':'pending'}">${item.status}</span></td><td>${next}</td></tr>`;
+  }).join("") || '<tr><td colspan="7">ยังไม่มีออเดอร์</td></tr>';
+}
+
+async function setOrderStatus(id,status){
+  try{const {error}=await sb.rpc("admin_update_order_status",{p_order_id:id,p_status:status,p_note:""});throwIfError(error,"อัปเดตออเดอร์ไม่สำเร็จ");toast("อัปเดตสถานะออเดอร์แล้ว");await load();}catch(error){toast(error.message);}
 }
 
 function renderUsers() {

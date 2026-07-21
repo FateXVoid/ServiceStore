@@ -927,9 +927,27 @@
     .withdraw-note{padding:12px 14px;border-left:3px solid var(--primary-2);background:rgba(0,217,255,.07);border-radius:10px;color:var(--muted);margin:12px 0}
     @media(max-width:900px){.settings-grid{grid-template-columns:1fr}.settings-card{padding:19px}}
     @media(prefers-reduced-motion:reduce){.profile-avatar-large{animation:none}.settings-tab,.pay-method,.timeline-item{transition:none}}
+  
+    /* v13 premium marketplace upgrade */
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,black,transparent 88%)}
+    .service-card{isolation:isolate;min-height:360px;display:flex;flex-direction:column;transform-style:preserve-3d;background:linear-gradient(155deg,rgba(23,35,65,.92),rgba(8,13,28,.88));transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s}
+    .service-card:hover{transform:translateY(-12px) rotateX(2deg);box-shadow:0 32px 90px rgba(0,0,0,.5),0 0 0 1px rgba(124,92,255,.16),0 0 55px rgba(124,92,255,.12)}
+    .service-card .price{margin-top:auto}.service-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(130deg,rgba(255,255,255,.34),transparent 30%,rgba(0,217,255,.2));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+    .service-icon{font-size:1.7rem;box-shadow:inset 0 0 24px rgba(255,255,255,.05),0 12px 30px rgba(0,0,0,.25);animation:iconHover 4s ease-in-out infinite}@keyframes iconHover{50%{transform:translateY(-7px) rotate(4deg)}}
+    .market-badge{display:inline-flex;gap:7px;align-items:center;font-size:.78rem;color:#baffea;background:rgba(53,230,165,.09);border:1px solid rgba(53,230,165,.22);padding:6px 10px;border-radius:999px;margin-bottom:13px}
+    .checkout-panel{position:relative;overflow:hidden}.checkout-panel::after{content:"SECURE CHECKOUT";position:absolute;right:-22px;top:24px;transform:rotate(35deg);font:700 10px Inter;letter-spacing:1.8px;color:rgba(255,255,255,.14)}
+    .credit-checkout{margin-top:16px;padding:16px;border-radius:18px;background:linear-gradient(135deg,rgba(124,92,255,.14),rgba(0,217,255,.07));border:1px solid rgba(124,92,255,.26)}
+    .credit-checkout strong{font-size:1.4rem}.checkout-status{display:flex;align-items:center;gap:9px;color:#b9ffe6;font-size:.9rem;margin-top:10px}.checkout-status::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 16px var(--success);animation:pulsePay 1.4s infinite}@keyframes pulsePay{50%{opacity:.35;transform:scale(.75)}}
+    .submit-btn{position:relative;overflow:hidden;background:linear-gradient(110deg,#684cff,#3b83ff,#00c9e9);background-size:200% 100%;animation:buttonFlow 4s linear infinite;box-shadow:0 16px 38px rgba(74,92,255,.34)}@keyframes buttonFlow{to{background-position:200% 0}}
+    .submit-btn::after,.buy-credit-btn::after{content:"";position:absolute;inset:-2px;transform:translateX(-120%) skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:.7s}.submit-btn:hover::after,.buy-credit-btn:hover::after{transform:translateX(120%) skewX(-20deg)}
+    .buy-credit-btn{position:relative;overflow:hidden;box-shadow:0 13px 30px rgba(53,230,165,.18);transition:.25s}.buy-credit-btn:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(53,230,165,.28)}
+    .order-success{padding:22px;border-radius:22px;background:linear-gradient(145deg,rgba(53,230,165,.14),rgba(0,217,255,.08));border:1px solid rgba(53,230,165,.3);text-align:center}.order-success .check{width:64px;height:64px;border-radius:22px;margin:0 auto 13px;display:grid;place-items:center;font-size:2rem;background:linear-gradient(135deg,#20c88b,#35e6a5);box-shadow:0 16px 40px rgba(53,230,165,.3);animation:successPop .55s cubic-bezier(.2,1.5,.5,1)}@keyframes successPop{from{transform:scale(.2) rotate(-20deg);opacity:0}}
+    .live-credit{display:flex;justify-content:space-between;align-items:center;gap:12px}.live-credit b{color:#b9ffe6}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app-config.js?v=12"></script>
+  <script src="app-config.js?v=13"></script>
 </head>
 
 <body>
@@ -1120,7 +1138,7 @@
 
         <div class="service-grid">
           <article class="service-card reveal">
-            <div class="service-icon">💼</div>
+            <div class="market-badge">● พร้อมรับงาน • ซื้อผ่านเว็บได้ทันที</div><div class="service-icon">💼</div>
             <h3 data-i18n="services.portTitle">รับทำ Portfolio</h3>
             <p data-i18n="services.portDesc">ออกแบบ Portfolio สำหรับสมัครเรียน สมัครงาน หรือแนะนำตัว พร้อมจัดหน้าให้ดูเป็นมืออาชีพ</p>
             <div class="price"><span data-i18n="services.start">เริ่มต้น</span> ฿499 <small data-i18n="services.perJob">/ งาน</small></div>
@@ -1129,7 +1147,7 @@
           </article>
 
           <article class="service-card reveal">
-            <div class="service-icon">📦</div>
+            <div class="market-badge">● พร้อมให้บริการ • ตัดเครดิตอัตโนมัติ</div><div class="service-icon">📦</div>
             <h3 data-i18n="services.deliveryTitle">รับส่งของหรือสินค้า</h3>
             <p data-i18n="services.deliveryDesc">บริการรับและส่งสิ่งของตามจุดที่กำหนด ราคาอ้างอิงจากระยะทาง ขนาด และรายละเอียดสินค้า</p>
             <div class="price"><span data-i18n="services.start">เริ่มต้น</span> ฿99 <small data-i18n="services.perTrip">/ เที่ยว</small></div>
@@ -1157,8 +1175,9 @@
         </div>
 
         <div class="hire-layout">
-          <div class="order-panel reveal">
-            <h3 style="margin-bottom:18px" data-i18n="hire.formTitle">รายละเอียดการจ้างงาน</h3>
+          <div class="order-panel checkout-panel reveal">
+            <h3 style="margin-bottom:8px" data-i18n="hire.formTitle">สั่งซื้อบริการผ่านเว็บไซต์</h3>
+            <p style="color:var(--muted);margin-bottom:20px">กรอกรายละเอียด ยืนยันคำสั่งซื้อ และระบบจะหักเครดิตทันทีอย่างปลอดภัย</p>
 
             <form id="hireForm">
               <div class="form-row">
@@ -1196,7 +1215,7 @@
                 <textarea id="details" required data-i18n-placeholder="hire.detailsPh" placeholder="อธิบายรายละเอียด สิ่งที่ต้องการ จุดรับ-ส่ง หรือข้อมูลอื่น ๆ"></textarea>
               </div>
 
-              <button class="submit-btn" type="submit" data-i18n="hire.submit">สร้างสรุปคำสั่งจ้าง</button>
+              <button class="submit-btn" type="submit" data-i18n="hire.submit">ยืนยันซื้อบริการและหักเครดิต</button>
             </form>
           </div>
 
@@ -1214,14 +1233,15 @@
               </div>
               <div class="summary-line">
                 <span data-i18n="hire.sumStatus">สถานะ</span>
-                <strong data-i18n="hire.waitInfo">รอข้อมูล</strong>
+                <strong id="sumStatusText">พร้อมสั่งซื้อ</strong>
               </div>
             </div>
 
-            <div class="notice" data-i18n="hire.notice">
-              แบบฟอร์มตัวอย่างนี้จะสร้างข้อความสรุปให้คัดลอกไปส่งทางช่องทางติดต่อ
-              คุณสามารถเชื่อมต่อระบบหลังบ้านหรือฐานข้อมูลเพิ่มเติมภายหลังได้
+            <div class="credit-checkout">
+              <div class="live-credit"><span>เครดิตปัจจุบัน</span><b id="checkoutBalance">฿0</b></div>
+              <div class="checkout-status">ชำระด้วยเครดิตและสร้างออเดอร์จริงในระบบ</div>
             </div>
+            <div class="notice">หลังยืนยัน ระบบจะบันทึกออเดอร์ให้แอดมินเห็นทันที และหักเครดิตแบบธุรกรรมเดียว ป้องกันยอดผิดพลาด</div>
           </aside>
         </div>
       </div>
@@ -1501,15 +1521,15 @@
         },
         hire:{
           badge:"ส่งรายละเอียดงาน",title:"หน้าจ้างบริการ",
-          desc:"กรอกข้อมูลให้ครบ ระบบจะสร้างสรุปคำสั่งจ้างให้คุณตรวจสอบก่อนส่ง",
-          formTitle:"รายละเอียดการจ้างงาน",name:"ชื่อผู้ติดต่อ",namePh:"กรอกชื่อของคุณ",
+          desc:"เลือกบริการ กรอกรายละเอียด และชำระด้วยเครดิตผ่านเว็บไซต์ได้ทันที",
+          formTitle:"สั่งซื้อบริการผ่านเว็บไซต์",name:"ชื่อผู้ติดต่อ",namePh:"กรอกชื่อของคุณ",
           contact:"ช่องทางติดต่อ",contactPh:"เบอร์โทร / Line / Email",
           service:"เลือกบริการ",optPortfolio:"รับทำ Portfolio",optDelivery:"รับส่งของหรือสินค้า",optCustom:"บริการสั่งทำพิเศษ",
           budget:"งบประมาณโดยประมาณ",budgetPh:"เช่น 500",deadline:"วันที่ต้องการงาน",
           details:"รายละเอียดงาน",detailsPh:"อธิบายรายละเอียด สิ่งที่ต้องการ จุดรับ-ส่ง หรือข้อมูลอื่น ๆ",
-          submit:"สร้างสรุปคำสั่งจ้าง",summaryTitle:"สรุปเบื้องต้น",sumService:"บริการ",sumPrice:"ราคาเริ่มต้น",
+          submit:"ยืนยันซื้อบริการและหักเครดิต",summaryTitle:"สรุปเบื้องต้น",sumService:"บริการ",sumPrice:"ราคาเริ่มต้น",
           sumStatus:"สถานะ",waitInfo:"รอข้อมูล",
-          notice:"แบบฟอร์มตัวอย่างนี้จะสร้างข้อความสรุปให้คัดลอกไปส่งทางช่องทางติดต่อ คุณสามารถเชื่อมต่อระบบหลังบ้านหรือฐานข้อมูลเพิ่มเติมภายหลังได้"
+          notice:"ระบบจะหักเครดิตและสร้างออเดอร์จริงให้แอดมินดำเนินงานต่อ"
         },
         wallet:{badge:"กระเป๋าเครดิต",title:"เติมเครดิตและชำระค่าบริการ",desc:"เติมเครดิตผ่านบัญชีธนาคารหรือ TrueMoney แล้วใช้เครดิตซื้อบริการภายในเว็บไซต์",balanceShort:"เครดิต",available:"เครดิตคงเหลือ",localNote:"",serverNote:"ยอดเครดิตถูกเก็บในฐานข้อมูลและแก้จากหน้าเว็บไม่ได้",refresh:"รีเฟรชยอดเครดิต",reset:"",history:"ประวัติรายการ",topup:"เติมเครดิต",bank:"ธนาคาร",bankName:"ธนาคารตัวอย่าง",accountName:"ชื่อบัญชี: YOUR NAME",tmName:"ชื่อบัญชี: YOUR NAME",amount:"จำนวนเงิน",reference:"เลขอ้างอิง/เวลาที่โอน",referencePh:"เช่น 123456 / 14:30",slip:"แนบหลักฐานการโอน",demoNotice:"",confirm:"",loginTitle:"เข้าสู่ระบบก่อนเติมเครดิต",password:"รหัสผ่าน",login:"เข้าสู่ระบบ",signup:"สมัครสมาชิก",logout:"ออกจากระบบ",autoVerify:"ตรวจสอบยอดอัตโนมัติ",gatewayNote:"QR จะถูกสร้างโดย Payment Gateway และมีจำนวนเงินกำหนดไว้",tmGatewayNote:"ผู้ชำระจะยืนยันรายการผ่าน TrueMoney ตามหน้าที่ Gateway แสดง",phone:"เบอร์ TrueMoney",liveNotice:"เครดิตจะยังไม่เพิ่มตอนกดปุ่ม ระบบจะรอ Webhook ยืนยันการจ่ายเงินจริงก่อน",createPayment:"สร้างรายการชำระเงิน",openPayment:"เปิดหน้าชำระเงิน",empty:"ยังไม่มีรายการ",topupText:"เติมเครดิต",purchaseText:"ซื้อบริการ",insufficient:"เครดิตไม่เพียงพอ กรุณาเติมเครดิตก่อน",purchased:"ชำระด้วยเครดิตสำเร็จ",resetDone:"รีเซ็ตเครดิตแล้ว"},
         contact:{
@@ -1568,13 +1588,13 @@
         },
         hire:{
           badge:"Send project details",title:"Hire a service",
-          desc:"Complete the form and the system will generate a project summary for review.",
-          formTitle:"Project details",name:"Contact name",namePh:"Enter your name",
+          desc:"Choose a service, enter project details, and pay securely with website credits.",
+          formTitle:"Purchase service",name:"Contact name",namePh:"Enter your name",
           contact:"Contact method",contactPh:"Phone / Line / Email",
           service:"Select service",optPortfolio:"Portfolio design",optDelivery:"Product delivery",optCustom:"Custom request",
           budget:"Estimated budget",budgetPh:"Example: 500",deadline:"Preferred deadline",
           details:"Project details",detailsPh:"Describe your requirements, pickup and delivery points, or other information",
-          submit:"Generate request summary",summaryTitle:"Initial summary",sumService:"Service",sumPrice:"Starting price",
+          submit:"Confirm purchase and spend credits",summaryTitle:"Initial summary",sumService:"Service",sumPrice:"Starting price",
           sumStatus:"Status",waitInfo:"Waiting for details",
           notice:"This demo form generates a summary that can be copied and sent through your contact channels. You can connect a backend or database later."
         },
@@ -1736,6 +1756,8 @@
       creditBalance = Number(profile?.credit_balance || 0);
       creditHistory = tx || [];
       renderWallet();
+      const checkoutBalance = document.getElementById("checkoutBalance");
+      if (checkoutBalance) checkoutBalance.textContent = formatMoney(creditBalance);
     }
 
     function statusThai(status) {
@@ -1749,11 +1771,12 @@
 
     async function loadAccountCenter() {
       if (!supabaseClient || !currentUser) return;
-      const [profileRes, txRes, topupRes, withdrawRes] = await Promise.all([
+      const [profileRes, txRes, topupRes, withdrawRes, orderRes] = await Promise.all([
         supabaseClient.from("profiles").select("id,email,credit_balance,nickname,avatar_url,created_at").eq("id", currentUser.id).maybeSingle(),
         supabaseClient.from("credit_transactions").select("id,amount,transaction_type,description,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100),
         supabaseClient.from("topup_requests").select("id,amount,payment_method,status,admin_note,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100),
-        supabaseClient.from("withdrawal_requests").select("id,amount,payout_method,status,admin_note,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100)
+        supabaseClient.from("withdrawal_requests").select("id,amount,payout_method,status,admin_note,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100),
+        supabaseClient.from("service_orders").select("id,service_id,service_name,price,status,details,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100)
       ]);
       currentProfile = profileRes.data || {id:currentUser.id,email:currentUser.email,credit_balance:creditBalance};
       const nickname = currentProfile.nickname || currentUser.user_metadata?.display_name || currentUser.email?.split("@")[0] || "สมาชิก";
@@ -1768,7 +1791,8 @@
       fullAccountHistory = [
         ...(txRes.data || []).map(x=>({...x,kind:"transaction"})),
         ...(topupRes.data || []).map(x=>({...x,kind:"topup"})),
-        ...(withdrawRes.data || []).map(x=>({...x,kind:"withdraw"}))
+        ...(withdrawRes.data || []).map(x=>({...x,kind:"withdraw"})),
+        ...(orderRes.data || []).map(x=>({...x,kind:"order",amount:-Number(x.price||0)}))
       ].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
       renderFullHistory();
       updateHeaderAccount();
@@ -1782,6 +1806,7 @@
         let icon="🧾", title="รายการเครดิต", detail=item.description || "";
         if(item.kind==="topup"){ icon="💰"; title=`ฝากเงินผ่าน ${item.payment_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}`; detail=statusThai(item.status); }
         else if(item.kind==="withdraw"){ icon="📤"; title=`ถอนเงินผ่าน ${item.payout_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}`; detail=statusThai(item.status); }
+        else if(item.kind==="order"){ icon="🛒"; title=item.service_name || "คำสั่งซื้อบริการ"; detail=`สถานะ: ${statusThai(item.status)} • #${String(item.id).slice(0,8)}`; }
         else if(item.transaction_type==="purchase"){ icon="🛍️"; title="ซื้อบริการ"; }
         else if(item.transaction_type==="topup"){ icon="✅"; title="เครดิตจากการฝากเงิน"; }
         const amount=Number(item.amount||0); const sign=item.kind==="withdraw"||amount<0?"-":"+";
@@ -2092,46 +2117,44 @@
       finally { button.disabled=false; button.style.opacity="1"; button.textContent="ส่งสลิปให้แอดมินตรวจ"; }
     });
 
-    document.querySelectorAll(".buy-now").forEach(btn => btn.addEventListener("click", async () => {
-      try {
-        const result = await callFunction("spend-credits", { service_id:btn.dataset.service });
-        await loadWallet();
-        showToast(`${translations[currentLang].wallet.purchased} (${formatMoney(result.remaining_balance)} คงเหลือ)`);
-      } catch (error) {
-        showToast(error.message);
-        if (String(error.message).toLowerCase().includes("insufficient")) { location.hash="wallet"; routeTo("wallet"); }
-      }
+    async function purchaseService(payload) {
+      if (!supabaseClient || !currentUser) throw new Error("กรุณาเข้าสู่ระบบก่อนซื้อบริการ");
+      const { data, error } = await supabaseClient.rpc("purchase_service", { p_payload: payload });
+      if (error) throw error;
+      await Promise.all([loadWallet(), loadAccountCenter()]);
+      return data;
+    }
+
+    document.querySelectorAll(".buy-now").forEach(btn => btn.addEventListener("click", () => {
+      serviceSelect.value = btn.dataset.service;
+      updateServiceSummary();
+      location.hash = "hire"; routeTo("hire");
+      setTimeout(() => document.getElementById("customerName")?.focus(), 400);
     }));
 
-    document.getElementById("hireForm").addEventListener("submit", e => {
+    document.getElementById("hireForm").addEventListener("submit", async e => {
       e.preventDefault();
-
-      const name = document.getElementById("customerName").value.trim();
-      const contact = document.getElementById("customerContact").value.trim();
-      const budget = document.getElementById("budget").value.trim() || "-";
-      const deadline = document.getElementById("deadline").value || "-";
-      const details = document.getElementById("details").value.trim();
-
-      if (!name || !contact || !details) {
-        showToast(translations[currentLang].modal.required);
-        return;
-      }
-
-      const service = serviceMeta[serviceSelect.value][currentLang];
-      const summary = currentLang === "th"
-        ? `คำสั่งจ้างบริการ\nชื่อ: ${name}\nช่องทางติดต่อ: ${contact}\nบริการ: ${service}\nงบประมาณ: ${budget} บาท\nวันที่ต้องการงาน: ${deadline}\nรายละเอียด: ${details}`
-        : `Service request\nName: ${name}\nContact: ${contact}\nService: ${service}\nBudget: ${budget} THB\nPreferred deadline: ${deadline}\nDetails: ${details}`;
-
-      modalTitle.textContent = translations[currentLang].modal.orderTitle;
-      modalBody.innerHTML = `
-        <div class="summary-box" style="white-space:pre-wrap;line-height:1.8">${summary}</div>
-        <button class="submit-btn" id="copyOrderBtn" style="width:100%">${translations[currentLang].modal.copy}</button>
-      `;
-      modal.classList.add("open");
-
-      document.getElementById("copyOrderBtn").addEventListener("click", () => {
-        copyText(summary, translations[currentLang].modal.copied);
-      });
+      const submit = e.submitter || e.target.querySelector('button[type="submit"]');
+      try {
+        if (!currentUser) { location.hash="wallet"; routeTo("wallet"); throw new Error("กรุณาเข้าสู่ระบบก่อนสั่งซื้อ"); }
+        const name = document.getElementById("customerName").value.trim();
+        const contact = document.getElementById("customerContact").value.trim();
+        const deadline = document.getElementById("deadline").value || null;
+        const details = document.getElementById("details").value.trim();
+        const serviceId = serviceSelect.value;
+        const meta = serviceMeta[serviceId];
+        if (!name || !contact || !details) throw new Error(translations[currentLang].modal.required);
+        if (!meta?.credits) throw new Error("บริการสั่งทำพิเศษต้องติดต่อเพื่อประเมินราคาก่อน");
+        if (creditBalance < meta.credits) { location.hash="wallet"; routeTo("wallet"); throw new Error("เครดิตไม่เพียงพอ กรุณาเติมเครดิตก่อน"); }
+        submit.disabled=true; submit.textContent="กำลังสร้างออเดอร์...";
+        const order = await purchaseService({service_id:serviceId,customer_name:name,contact,deadline,details});
+        modalTitle.textContent="สั่งซื้อสำเร็จ";
+        modalBody.innerHTML=`<div class="order-success"><div class="check">✓</div><h2>ชำระด้วยเครดิตสำเร็จ</h2><p style="color:var(--muted);margin:8px 0 16px">ออเดอร์ #${String(order.order_id).slice(0,8)} ถูกส่งให้แอดมินแล้ว</p><div class="summary-box"><div class="summary-line"><span>บริการ</span><strong>${meta[currentLang]}</strong></div><div class="summary-line"><span>หักเครดิต</span><strong>${formatMoney(order.price)}</strong></div><div class="summary-line"><span>เครดิตคงเหลือ</span><strong>${formatMoney(order.remaining_balance)}</strong></div></div></div>`;
+        modal.classList.add("open");
+        e.target.reset(); serviceSelect.value=serviceId; updateServiceSummary();
+        showToast("สร้างคำสั่งซื้อเรียบร้อยแล้ว");
+      } catch(error) { showToast(error.message || "สั่งซื้อไม่สำเร็จ"); }
+      finally { submit.disabled=false; submit.textContent="ยืนยันซื้อบริการและหักเครดิต"; }
     });
 
     document.getElementById("contactForm").addEventListener("submit", e => {

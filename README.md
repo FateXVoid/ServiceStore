@@ -36,3 +36,7 @@
 
 ## Account Center v12
 Run `supabase/account-center-v12.sql` once in Supabase SQL Editor. This adds profile editing, avatars, full user history, bank/TrueMoney top-ups, and withdrawal requests. The admin dashboard remains compatible with top-up requests.
+
+
+## v13 Marketplace upgrade
+Run `supabase/marketplace-v13.sql` once in Supabase SQL Editor. This adds real service orders, atomic credit deduction, customer order history, admin order workflow, and admin credit controls.
