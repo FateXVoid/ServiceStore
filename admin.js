@@ -47,75 +47,41 @@ async function boot() {
   }
 }
 
-async function load() {
+async function safeLoad(name, task, fallback = []) {
   try {
-    const [topupResult, profileResult, ledgerResult, withdrawalResult, orderResult, serviceResult] = await Promise.all([
-      sb.from("topup_requests").select("*").order("created_at", { ascending: false }).limit(200),
-      sb.rpc("admin_list_users"),
-      sb.from("admin_ledger").select("*").order("created_at", { ascending: false }).limit(300),
-      sb.from("withdrawal_requests").select("*").order("created_at", { ascending: false }).limit(200),
-      sb.from("service_orders").select("*").order("created_at", { ascending: false }).limit(300),
-      sb.from("services").select("*").order("sort_order", { ascending: true }),
-    ]);
-
-    throwIfError(topupResult.error, "โหลดรายการเติมเงินไม่สำเร็จ");
-    throwIfError(profileResult.error, "โหลดข้อมูลลูกค้าไม่สำเร็จ");
-    throwIfError(ledgerResult.error, "โหลดบัญชีรายรับรายจ่ายไม่สำเร็จ");
-    throwIfError(withdrawalResult.error, "โหลดคำขอถอนเงินไม่สำเร็จ");
-    throwIfError(orderResult.error, "โหลดออเดอร์ไม่สำเร็จ");
-    throwIfError(serviceResult.error, "โหลดบริการไม่สำเร็จ");
-
-    const profiles = profileResult.data || [];
-    const emailById = new Map(profiles.map((item) => [item.id, item.email]));
-    const withdrawals = (withdrawalResult.data || []).map(item => ({ ...item, email: emailById.get(item.user_id) || null }));
-    const topups = await Promise.all((topupResult.data || []).map(async (item) => {
-      let slipUrl = "";
-      if (item.slip_path) {
-        const { data: signed, error } = await sb.storage
-          .from("payment-slips")
-          .createSignedUrl(item.slip_path, 900);
-        if (!error) slipUrl = signed?.signedUrl || "";
-      }
-      return { ...item, email: emailById.get(item.user_id) || null, slip_url: slipUrl };
-    }));
-
-    const approved = topups.filter((item) => item.status === "approved");
-    const dailyIncome = [];
-    for (let i = 13; i >= 0; i -= 1) {
-      const date = new Date();
-      date.setHours(0, 0, 0, 0);
-      date.setDate(date.getDate() - i);
-      const key = date.toISOString().slice(0, 10);
-      dailyIncome.push({
-        day: key.slice(5),
-        total: approved
-          .filter((item) => item.reviewed_at?.slice(0, 10) === key)
-          .reduce((sum, item) => sum + Number(item.amount || 0), 0),
-      });
-    }
-
-    state = {
-      stats: {
-        approved_income: approved.reduce((sum, item) => sum + Number(item.amount || 0), 0),
-        total_credit_balance: profiles.reduce((sum, item) => sum + Number(item.credit_balance || 0), 0),
-        pending_topups: topups.filter((item) => item.status === "pending").length,
-        pending_withdrawals: withdrawals.filter((item) => item.status === "pending").length,
-        users: profiles.length,
-      },
-      daily_income: dailyIncome,
-      topups,
-      users: profiles,
-      ledger: ledgerResult.data || [],
-      withdrawals,
-      orders: (orderResult.data || []).map(item => ({...item,email:emailById.get(item.user_id)||null})),
-      services: serviceResult.data || [],
-    };
-
-    render();
+    const result = await task();
+    if (result?.error) throw result.error;
+    return result?.data ?? fallback;
   } catch (error) {
-    console.error("Dashboard load failed:", error);
-    toast(error.message || "โหลดข้อมูลไม่สำเร็จ");
+    console.error(`${name} load failed:`, error);
+    toast(`${name}: ${error.message || "โหลดไม่สำเร็จ"}`);
+    return fallback;
   }
+}
+
+async function load() {
+  const profiles = await safeLoad("ข้อมูลลูกค้า", () => sb.rpc("admin_list_users"));
+  const emailById = new Map((profiles || []).map(item => [item.id || item.user_id, item.email]));
+
+  const [topupData, ledgerData, withdrawalData, orderData, serviceData] = await Promise.all([
+    safeLoad("รายการเติมเงิน", () => sb.from("topup_requests").select("*").order("created_at", {ascending:false}).limit(200)),
+    safeLoad("บัญชีรายรับรายจ่าย", () => sb.from("admin_ledger").select("*").order("created_at", {ascending:false}).limit(300)),
+    safeLoad("คำขอถอนเงิน", () => sb.from("withdrawal_requests").select("*").order("created_at", {ascending:false}).limit(200)),
+    safeLoad("ออเดอร์", () => sb.from("service_orders").select("*").order("created_at", {ascending:false}).limit(300)),
+    safeLoad("บริการ", () => sb.from("services").select("*").order("sort_order", {ascending:true})),
+  ]);
+
+  const withdrawals=(withdrawalData||[]).map(x=>({...x,email:emailById.get(x.user_id)||null}));
+  const topups=await Promise.all((topupData||[]).map(async item=>{
+    let slip_url="";
+    if(item.slip_path){const {data}=await sb.storage.from("payment-slips").createSignedUrl(item.slip_path,900);slip_url=data?.signedUrl||"";}
+    return {...item,email:emailById.get(item.user_id)||null,slip_url};
+  }));
+  const approved=topups.filter(x=>x.status==="approved");
+  const daily_income=[];
+  for(let i=13;i>=0;i--){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);daily_income.push({day:key.slice(5),total:approved.filter(x=>x.reviewed_at?.slice(0,10)===key).reduce((a,x)=>a+Number(x.amount||0),0)});}
+  state={stats:{approved_income:approved.reduce((a,x)=>a+Number(x.amount||0),0),total_credit_balance:(profiles||[]).reduce((a,x)=>a+Number(x.credit_balance||0),0),pending_topups:topups.filter(x=>x.status==="pending").length,pending_withdrawals:withdrawals.filter(x=>x.status==="pending").length,users:(profiles||[]).length},daily_income,topups,users:profiles||[],ledger:ledgerData||[],withdrawals,orders:(orderData||[]).map(x=>({...x,email:emailById.get(x.user_id)||null})),services:serviceData||[]};
+  render();
 }
 
 function render() {
@@ -209,9 +175,11 @@ async function setOrderStatus(id,status){
 
 function renderUsers() {
   const items = state.users || [];
-  $("#userRows").innerHTML = items.map((item) => `
-    <tr><td>${item.email || "-"}<small>${item.id}</small></td><td><b>${money(item.credit_balance)}</b></td><td>${new Date(item.created_at).toLocaleDateString("th-TH")}</td><td><button class="btn" onclick="selectUser('${item.id}')">เลือก</button></td></tr>`
-  ).join("") || '<tr><td colspan="4">ไม่มีผู้ใช้</td></tr>';
+  $("#userRows").innerHTML = items.map(item => {
+    const id=item.id||item.user_id||"";
+    return `<tr><td><b>${item.email||"-"}</b><small>${item.nickname||id}</small></td><td><b>${money(item.credit_balance)}</b></td><td>${new Date(item.created_at).toLocaleDateString("th-TH")}</td><td><button class="btn" data-user-id="${id}" data-user-email="${item.email||""}">เลือก</button></td></tr>`;
+  }).join("") || '<tr><td colspan="4">ไม่มีผู้ใช้</td></tr>';
+  $("#userRows").querySelectorAll("[data-user-id]").forEach(btn=>btn.addEventListener("click",()=>selectUser(btn.dataset.userId,btn.dataset.userEmail)));
 }
 
 
@@ -269,8 +237,10 @@ async function review(id, mode) {
   }
 }
 
-function selectUser(id) {
+function selectUser(id, email = "") {
   $("#adjustUserId").value = id;
+  $("#adjustUserId").dataset.email = email;
+  $("#adjustUserId").title = email ? `เลือกแล้ว: ${email}` : id;
   document.querySelector('[data-section="users"]')?.click();
 }
 
