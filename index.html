@@ -864,6 +864,49 @@
     .payment-qr { width:min(280px,100%); border-radius:16px; background:white; padding:10px; margin:14px auto; display:block; }
     .status-chip { display:inline-flex; padding:7px 11px; border-radius:999px; background:rgba(255,209,92,.12); color:#ffe49c; border:1px solid rgba(255,209,92,.25); }
     .hidden { display:none !important; }
+  
+
+    /* Account menu */
+    .login-nav-btn{padding:10px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:800;cursor:pointer;box-shadow:0 10px 25px rgba(108,92,231,.22)}
+    .account-nav{position:relative}
+    .account-trigger{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);border-radius:999px;color:var(--text);cursor:pointer;max-width:220px}
+    .account-trigger:hover{background:rgba(255,255,255,.1)}
+    .account-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,var(--primary),var(--secondary));display:grid;place-items:center;color:#fff;font-weight:900;flex:0 0 auto}
+    .account-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:750}
+    .account-chevron{font-size:12px;color:var(--muted)}
+    .account-dropdown{position:absolute;right:0;top:calc(100% + 12px);width:280px;padding:10px;border:1px solid rgba(255,255,255,.13);background:rgba(14,17,29,.96);backdrop-filter:blur(20px);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(-8px);transition:.22s;z-index:120}
+    .account-dropdown.open{opacity:1;visibility:visible;transform:translateY(0)}
+    .account-menu-head{display:flex;gap:11px;align-items:center;padding:10px 10px 14px;border-bottom:1px solid rgba(255,255,255,.09);margin-bottom:8px}
+    .account-menu-head small{display:block;color:var(--muted);overflow:hidden;text-overflow:ellipsis;max-width:185px}
+    .account-menu-item{width:100%;display:flex;align-items:center;gap:11px;padding:11px 12px;border:0;background:transparent;color:var(--text);border-radius:12px;text-align:left;cursor:pointer;font:inherit}
+    .account-menu-item:hover{background:rgba(255,255,255,.075)}
+    .account-menu-item.danger{color:#ff8f9a}
+    .account-lang-row{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;color:var(--muted)}
+    .mini-language{display:flex;align-items:center;gap:7px;font-weight:800}
+    .mini-language button{border:0;background:transparent;color:var(--muted);cursor:pointer;font:inherit;padding:0}
+    .mini-language button.active{color:#fff}
+    .mini-language span{opacity:.45}
+
+    .account-overlay{position:fixed;inset:0;background:rgba(2,4,12,.66);backdrop-filter:blur(8px);z-index:180;opacity:0;visibility:hidden;transition:.25s}
+    .account-overlay.open{opacity:1;visibility:visible}
+    .account-panel{position:absolute;right:0;top:0;height:100%;width:min(620px,100%);background:#10131f;border-left:1px solid rgba(255,255,255,.12);transform:translateX(100%);transition:.3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+    .account-overlay.open .account-panel{transform:translateX(0)}
+    .account-panel-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-bottom:1px solid rgba(255,255,255,.09)}
+    .account-panel-head h2{font-size:1.35rem}
+    .account-tabs{display:flex;gap:7px;padding:14px 18px;overflow:auto;border-bottom:1px solid rgba(255,255,255,.08)}
+    .account-tab{border:0;background:transparent;color:var(--muted);padding:10px 13px;border-radius:11px;cursor:pointer;white-space:nowrap;font:inherit;font-weight:750}
+    .account-tab.active{background:rgba(255,255,255,.09);color:#fff}
+    .account-panel-body{padding:22px;overflow:auto;flex:1}
+    .account-pane{display:none}.account-pane.active{display:block;animation:fadeUp .25s ease}
+    .profile-hero{display:flex;align-items:center;gap:16px;padding:18px;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:rgba(255,255,255,.04);margin-bottom:18px}
+    .profile-avatar-large{width:78px;height:78px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,var(--primary),var(--secondary));display:grid;place-items:center;font-size:1.65rem;font-weight:900}
+    .avatar-upload-label{display:inline-flex;margin-top:8px;color:#bfc6ff;cursor:pointer;font-size:.88rem}.avatar-upload-label input{display:none}
+    .account-list{display:grid;gap:10px}.account-record{display:flex;justify-content:space-between;gap:15px;padding:14px 15px;border:1px solid rgba(255,255,255,.09);border-radius:15px;background:rgba(255,255,255,.035)}
+    .account-record small{display:block;color:var(--muted);margin-top:4px}.empty-state{padding:30px;text-align:center;color:var(--muted);border:1px dashed rgba(255,255,255,.15);border-radius:16px}
+    .language-settings{display:flex;align-items:center;justify-content:space-between;padding:17px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.04)}
+    .language-large{display:flex;gap:10px;align-items:center;font-size:1.05rem;font-weight:850}.language-large button{border:0;background:transparent;color:var(--muted);cursor:pointer;font:inherit}.language-large button.active{color:#fff}.language-large span{color:var(--muted);opacity:.45}
+    @media(max-width:900px){.clock,.credit-pill{display:none}.account-name{display:none}.account-trigger{padding-right:6px}.account-dropdown{right:-45px}}
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app-config.js"></script>
@@ -893,7 +936,26 @@
       <div class="nav-actions">
         <button class="credit-pill" data-go="wallet">💳 <span data-i18n="wallet.balanceShort">เครดิต</span> <strong id="headerCredit">฿0</strong></button>
         <div class="clock" id="clock">--:--:--</div>
-        <button class="lang-btn" id="langBtn" aria-label="Change language">EN</button>
+        <button class="login-nav-btn" id="navLoginBtn" data-i18n="account.login">เข้าสู่ระบบ</button>
+        <div class="account-nav hidden" id="accountNav">
+          <button class="account-trigger" id="accountTrigger" aria-expanded="false">
+            <span class="account-avatar" id="navAvatar">U</span>
+            <span class="account-name" id="navAccountName">User</span>
+            <span class="account-chevron">▾</span>
+          </button>
+          <div class="account-dropdown" id="accountDropdown">
+            <div class="account-menu-head">
+              <span class="account-avatar" id="menuAvatar">U</span>
+              <div><strong id="menuName">User</strong><small id="menuEmail">email</small></div>
+            </div>
+            <button class="account-menu-item" data-account-pane="profile">👤 <span data-i18n="account.profile">โปรไฟล์ของฉัน</span></button>
+            <button class="account-menu-item" data-account-pane="payments">💳 <span data-i18n="account.payments">ประวัติการชำระเงิน</span></button>
+            <button class="account-menu-item" data-account-pane="orders">📦 <span data-i18n="account.orders">ประวัติการสั่งซื้อ</span></button>
+            <button class="account-menu-item" data-account-pane="settings">⚙️ <span data-i18n="account.settings">การตั้งค่า</span></button>
+            <div class="account-lang-row"><span data-i18n="account.language">ภาษา</span><div class="mini-language"><button id="quickTh">ไทย</button><span>|</span><button id="quickEn">Eng</button></div></div>
+            <button class="account-menu-item danger" id="navLogoutBtn">↪ <span data-i18n="wallet.logout">ออกจากระบบ</span></button>
+          </div>
+        </div>
         <button class="icon-btn" id="menuBtn" aria-label="Open menu">☰</button>
       </div>
     </div>
@@ -1304,6 +1366,29 @@
     </div>
   </footer>
 
+
+  <div class="account-overlay" id="accountOverlay" aria-hidden="true">
+    <aside class="account-panel" role="dialog" aria-modal="true" aria-labelledby="accountPanelTitle">
+      <div class="account-panel-head"><h2 id="accountPanelTitle" data-i18n="account.myAccount">บัญชีของฉัน</h2><button class="icon-btn" id="closeAccountPanel">✕</button></div>
+      <div class="account-tabs">
+        <button class="account-tab active" data-pane="profile" data-i18n="account.profile">โปรไฟล์</button>
+        <button class="account-tab" data-pane="payments" data-i18n="account.payments">การชำระเงิน</button>
+        <button class="account-tab" data-pane="orders" data-i18n="account.orders">การสั่งซื้อ</button>
+        <button class="account-tab" data-pane="settings" data-i18n="account.settings">การตั้งค่า</button>
+      </div>
+      <div class="account-panel-body">
+        <section class="account-pane active" data-pane-content="profile">
+          <div class="profile-hero"><span class="profile-avatar-large" id="profileAvatar">U</span><div><h3 id="profileDisplayHeading">User</h3><p id="profileEmail" style="color:var(--muted)">email</p><label class="avatar-upload-label"><span data-i18n="account.changePhoto">เปลี่ยนรูปโปรไฟล์</span><input type="file" id="avatarInput" accept="image/*"></label></div></div>
+          <div class="field"><label for="displayNameInput" data-i18n="account.displayName">ชื่อที่แสดง</label><input id="displayNameInput" maxlength="40" placeholder="ชื่อของคุณ"></div>
+          <button class="primary-btn" id="saveProfileBtn" style="margin-top:14px" data-i18n="account.saveProfile">บันทึกโปรไฟล์</button>
+        </section>
+        <section class="account-pane" data-pane-content="payments"><h3 data-i18n="account.payments">ประวัติการชำระเงิน</h3><div class="account-list" id="accountPayments" style="margin-top:14px"></div></section>
+        <section class="account-pane" data-pane-content="orders"><h3 data-i18n="account.orders">ประวัติการสั่งซื้อ</h3><div class="account-list" id="accountOrders" style="margin-top:14px"></div></section>
+        <section class="account-pane" data-pane-content="settings"><h3 data-i18n="account.settings">การตั้งค่า</h3><div class="language-settings" style="margin-top:14px"><div><strong data-i18n="account.language">ภาษา</strong><small style="display:block;color:var(--muted);margin-top:4px" data-i18n="account.languageHint">เลือกภาษาที่ใช้แสดงบนเว็บไซต์</small></div><div class="language-large"><button id="settingsTh">ไทย</button><span>|</span><button id="settingsEn">Eng</button></div></div></section>
+      </div>
+    </aside>
+  </div>
+
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-card">
       <div class="modal-head">
@@ -1322,6 +1407,7 @@
     const translations = {
       th: {
         nav:{home:"หน้าแรก",news:"ข่าวสาร",services:"บริการ",hire:"จ้างบริการ",wallet:"เครดิต",contact:"ติดต่อ"},
+        account:{login:"เข้าสู่ระบบ",myAccount:"บัญชีของฉัน",profile:"โปรไฟล์ของฉัน",payments:"ประวัติการชำระเงิน",orders:"ประวัติการสั่งซื้อ",settings:"การตั้งค่า",language:"ภาษา",languageHint:"เลือกภาษาที่ใช้แสดงบนเว็บไซต์",changePhoto:"เปลี่ยนรูปโปรไฟล์",displayName:"ชื่อที่แสดง",saveProfile:"บันทึกโปรไฟล์",saved:"บันทึกโปรไฟล์แล้ว",noPayments:"ยังไม่มีประวัติการชำระเงิน",noOrders:"ยังไม่มีประวัติการสั่งซื้อ"},
         home:{
           badge:"พร้อมรับงานออนไลน์",
           title1:"บริการดิจิทัล",
@@ -1389,6 +1475,7 @@
 
       en: {
         nav:{home:"Home",news:"News",services:"Services",hire:"Hire",wallet:"Credits",contact:"Contact"},
+        account:{login:"Log in",myAccount:"My account",profile:"My profile",payments:"Payment history",orders:"Order history",settings:"Settings",language:"Language",languageHint:"Choose the website display language",changePhoto:"Change profile photo",displayName:"Display name",saveProfile:"Save profile",saved:"Profile saved",noPayments:"No payment history yet",noOrders:"No order history yet"},
         home:{
           badge:"Available for online work",
           title1:"Digital services",
@@ -1484,6 +1571,11 @@
     const modalTitle = document.getElementById("modalTitle");
     const modalBody = document.getElementById("modalBody");
     const toast = document.getElementById("toast");
+    const navLoginBtn = document.getElementById("navLoginBtn");
+    const accountNav = document.getElementById("accountNav");
+    const accountDropdown = document.getElementById("accountDropdown");
+    const accountOverlay = document.getElementById("accountOverlay");
+    let pendingAvatarData = null;
     const serviceSelect = document.getElementById("serviceSelect");
     let creditBalance = 0;
     let creditHistory = [];
@@ -1512,6 +1604,38 @@
         </div>`).join("");
     }
 
+    function userDisplayName(user = currentUser) {
+      return user?.user_metadata?.display_name || user?.email?.split("@")[0] || "User";
+    }
+    function avatarMarkup(el, user = currentUser) {
+      if (!el) return;
+      const url = user?.user_metadata?.avatar_url;
+      const name = userDisplayName(user);
+      if (url) { el.innerHTML = `<img src="${url}" alt="" style="width:100%;height:100%;border-radius:inherit;object-fit:cover">`; }
+      else { el.textContent = name.charAt(0).toUpperCase(); }
+    }
+    function updateAccountIdentity() {
+      if (!currentUser) return;
+      const name = userDisplayName();
+      ["navAccountName","menuName","profileDisplayHeading"].forEach(id=>{ const e=document.getElementById(id); if(e)e.textContent=name; });
+      ["menuEmail","profileEmail"].forEach(id=>{ const e=document.getElementById(id); if(e)e.textContent=currentUser.email || ""; });
+      document.getElementById("displayNameInput").value = name;
+      ["navAvatar","menuAvatar","profileAvatar"].forEach(id=>avatarMarkup(document.getElementById(id)));
+    }
+    function renderAccountHistory() {
+      const paymentItems = creditHistory.filter(x=>x.transaction_type === "topup");
+      const orderItems = creditHistory.filter(x=>x.transaction_type === "purchase");
+      const render = (items, emptyKey) => items.length ? items.map(item=>`<div class="account-record"><div><strong>${item.reference || (item.transaction_type === "topup" ? translations[currentLang].wallet.topupText : translations[currentLang].wallet.purchaseText)}</strong><small>${new Date(item.created_at).toLocaleString(currentLang === "th" ? "th-TH" : "en-GB")}</small></div><strong class="${item.amount>=0?'amount-plus':'amount-minus'}">${item.amount>=0?'+':'-'}${formatMoney(Math.abs(item.amount))}</strong></div>`).join("") : `<div class="empty-state">${translations[currentLang].account[emptyKey]}</div>`;
+      document.getElementById("accountPayments").innerHTML = render(paymentItems,"noPayments");
+      document.getElementById("accountOrders").innerHTML = render(orderItems,"noOrders");
+    }
+    function setAccountPane(name) {
+      document.querySelectorAll(".account-tab").forEach(x=>x.classList.toggle("active",x.dataset.pane===name));
+      document.querySelectorAll(".account-pane").forEach(x=>x.classList.toggle("active",x.dataset.paneContent===name));
+      accountOverlay.classList.add("open"); accountOverlay.setAttribute("aria-hidden","false"); accountDropdown.classList.remove("open");
+      renderAccountHistory();
+    }
+
     async function refreshSessionUI() {
       if (!supabaseClient) {
         document.getElementById("authStatus").textContent = "กรุณาตั้งค่า app-config.js ก่อน";
@@ -1520,6 +1644,9 @@
       const { data } = await supabaseClient.auth.getSession();
       currentUser = data.session?.user || null;
       const signedIn = Boolean(currentUser);
+      navLoginBtn.classList.toggle("hidden", signedIn);
+      accountNav.classList.toggle("hidden", !signedIn);
+      if (signedIn) updateAccountIdentity(); else accountDropdown.classList.remove("open");
       document.getElementById("topupArea").classList.toggle("hidden", !signedIn);
       document.getElementById("logoutBtn").classList.toggle("hidden", !signedIn);
       document.getElementById("loginBtn").classList.toggle("hidden", signedIn);
@@ -1541,6 +1668,7 @@
       creditBalance = Number(profile?.credit_balance || 0);
       creditHistory = tx || [];
       renderWallet();
+      renderAccountHistory();
     }
 
     async function callFunction(name, body) {
@@ -1611,7 +1739,9 @@
       currentLang = lang;
       localStorage.setItem("siteLang", lang);
       document.documentElement.lang = lang;
-      document.getElementById("langBtn").textContent = lang === "th" ? "EN" : "TH";
+      const oldLangBtn = document.getElementById("langBtn"); if(oldLangBtn) oldLangBtn.textContent = lang === "th" ? "EN" : "TH";
+      ["quickTh","settingsTh"].forEach(id=>document.getElementById(id)?.classList.toggle("active",lang==="th"));
+      ["quickEn","settingsEn"].forEach(id=>document.getElementById(id)?.classList.toggle("active",lang==="en"));
 
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const keys = el.dataset.i18n.split(".");
@@ -1631,9 +1761,8 @@
       renderWallet();
     }
 
-    document.getElementById("langBtn").addEventListener("click", () => {
-      applyLanguage(currentLang === "th" ? "en" : "th");
-    });
+    const oldLangBtn = document.getElementById("langBtn");
+    if (oldLangBtn) oldLangBtn.addEventListener("click", () => applyLanguage(currentLang === "th" ? "en" : "th"));
 
     function updateClock() {
       const now = new Date();
@@ -1691,6 +1820,25 @@
     document.querySelectorAll(".quick-amount").forEach(btn => btn.addEventListener("click", () => {
       document.getElementById("topupAmount").value = btn.dataset.amount;
     }));
+
+    navLoginBtn.addEventListener("click", () => { routeTo("wallet"); setTimeout(()=>document.getElementById("authEmail")?.focus(),250); });
+    document.getElementById("accountTrigger").addEventListener("click", e => { e.stopPropagation(); accountDropdown.classList.toggle("open"); });
+    document.addEventListener("click", e => { if(!accountNav.contains(e.target)) accountDropdown.classList.remove("open"); });
+    document.querySelectorAll("[data-account-pane]").forEach(btn=>btn.addEventListener("click",()=>setAccountPane(btn.dataset.accountPane)));
+    document.querySelectorAll(".account-tab").forEach(btn=>btn.addEventListener("click",()=>setAccountPane(btn.dataset.pane)));
+    document.getElementById("closeAccountPanel").addEventListener("click",()=>accountOverlay.classList.remove("open"));
+    accountOverlay.addEventListener("click",e=>{if(e.target===accountOverlay)accountOverlay.classList.remove("open")});
+    [["quickTh","th"],["settingsTh","th"],["quickEn","en"],["settingsEn","en"]].forEach(([id,lang])=>document.getElementById(id).addEventListener("click",()=>applyLanguage(lang)));
+    document.getElementById("navLogoutBtn").addEventListener("click", async()=>{ if(supabaseClient) await supabaseClient.auth.signOut(); accountDropdown.classList.remove("open"); accountOverlay.classList.remove("open"); });
+    document.getElementById("avatarInput").addEventListener("change", e=>{
+      const file=e.target.files?.[0]; if(!file)return; if(file.size>5*1024*1024){showToast("ไฟล์รูปใหญ่เกิน 5MB");return;}
+      const img=new Image(), reader=new FileReader(); reader.onload=()=>img.src=reader.result; img.onload=()=>{const c=document.createElement("canvas"),size=256;c.width=c.height=size;const ctx=c.getContext("2d");const scale=Math.max(size/img.width,size/img.height),w=img.width*scale,h=img.height*scale;ctx.drawImage(img,(size-w)/2,(size-h)/2,w,h);pendingAvatarData=c.toDataURL("image/jpeg",.82);["navAvatar","menuAvatar","profileAvatar"].forEach(id=>{const el=document.getElementById(id);el.innerHTML=`<img src="${pendingAvatarData}" alt="" style="width:100%;height:100%;border-radius:inherit;object-fit:cover">`;});}; reader.readAsDataURL(file);
+    });
+    document.getElementById("saveProfileBtn").addEventListener("click", async()=>{
+      if(!supabaseClient||!currentUser)return; const display_name=document.getElementById("displayNameInput").value.trim()||currentUser.email.split("@")[0];
+      const metadata={display_name}; if(pendingAvatarData)metadata.avatar_url=pendingAvatarData;
+      const {data,error}=await supabaseClient.auth.updateUser({data:metadata}); if(error){showToast(error.message);return;} currentUser=data.user;pendingAvatarData=null;updateAccountIdentity();showToast(translations[currentLang].account.saved);
+    });
 
     document.getElementById("loginBtn").addEventListener("click", async () => {
       try {
