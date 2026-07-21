@@ -49,18 +49,21 @@ async function boot() {
 
 async function load() {
   try {
-    const [topupResult, profileResult, ledgerResult] = await Promise.all([
+    const [topupResult, profileResult, ledgerResult, withdrawalResult] = await Promise.all([
       sb.from("topup_requests").select("*").order("created_at", { ascending: false }).limit(200),
       sb.from("profiles").select("id,email,credit_balance,created_at").order("created_at", { ascending: false }).limit(500),
       sb.from("admin_ledger").select("*").order("created_at", { ascending: false }).limit(300),
+      sb.from("withdrawal_requests").select("*").order("created_at", { ascending: false }).limit(200),
     ]);
 
     throwIfError(topupResult.error, "โหลดรายการเติมเงินไม่สำเร็จ");
     throwIfError(profileResult.error, "โหลดข้อมูลลูกค้าไม่สำเร็จ");
     throwIfError(ledgerResult.error, "โหลดบัญชีรายรับรายจ่ายไม่สำเร็จ");
+    throwIfError(withdrawalResult.error, "โหลดคำขอถอนเงินไม่สำเร็จ");
 
     const profiles = profileResult.data || [];
     const emailById = new Map(profiles.map((item) => [item.id, item.email]));
+    const withdrawals = (withdrawalResult.data || []).map(item => ({ ...item, email: emailById.get(item.user_id) || null }));
     const topups = await Promise.all((topupResult.data || []).map(async (item) => {
       let slipUrl = "";
       if (item.slip_path) {
@@ -92,12 +95,14 @@ async function load() {
         approved_income: approved.reduce((sum, item) => sum + Number(item.amount || 0), 0),
         total_credit_balance: profiles.reduce((sum, item) => sum + Number(item.credit_balance || 0), 0),
         pending_topups: topups.filter((item) => item.status === "pending").length,
+        pending_withdrawals: withdrawals.filter((item) => item.status === "pending").length,
         users: profiles.length,
       },
       daily_income: dailyIncome,
       topups,
       users: profiles,
       ledger: ledgerResult.data || [],
+      withdrawals,
     };
 
     render();
@@ -114,9 +119,11 @@ function render() {
   $("#statPending").textContent = stats.pending_topups || 0;
   $("#statUsers").textContent = stats.users || 0;
   $("#pendingChip").textContent = `${stats.pending_topups || 0} pending`;
+  if ($("#withdrawPendingChip")) $("#withdrawPendingChip").textContent = `${stats.pending_withdrawals || 0} pending`;
   renderChart();
   renderRecent();
   renderTopups();
+  renderWithdrawals();
   renderUsers();
   renderLedger();
 }
@@ -151,6 +158,29 @@ function renderTopups() {
       : "-";
     return `<tr><td>${slip}</td><td>${item.email || "-"}<small>${safeId}</small></td><td><b>${money(item.amount)}</b></td><td>${item.transfer_reference || "-"}</td><td>${new Date(item.created_at).toLocaleString("th-TH")}</td><td><span class="status ${item.status}">${item.status}</span></td><td>${actions}</td></tr>`;
   }).join("") || '<tr><td colspan="7">ไม่มีรายการ</td></tr>';
+}
+
+function renderWithdrawals() {
+  const items = state.withdrawals || [];
+  const box = $("#withdrawRows");
+  if (!box) return;
+  box.innerHTML = items.map((item) => {
+    const actions = item.status === "pending"
+      ? `<button class="btn good" onclick="reviewWithdrawal('${item.id}','approve')">อนุมัติ</button> <button class="btn bad" onclick="reviewWithdrawal('${item.id}','reject')">ปฏิเสธ</button>`
+      : "-";
+    return `<tr><td>${item.email || "-"}<small>${String(item.user_id||"").slice(0,8)}</small></td><td><b>${money(item.amount)}</b></td><td>${item.payout_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}</td><td>${item.payout_account || "-"}<small>${item.payout_name || "-"}</small></td><td>${new Date(item.created_at).toLocaleString("th-TH")}</td><td><span class="status ${item.status}">${item.status}</span></td><td>${actions}</td></tr>`;
+  }).join("") || '<tr><td colspan="7">ไม่มีคำขอถอน</td></tr>';
+}
+
+async function reviewWithdrawal(id, mode) {
+  const note = prompt(mode === "approve" ? "หมายเหตุการอนุมัติ" : "เหตุผลที่ปฏิเสธ") || "";
+  try {
+    const rpcName = mode === "approve" ? "admin_approve_withdrawal_simple" : "admin_reject_withdrawal_simple";
+    const { error } = await sb.rpc(rpcName, { p_request_id: id, p_note: note });
+    throwIfError(error, "ดำเนินการคำขอถอนไม่สำเร็จ");
+    toast(mode === "approve" ? "อนุมัติและหักเครดิตแล้ว" : "ปฏิเสธคำขอถอนแล้ว");
+    await load();
+  } catch (error) { toast(error.message); }
 }
 
 function renderUsers() {
@@ -231,6 +261,7 @@ window.openSlip = (item) => {
 window.closeSlip = () => $("#slipModal").classList.remove("open");
 window.review = review;
 window.selectUser = selectUser;
+window.reviewWithdrawal = reviewWithdrawal;
 
 document.querySelectorAll("[data-section]").forEach((button) => {
   button.addEventListener("click", () => {

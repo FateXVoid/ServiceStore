@@ -901,9 +901,35 @@
     .account-item.danger { color:#ff9db1; }
     @media(max-width:1120px){ .account-trigger{min-width:44px;width:44px;padding:0;justify-content:center}.account-copy,.account-chevron{display:none}.account-dropdown{right:0} }
     @media(max-width:640px){ .account-trigger{width:40px;height:40px}.account-avatar{width:27px;height:27px;flex-basis:27px}.nav-actions{gap:7px} }
+
+
+    /* Account Center v12 */
+    .settings-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:24px;align-items:start}
+    .settings-card{background:linear-gradient(145deg,rgba(18,27,49,.88),rgba(10,17,34,.82));border:1px solid var(--border);border-radius:26px;padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(18px);position:relative;overflow:hidden}
+    .settings-card::before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(124,92,255,.16);filter:blur(30px);right:-70px;top:-80px;pointer-events:none}
+    .profile-avatar-large{width:118px;height:118px;border-radius:32px;object-fit:cover;display:grid;place-items:center;margin:0 auto 18px;background:linear-gradient(135deg,var(--primary),var(--primary-2));font-size:2.4rem;font-weight:800;border:3px solid rgba(255,255,255,.16);box-shadow:0 18px 45px rgba(0,0,0,.35);animation:avatarFloat 4s ease-in-out infinite}
+    @keyframes avatarFloat{50%{transform:translateY(-7px) rotate(1deg)}}
+    .profile-upload{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    .profile-upload input{max-width:100%}
+    .settings-tabs,.payment-tabs-v2{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+    .settings-tab,.pay-method{border:1px solid var(--border);background:rgba(255,255,255,.045);color:var(--muted);padding:11px 15px;border-radius:14px;cursor:pointer;transition:.25s ease}
+    .settings-tab.active,.pay-method.active{color:#fff;background:linear-gradient(135deg,rgba(124,92,255,.42),rgba(0,217,255,.22));border-color:rgba(124,92,255,.6);transform:translateY(-2px);box-shadow:0 10px 24px rgba(124,92,255,.18)}
+    .settings-panel,.pay-info{display:none}.settings-panel.active,.pay-info.active{display:block;animation:panelPop .35s cubic-bezier(.2,.8,.2,1)}
+    @keyframes panelPop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+    .account-detail{display:grid;gap:10px;margin-top:16px}.account-detail div{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.035)}
+    .timeline-list{display:grid;gap:12px}.timeline-item{position:relative;padding:15px 16px 15px 48px;border-radius:17px;border:1px solid var(--border);background:rgba(255,255,255,.035);transition:.22s ease}.timeline-item:hover{transform:translateX(4px);background:rgba(255,255,255,.06)}
+    .timeline-icon{position:absolute;left:13px;top:15px;width:25px;height:25px;border-radius:9px;display:grid;place-items:center;background:rgba(124,92,255,.2)}
+    .timeline-item small{display:block;color:var(--muted);margin-top:4px}.timeline-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .status.pending{color:#ffd67a}.status.approved{color:var(--success)}.status.rejected{color:var(--danger)}
+    .bank-hero{padding:20px;border:1px solid var(--border);border-radius:20px;background:linear-gradient(135deg,rgba(53,230,165,.10),rgba(0,217,255,.08));text-align:center}
+    .bank-number{font-size:1.5rem;font-weight:800;letter-spacing:1px;margin:8px 0}.method-note{color:var(--muted);font-size:.9rem;margin-top:8px}
+    .account-avatar.has-image{background-size:cover;background-position:center;color:transparent}
+    .withdraw-note{padding:12px 14px;border-left:3px solid var(--primary-2);background:rgba(0,217,255,.07);border-radius:10px;color:var(--muted);margin:12px 0}
+    @media(max-width:900px){.settings-grid{grid-template-columns:1fr}.settings-card{padding:19px}}
+    @media(prefers-reduced-motion:reduce){.profile-avatar-large{animation:none}.settings-tab,.pay-method,.timeline-item{transition:none}}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app-config.js?v=9"></script>
+  <script src="app-config.js?v=12"></script>
 </head>
 
 <body>
@@ -924,6 +950,7 @@
         <a href="#services" class="nav-link" data-route="services" data-i18n="nav.services">บริการ</a>
         <a href="#hire" class="nav-link" data-route="hire" data-i18n="nav.hire">จ้างบริการ</a>
         <a href="#wallet" class="nav-link" data-route="wallet" data-i18n="nav.wallet">เครดิต</a>
+        <a href="#settings" class="nav-link" data-route="settings">ตั้งค่า</a>
         <a href="admin.html" class="nav-link hidden" id="adminNavLink">Admin</a>
         <a href="#contact" class="nav-link" data-route="contact" data-i18n="nav.contact">ติดต่อ</a>
       </nav>
@@ -949,6 +976,7 @@
             </div>
             <button class="account-item" id="accountLoginAction" type="button">🔐 <span>เข้าสู่ระบบ / สมัครสมาชิก</span></button>
             <button class="account-item hidden" id="accountWalletAction" type="button">💳 <span>กระเป๋าเครดิต</span></button>
+            <button class="account-item hidden" id="accountSettingsAction" type="button">👤 <span>ตั้งค่าบัญชี</span></button>
             <a class="account-item hidden" id="accountAdminAction" href="admin.html">⚙️ <span>Owner Control Center</span></a>
             <button class="account-item danger hidden" id="accountLogoutAction" type="button">↪ <span>ออกจากระบบ</span></button>
           </div>
@@ -1241,13 +1269,28 @@
 
             <div id="topupArea" class="hidden">
               <h3>เติมเครดิตด้วยสลิป</h3>
-              <div class="account-box" style="text-align:center">
-                <small>PromptPay • ตรวจโดยแอดมิน</small>
-                <h3 id="promptPayName">FateX Service</h3>
-                <p id="promptPayNumber">กรุณาตรวจชื่อผู้รับก่อนโอนทุกครั้ง</p>
-                <img id="manualPromptPayQr" class="payment-qr" src="promptpay-qr.png" alt="PromptPay QR" style="display:block;margin:18px auto 8px;max-width:230px">
-                <small style="color:var(--muted)">เครดิตจะเข้าเมื่อแอดมินตรวจสลิปและกดอนุมัติแล้ว</small>
+              <div class="payment-tabs-v2">
+                <button class="pay-method active" type="button" data-payment="bank">🏦 ธนาคารกสิกร</button>
+                <button class="pay-method" type="button" data-payment="truemoney">🟠 TrueMoney Wallet</button>
               </div>
+              <div class="pay-info active" data-pay-panel="bank">
+                <div class="bank-hero">
+                  <small>โอนผ่านธนาคารกสิกรไทย</small>
+                  <h3 id="bankAccountName">นายกรณพัฒน์ สายวงค์สอน</h3>
+                  <div class="bank-number" id="bankAccountNumber">179-8-83569-2</div>
+                  <img id="bankQrImage" class="payment-qr" src="promptpay-qr.png" alt="Bank payment QR" style="display:block;margin:16px auto 8px;max-width:230px">
+                  <div class="method-note">ตรวจชื่อผู้รับและยอดเงินก่อนโอนทุกครั้ง</div>
+                </div>
+              </div>
+              <div class="pay-info" data-pay-panel="truemoney">
+                <div class="bank-hero">
+                  <small>TrueMoney Wallet</small>
+                  <h3 id="trueMoneyName">นายกรณพัฒน์ สายวงค์สอน</h3>
+                  <div class="bank-number" id="trueMoneyNumber">095-721-3642</div>
+                  <div class="method-note">โอนเข้าหมายเลข Wallet แล้วแนบสลิปด้านล่าง</div>
+                </div>
+              </div>
+              <div class="notice" style="margin-top:14px">ทุกการเติมเครดิตต้องแนบสลิป และเครดิตจะเข้าเมื่อแอดมินอนุมัติแล้วเท่านั้น</div>
               <form id="topupForm" style="margin-top:18px">
                 <div class="field">
                   <label for="topupAmount">จำนวนเงินที่โอน</label>
@@ -1275,6 +1318,55 @@
                 <span class="status-chip" id="paymentStatus">รอตรวจสอบ</span>
                 <p id="paymentHint" style="color:var(--muted);margin-top:14px"></p>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="page" id="settings">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Account Center</span>
+          <h2>ตั้งค่าบัญชีและประวัติทั้งหมด</h2>
+          <p>แก้ไขโปรไฟล์ ดูรายการซื้อ เติมเครดิต และคำขอถอนเงินได้ในหน้าเดียว</p>
+        </div>
+        <div id="settingsLoginNotice" class="notice reveal">กรุณาเข้าสู่ระบบก่อนใช้งานหน้าตั้งค่า</div>
+        <div id="settingsArea" class="settings-grid hidden">
+          <aside class="settings-card reveal">
+            <img id="profileAvatarPreview" class="profile-avatar-large" alt="Profile avatar">
+            <div style="text-align:center"><h3 id="settingsDisplayName">บัญชีของฉัน</h3><p id="settingsEmail" style="color:var(--muted)">-</p></div>
+            <div class="account-detail">
+              <div><span>เครดิตคงเหลือ</span><strong id="settingsCredit">฿0</strong></div>
+              <div><span>สมาชิกตั้งแต่</span><strong id="settingsJoined">-</strong></div>
+            </div>
+          </aside>
+          <div class="settings-card reveal">
+            <div class="settings-tabs">
+              <button class="settings-tab active" type="button" data-settings-tab="profile">โปรไฟล์</button>
+              <button class="settings-tab" type="button" data-settings-tab="history">ประวัติ</button>
+              <button class="settings-tab" type="button" data-settings-tab="withdraw">ถอนเครดิต</button>
+            </div>
+            <div class="settings-panel active" data-settings-panel="profile">
+              <form id="profileForm">
+                <div class="field"><label for="nicknameInput">ชื่อเล่น</label><input id="nicknameInput" maxlength="40" placeholder="ชื่อที่ใช้แสดงบนเว็บไซต์"></div>
+                <div class="field" style="margin-top:14px"><label for="avatarFile">รูปโปรไฟล์ (JPG, PNG, WEBP ไม่เกิน 3MB)</label><input id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp"></div>
+                <button class="submit-btn" type="submit" style="width:100%;margin-top:16px">บันทึกโปรไฟล์</button>
+              </form>
+            </div>
+            <div class="settings-panel" data-settings-panel="history">
+              <div class="timeline-list" id="fullHistoryList"><div class="notice">กำลังโหลด...</div></div>
+            </div>
+            <div class="settings-panel" data-settings-panel="withdraw">
+              <div class="withdraw-note">คำขอถอนจะถูกตรวจโดยแอดมิน และยอดเครดิตจะถูกหักเมื่อคำขอได้รับอนุมัติ</div>
+              <form id="withdrawForm">
+                <div class="field"><label for="withdrawAmount">จำนวนเครดิตที่ต้องการถอน</label><input id="withdrawAmount" type="number" min="50" max="50000" required placeholder="100"></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawChannel">ช่องทางรับเงิน</label><select id="withdrawChannel"><option value="bank">ธนาคาร</option><option value="truemoney">TrueMoney Wallet</option></select></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawAccount">เลขบัญชี / เบอร์ Wallet</label><input id="withdrawAccount" maxlength="60" required></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawAccountName">ชื่อบัญชี</label><input id="withdrawAccountName" maxlength="80" required></div>
+                <button class="submit-btn" type="submit" style="width:100%;margin-top:16px">ส่งคำขอถอน</button>
+              </form>
             </div>
           </div>
         </div>
@@ -1538,7 +1630,9 @@
     const serviceSelect = document.getElementById("serviceSelect");
     let creditBalance = 0;
     let creditHistory = [];
-    let selectedPaymentMethod = "promptpay";
+    let selectedPaymentMethod = "bank";
+    let currentProfile = null;
+    let fullAccountHistory = [];
     let currentUser = null;
     let walletPollTimer = null;
     const appConfig = window.APP_CONFIG || {};
@@ -1546,12 +1640,16 @@
       ? window.supabase.createClient(appConfig.supabaseUrl, appConfig.supabaseAnonKey)
       : null;
     window.addEventListener("DOMContentLoaded", () => {
-      const qr = document.getElementById("manualPromptPayQr");
-      if (qr && appConfig.promptPayQrImage) qr.src = appConfig.promptPayQrImage;
-      const name = document.getElementById("promptPayName");
-      if (name && appConfig.promptPayName) name.textContent = appConfig.promptPayName;
-      const number = document.getElementById("promptPayNumber");
-      if (number && appConfig.promptPayNumber) number.textContent = appConfig.promptPayNumber;
+      const qr = document.getElementById("bankQrImage");
+      if (qr && appConfig.bankQrImage) qr.src = appConfig.bankQrImage;
+      const bankName = document.getElementById("bankAccountName");
+      if (bankName) bankName.textContent = appConfig.bankAccountName || "นายกรณพัฒน์ สายวงค์สอน";
+      const bankNumber = document.getElementById("bankAccountNumber");
+      if (bankNumber) bankNumber.textContent = appConfig.bankAccountNumber || "179-8-83569-2";
+      const tmName = document.getElementById("trueMoneyName");
+      if (tmName) tmName.textContent = appConfig.trueMoneyName || appConfig.bankAccountName || "นายกรณพัฒน์ สายวงค์สอน";
+      const tmNumber = document.getElementById("trueMoneyNumber");
+      if (tmNumber) tmNumber.textContent = appConfig.trueMoneyNumber || "095-721-3642";
     });
 
     function formatMoney(value) { return `฿${Number(value || 0).toLocaleString()}`; }
@@ -1580,6 +1678,8 @@
       currentUser = data.session?.user || null;
       const signedIn = Boolean(currentUser);
       document.getElementById("topupArea").classList.toggle("hidden", !signedIn);
+      document.getElementById("settingsArea")?.classList.toggle("hidden", !signedIn);
+      document.getElementById("settingsLoginNotice")?.classList.toggle("hidden", signedIn);
       document.getElementById("logoutBtn").classList.toggle("hidden", !signedIn);
       document.getElementById("loginBtn").classList.toggle("hidden", signedIn);
       document.getElementById("signupBtn").classList.toggle("hidden", signedIn);
@@ -1587,12 +1687,12 @@
       document.getElementById("authPassword").disabled = signedIn;
       document.getElementById("authStatus").textContent = signedIn ? `เข้าสู่ระบบ: ${currentUser.email}` : "ยังไม่ได้เข้าสู่ระบบ";
       updateHeaderAccount();
-      if (signedIn) { await loadWallet(); await checkAdminAccess(); } else { creditBalance = 0; creditHistory = []; renderWallet(); document.getElementById("adminNavLink")?.classList.add("hidden"); document.getElementById("accountAdminAction")?.classList.add("hidden"); }
+      if (signedIn) { await loadWallet(); await loadAccountCenter(); await checkAdminAccess(); } else { creditBalance = 0; creditHistory = []; renderWallet(); document.getElementById("adminNavLink")?.classList.add("hidden"); document.getElementById("accountAdminAction")?.classList.add("hidden"); }
     }
 
     function getAccountLabel() {
       if (!currentUser) return "เข้าสู่ระบบ";
-      const metadataName = currentUser.user_metadata?.display_name || currentUser.user_metadata?.username;
+      const metadataName = currentProfile?.nickname || currentUser.user_metadata?.display_name || currentUser.user_metadata?.username;
       return metadataName || currentUser.email?.split("@")[0] || "Account";
     }
 
@@ -1604,13 +1704,19 @@
       const sub = document.getElementById("accountSubtext");
       const dropName = document.getElementById("accountDropdownName");
       const dropEmail = document.getElementById("accountDropdownEmail");
-      if (avatar) avatar.textContent = (signedIn ? label : "F").trim().charAt(0).toUpperCase();
+      if (avatar) {
+        const avatarUrl = currentProfile?.avatar_url || currentUser?.user_metadata?.avatar_url;
+        avatar.classList.toggle("has-image", Boolean(signedIn && avatarUrl));
+        avatar.style.backgroundImage = signedIn && avatarUrl ? `url("${avatarUrl}")` : "";
+        avatar.textContent = (signedIn ? label : "F").trim().charAt(0).toUpperCase();
+      }
       if (name) name.textContent = signedIn ? label : "เข้าสู่ระบบ";
       if (sub) sub.textContent = signedIn ? "บัญชีของฉัน" : "Login / Register";
       if (dropName) dropName.textContent = signedIn ? label : "ยังไม่ได้เข้าสู่ระบบ";
       if (dropEmail) dropEmail.textContent = signedIn ? currentUser.email : "เข้าสู่ระบบเพื่อใช้งานเครดิต";
       document.getElementById("accountLoginAction")?.classList.toggle("hidden", signedIn);
       document.getElementById("accountWalletAction")?.classList.toggle("hidden", !signedIn);
+      document.getElementById("accountSettingsAction")?.classList.toggle("hidden", !signedIn);
       document.getElementById("accountLogoutAction")?.classList.toggle("hidden", !signedIn);
     }
 
@@ -1623,13 +1729,64 @@
       if (!supabaseClient || !currentUser) return;
       const [{ data: profile, error: profileError }, { data: tx, error: txError }] = await Promise.all([
         supabaseClient.from("profiles").select("credit_balance").eq("id", currentUser.id).single(),
-        supabaseClient.from("credit_transactions").select("amount,transaction_type,created_at").eq("user_id", currentUser.id).order("created_at", { ascending:false }).limit(30)
+        supabaseClient.from("credit_transactions").select("amount,transaction_type,description,created_at").eq("user_id", currentUser.id).order("created_at", { ascending:false }).limit(30)
       ]);
       if (profileError) console.error(profileError);
       if (txError) console.error(txError);
       creditBalance = Number(profile?.credit_balance || 0);
       creditHistory = tx || [];
       renderWallet();
+    }
+
+    function statusThai(status) {
+      return ({pending:"รอตรวจสอบ",approved:"อนุมัติแล้ว",rejected:"ปฏิเสธ"})[status] || status || "-";
+    }
+
+    function avatarFallback(name) {
+      const letter = (name || "F").trim().charAt(0).toUpperCase();
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#7c5cff"/><stop offset="1" stop-color="#00d9ff"/></linearGradient></defs><rect width="240" height="240" rx="60" fill="url(#g)"/><text x="120" y="145" text-anchor="middle" font-family="Arial" font-size="100" font-weight="700" fill="white">${letter}</text></svg>`)}`;
+    }
+
+    async function loadAccountCenter() {
+      if (!supabaseClient || !currentUser) return;
+      const [profileRes, txRes, topupRes, withdrawRes] = await Promise.all([
+        supabaseClient.from("profiles").select("id,email,credit_balance,nickname,avatar_url,created_at").eq("id", currentUser.id).maybeSingle(),
+        supabaseClient.from("credit_transactions").select("id,amount,transaction_type,description,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100),
+        supabaseClient.from("topup_requests").select("id,amount,payment_method,status,admin_note,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100),
+        supabaseClient.from("withdrawal_requests").select("id,amount,payout_method,status,admin_note,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100)
+      ]);
+      currentProfile = profileRes.data || {id:currentUser.id,email:currentUser.email,credit_balance:creditBalance};
+      const nickname = currentProfile.nickname || currentUser.user_metadata?.display_name || currentUser.email?.split("@")[0] || "สมาชิก";
+      const avatarUrl = currentProfile.avatar_url || currentUser.user_metadata?.avatar_url || avatarFallback(nickname);
+      const avatarPreview = document.getElementById("profileAvatarPreview");
+      if (avatarPreview) avatarPreview.src = avatarUrl;
+      document.getElementById("settingsDisplayName").textContent = nickname;
+      document.getElementById("settingsEmail").textContent = currentUser.email || "-";
+      document.getElementById("settingsCredit").textContent = formatMoney(currentProfile.credit_balance || creditBalance);
+      document.getElementById("settingsJoined").textContent = new Date(currentProfile.created_at || currentUser.created_at).toLocaleDateString("th-TH");
+      document.getElementById("nicknameInput").value = currentProfile.nickname || "";
+      fullAccountHistory = [
+        ...(txRes.data || []).map(x=>({...x,kind:"transaction"})),
+        ...(topupRes.data || []).map(x=>({...x,kind:"topup"})),
+        ...(withdrawRes.data || []).map(x=>({...x,kind:"withdraw"}))
+      ].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+      renderFullHistory();
+      updateHeaderAccount();
+    }
+
+    function renderFullHistory() {
+      const box = document.getElementById("fullHistoryList");
+      if (!box) return;
+      if (!fullAccountHistory.length) { box.innerHTML='<div class="notice">ยังไม่มีประวัติรายการ</div>'; return; }
+      box.innerHTML = fullAccountHistory.map(item => {
+        let icon="🧾", title="รายการเครดิต", detail=item.description || "";
+        if(item.kind==="topup"){ icon="💰"; title=`ฝากเงินผ่าน ${item.payment_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}`; detail=statusThai(item.status); }
+        else if(item.kind==="withdraw"){ icon="📤"; title=`ถอนเงินผ่าน ${item.payout_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}`; detail=statusThai(item.status); }
+        else if(item.transaction_type==="purchase"){ icon="🛍️"; title="ซื้อบริการ"; }
+        else if(item.transaction_type==="topup"){ icon="✅"; title="เครดิตจากการฝากเงิน"; }
+        const amount=Number(item.amount||0); const sign=item.kind==="withdraw"||amount<0?"-":"+";
+        return `<div class="timeline-item"><span class="timeline-icon">${icon}</span><div class="timeline-row"><div><strong>${title}</strong><small>${detail || "-"} • ${new Date(item.created_at).toLocaleString("th-TH")}</small></div><strong class="${sign==='+'?'amount-plus':'amount-minus'}">${sign}${formatMoney(Math.abs(amount))}</strong></div></div>`;
+      }).join("");
     }
 
     async function callFunction(name, body) {
@@ -1778,7 +1935,63 @@
     document.addEventListener("click", event => { if (!accountMenuWrap?.contains(event.target)) closeAccountMenu(); });
     document.getElementById("accountLoginAction")?.addEventListener("click", () => { closeAccountMenu(); location.hash="wallet"; routeTo("wallet"); setTimeout(() => document.getElementById("authEmail")?.focus(), 250); });
     document.getElementById("accountWalletAction")?.addEventListener("click", () => { closeAccountMenu(); location.hash="wallet"; routeTo("wallet"); });
+    document.getElementById("accountSettingsAction")?.addEventListener("click", () => { closeAccountMenu(); location.hash="settings"; routeTo("settings"); });
     document.getElementById("accountLogoutAction")?.addEventListener("click", async () => { closeAccountMenu(); if (supabaseClient) await supabaseClient.auth.signOut(); await refreshSessionUI(); showToast("ออกจากระบบแล้ว"); });
+
+    document.querySelectorAll(".pay-method").forEach(btn => btn.addEventListener("click", () => {
+      selectedPaymentMethod = btn.dataset.payment;
+      document.querySelectorAll(".pay-method").forEach(x=>x.classList.toggle("active",x===btn));
+      document.querySelectorAll("[data-pay-panel]").forEach(x=>x.classList.toggle("active",x.dataset.payPanel===selectedPaymentMethod));
+    }));
+
+    document.querySelectorAll(".settings-tab").forEach(btn => btn.addEventListener("click", () => {
+      document.querySelectorAll(".settings-tab").forEach(x=>x.classList.toggle("active",x===btn));
+      document.querySelectorAll("[data-settings-panel]").forEach(x=>x.classList.toggle("active",x.dataset.settingsPanel===btn.dataset.settingsTab));
+    }));
+
+    document.getElementById("avatarFile")?.addEventListener("change", e => {
+      const file=e.target.files?.[0]; if(file) document.getElementById("profileAvatarPreview").src=URL.createObjectURL(file);
+    });
+
+    document.getElementById("profileForm")?.addEventListener("submit", async e => {
+      e.preventDefault();
+      try{
+        if(!currentUser) throw new Error("กรุณาเข้าสู่ระบบ");
+        const nickname=document.getElementById("nicknameInput").value.trim();
+        if(!nickname) throw new Error("กรุณากรอกชื่อเล่น");
+        let avatarUrl=currentProfile?.avatar_url || null;
+        const file=document.getElementById("avatarFile").files?.[0];
+        if(file){
+          if(!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("รองรับเฉพาะ JPG, PNG หรือ WEBP");
+          if(file.size>3*1024*1024) throw new Error("รูปต้องไม่เกิน 3MB");
+          const ext=(file.name.split(".").pop()||"jpg").replace(/[^a-z0-9]/gi,"");
+          const path=`${currentUser.id}/avatar-${Date.now()}.${ext}`;
+          const {error:uploadError}=await supabaseClient.storage.from("avatars").upload(path,file,{contentType:file.type,upsert:true});
+          if(uploadError) throw uploadError;
+          avatarUrl=supabaseClient.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+        }
+        const {error}=await supabaseClient.from("profiles").upsert({id:currentUser.id,email:currentUser.email,nickname,avatar_url:avatarUrl},{onConflict:"id"});
+        if(error) throw error;
+        await supabaseClient.auth.updateUser({data:{display_name:nickname,avatar_url:avatarUrl}});
+        await loadAccountCenter(); showToast("บันทึกโปรไฟล์แล้ว");
+      }catch(error){showToast(error.message||"บันทึกไม่สำเร็จ");}
+    });
+
+    document.getElementById("withdrawForm")?.addEventListener("submit", async e => {
+      e.preventDefault();
+      try{
+        if(!currentUser) throw new Error("กรุณาเข้าสู่ระบบ");
+        const amount=Number(document.getElementById("withdrawAmount").value);
+        const payout_method=document.getElementById("withdrawChannel").value;
+        const payout_account=document.getElementById("withdrawAccount").value.trim();
+        const payout_name=document.getElementById("withdrawAccountName").value.trim();
+        if(amount<50) throw new Error("ถอนขั้นต่ำ 50 เครดิต");
+        if(amount>creditBalance) throw new Error("เครดิตคงเหลือไม่เพียงพอ");
+        const {error}=await supabaseClient.from("withdrawal_requests").insert({user_id:currentUser.id,amount,payout_method,payout_account,payout_name});
+        if(error) throw error;
+        e.target.reset(); await loadAccountCenter(); showToast("ส่งคำขอถอนแล้ว");
+      }catch(error){showToast(error.message||"ส่งคำขอไม่สำเร็จ");}
+    });
 
     document.querySelectorAll(".quick-amount").forEach(btn => btn.addEventListener("click", () => {
       document.getElementById("topupAmount").value = btn.dataset.amount;
@@ -1791,7 +2004,7 @@
         const password = document.getElementById("authPassword").value;
         const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        await refreshSessionUI(); showToast("เข้าสู่ระบบสำเร็จ");
+        await refreshSessionUI(); location.hash="home"; routeTo("home"); showToast("เข้าสู่ระบบสำเร็จ");
       } catch (error) { showToast(error.message); }
     });
 
@@ -1863,7 +2076,7 @@
         const { error: uploadError } = await supabaseClient.storage.from("payment-slips").upload(objectPath, file, { contentType:file.type, upsert:false });
         if (uploadError) throw uploadError;
         const { data, error } = await supabaseClient.from("topup_requests").insert({
-          user_id: currentUser.id, amount, transfer_reference: reference, slip_path: objectPath
+          user_id: currentUser.id, amount, payment_method: selectedPaymentMethod, transfer_reference: reference, slip_path: objectPath
         }).select("id,status,created_at").single();
         if (error) {
           await supabaseClient.storage.from("payment-slips").remove([objectPath]);

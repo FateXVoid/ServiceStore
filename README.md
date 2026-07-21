@@ -33,3 +33,6 @@
 - สลิปเป็น private bucket และออก signed URL ชั่วคราวให้แอดมิน
 
 > ระบบ `spend-credits` ของหน้าร้านยังคงเป็นคนละส่วน และสามารถใช้ Edge Function เดิมต่อได้
+
+## Account Center v12
+Run `supabase/account-center-v12.sql` once in Supabase SQL Editor. This adds profile editing, avatars, full user history, bank/TrueMoney top-ups, and withdrawal requests. The admin dashboard remains compatible with top-up requests.
