@@ -1,41 +1,35 @@
-# FateX Service Store — Manual Slip + Owner Admin
+# FateX Service Store — Simple Admin Backend
 
-ระบบนี้ถอด Omise ออก เปลี่ยนเป็น PromptPay + อัปโหลดสลิป + แอดมินอนุมัติ
+เวอร์ชันนี้เปลี่ยนระบบหลังบ้านให้เรียบง่ายขึ้น โดย **ไม่ใช้ `admin-api` Edge Function** แล้ว
+หน้า `admin.html` ติดต่อ Supabase Database โดยตรงผ่าน RLS และ RPC ที่ตรวจสิทธิ์แอดมินในฐานข้อมูล
 
-## ติดตั้ง
-1. นำ Supabase URL และ Anon key เดิมใส่ใน `app-config.js`
-2. แทนที่ `promptpay-qr.png` ด้วย QR พร้อมเพย์จริง และแก้ชื่อ/เลขพร้อมเพย์ใน `app-config.js`
-3. เปิด Supabase SQL Editor แล้วรัน `supabase/admin-manual-topup.sql`
-4. Deploy Edge Function:
-   `supabase functions deploy admin-api`
-5. อัปโหลดไฟล์เว็บทั้งหมดขึ้น GitHub/Cloudflare ใหม่
-6. เข้าระบบด้วย `fatex099@gmail.com` จะเห็นเมนู Admin และเปิด `admin.html` ได้
+## ความสามารถหลังบ้าน
+- ภาพรวมรายรับ เครดิตรวม จำนวนสมาชิก และสลิปรอตรวจ
+- กราฟรายรับ 14 วันล่าสุด
+- ดูสลิป อนุมัติ หรือปฏิเสธรายการเติมเงิน
+- ดูรายชื่อลูกค้าและปรับเครดิต
+- บันทึกรายรับ–รายจ่าย
+- ตรวจสิทธิ์เจ้าของร้านจาก `admin_users`
+
+## วิธีติดตั้ง
+1. ตรวจ `app-config.js` ให้มี Supabase URL และ Publishable key ถูกต้อง
+2. เข้า Supabase → SQL Editor
+3. เปิดไฟล์ `supabase/admin-simple.sql` คัดลอกทั้งหมดแล้วกด Run **ครั้งเดียว**
+4. เอาไฟล์โปรเจกต์นี้ขึ้น GitHub แล้วรอ Cloudflare Deploy
+5. เข้าหน้าร้านด้วย `fatex099@gmail.com`
+6. เปิด `admin.html?v=10`
+
+## สิ่งที่ไม่ต้องทำแล้ว
+- ไม่ต้อง Deploy `admin-api`
+- ไม่ต้องใช้ Supabase CLI สำหรับระบบหลังบ้าน
+- ไม่ต้องตั้งค่า CORS ของ Admin Edge Function
+- ไม่ต้องตั้ง Secret/Service Role key บนเว็บไซต์
 
 ## ความปลอดภัย
-- สิทธิ์แอดมินตรวจจากตาราง `admin_users` ฝั่งเซิร์ฟเวอร์ ไม่ได้เชื่อแค่ UI
-- สลิปอยู่ใน private Storage bucket และลิงก์ดูหมดอายุใน 15 นาที
-- ลูกค้าเพิ่มเครดิตเองไม่ได้ การอนุมัติทำแบบ atomic ผ่าน PostgreSQL function
-- อนุมัติรายการเดิมซ้ำไม่ได้
+- หน้าเว็บใช้เฉพาะ Publishable key ซึ่งวางใน Frontend ได้
+- RLS จำกัดข้อมูลทั่วไปตามผู้ใช้
+- RPC ทุกตัวตรวจ `auth.uid()` กับตาราง `admin_users` ฝั่งฐานข้อมูล
+- ลูกค้าทั่วไปเรียกคำสั่งอนุมัติสลิปหรือปรับเครดิตไม่ได้
+- สลิปเป็น private bucket และออก signed URL ชั่วคราวให้แอดมิน
 
-## หน้า Admin
-- ภาพรวมรายรับ เครดิตรวม สมาชิก และสลิปรอตรวจ
-- กราฟรายรับ 14 วัน
-- อนุมัติ/ปฏิเสธสลิป
-- ดูผู้ใช้และปรับเครดิต
-- บันทึกรายรับ–รายจ่าย
-
-## Windows PowerShell ขึ้น running scripts is disabled
-ไม่ต้องแก้ Execution Policy ก็ได้ ให้ดับเบิลคลิก `deploy-admin.cmd` หรือใช้คำสั่งนี้:
-
-```cmd
-npx.cmd supabase functions deploy admin-api
-```
-
-ถ้ายังไม่ได้ link โปรเจกต์ ให้ดับเบิลคลิก `link-and-deploy.cmd` แล้วใส่ Project Ref ของ Supabase
-
-## ไฟล์สำคัญ
-- `index.html` หน้าร้าน + อัปโหลดสลิป
-- `admin.html` หลังบ้าน Owner Control Center
-- `admin.js` การทำงาน Dashboard
-- `supabase/admin-manual-topup.sql` ตาราง, Storage, RLS และ RPC ปลอดภัย
-- `supabase/functions/admin-api/index.ts` API หลังบ้านที่ตรวจสิทธิ์จากฐานข้อมูล
+> ระบบ `spend-credits` ของหน้าร้านยังคงเป็นคนละส่วน และสามารถใช้ Edge Function เดิมต่อได้

@@ -1827,12 +1827,21 @@
 
     async function checkAdminAccess() {
       const link = document.getElementById("adminNavLink");
-      if (!link || !currentUser) return link?.classList.add("hidden");
+      const accountAdmin = document.getElementById("accountAdminAction");
+      if (!link || !currentUser || !supabaseClient) {
+        link?.classList.add("hidden");
+        accountAdmin?.classList.add("hidden");
+        return;
+      }
       try {
-        const result = await callFunction("admin-api", { action:"me" });
-        link.classList.toggle("hidden", !result.is_admin);
-        document.getElementById("accountAdminAction")?.classList.toggle("hidden", !result.is_admin);
-      } catch (_) { link.classList.add("hidden"); document.getElementById("accountAdminAction")?.classList.add("hidden"); }
+        const { data: isAdmin, error } = await supabaseClient.rpc("is_admin");
+        if (error) throw error;
+        link.classList.toggle("hidden", !isAdmin);
+        accountAdmin?.classList.toggle("hidden", !isAdmin);
+      } catch (_) {
+        link.classList.add("hidden");
+        accountAdmin?.classList.add("hidden");
+      }
     }
 
     document.getElementById("topupForm").addEventListener("submit", async e => {

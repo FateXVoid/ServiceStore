@@ -15,54 +15,28 @@ function toast(message) {
   setTimeout(() => element.classList.remove("show"), 2600);
 }
 
-async function api(action, payload = {}) {
+function throwIfError(error, fallback) {
+  if (error) throw new Error(error.message || fallback);
+}
+
+async function getAdminSession() {
   if (!sb) throw new Error("ยังไม่ได้ตั้งค่า app-config.js");
 
-  const { data, error: sessionError } = await sb.auth.getSession();
-  if (sessionError) throw new Error(sessionError.message);
+  const { data, error } = await sb.auth.getSession();
+  throwIfError(error, "ตรวจสอบการเข้าสู่ระบบไม่สำเร็จ");
+  if (!data.session?.user) throw new Error("กรุณาเข้าสู่ระบบจากหน้าร้านก่อน");
 
-  const token = data.session?.access_token;
-  if (!token) throw new Error("กรุณาเข้าสู่ระบบจากหน้าร้านก่อน");
+  const { data: isAdmin, error: adminError } = await sb.rpc("is_admin");
+  throwIfError(adminError, "ตรวจสอบสิทธิ์แอดมินไม่สำเร็จ");
+  if (!isAdmin) throw new Error("บัญชีนี้ไม่มีสิทธิ์เข้าหน้าหลังบ้าน");
 
-  let response;
-  try {
-    response = await fetch(`${cfg.supabaseUrl}/functions/v1/admin-api`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: cfg.supabaseAnonKey,
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ action, ...payload }),
-    });
-  } catch (error) {
-    console.error("admin-api network error:", error);
-    throw new Error("เชื่อมต่อระบบหลังบ้านไม่ได้ กรุณาลองใหม่");
-  }
-
-  const text = await response.text();
-  let result = {};
-  try {
-    result = text ? JSON.parse(text) : {};
-  } catch {
-    throw new Error(`ระบบหลังบ้านตอบข้อมูลผิดรูปแบบ (${response.status})`);
-  }
-
-  if (!response.ok) {
-    throw new Error(result.detail || result.error || `API Error ${response.status}`);
-  }
-
-  return result;
+  return data.session.user;
 }
 
 async function boot() {
   try {
-    if (!sb) throw new Error("ยังไม่ได้ตั้งค่า app-config.js");
-
-    const me = await api("me");
-    if (!me.is_admin) throw new Error("บัญชีนี้ไม่มีสิทธิ์เข้าหน้าหลังบ้าน");
-
-    $("#adminIdentity").textContent = `Owner • ${me.email || "Admin"}`;
+    const user = await getAdminSession();
+    $("#adminIdentity").textContent = `Owner • ${user.email || "Admin"}`;
     $("#gate").classList.add("hidden");
     $("#app").classList.remove("hidden");
     await load();
@@ -75,11 +49,61 @@ async function boot() {
 
 async function load() {
   try {
-    state = await api("dashboard");
+    const [topupResult, profileResult, ledgerResult] = await Promise.all([
+      sb.from("topup_requests").select("*").order("created_at", { ascending: false }).limit(200),
+      sb.from("profiles").select("id,email,credit_balance,created_at").order("created_at", { ascending: false }).limit(500),
+      sb.from("admin_ledger").select("*").order("created_at", { ascending: false }).limit(300),
+    ]);
+
+    throwIfError(topupResult.error, "โหลดรายการเติมเงินไม่สำเร็จ");
+    throwIfError(profileResult.error, "โหลดข้อมูลลูกค้าไม่สำเร็จ");
+    throwIfError(ledgerResult.error, "โหลดบัญชีรายรับรายจ่ายไม่สำเร็จ");
+
+    const profiles = profileResult.data || [];
+    const emailById = new Map(profiles.map((item) => [item.id, item.email]));
+    const topups = await Promise.all((topupResult.data || []).map(async (item) => {
+      let slipUrl = "";
+      if (item.slip_path) {
+        const { data: signed, error } = await sb.storage
+          .from("payment-slips")
+          .createSignedUrl(item.slip_path, 900);
+        if (!error) slipUrl = signed?.signedUrl || "";
+      }
+      return { ...item, email: emailById.get(item.user_id) || null, slip_url: slipUrl };
+    }));
+
+    const approved = topups.filter((item) => item.status === "approved");
+    const dailyIncome = [];
+    for (let i = 13; i >= 0; i -= 1) {
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() - i);
+      const key = date.toISOString().slice(0, 10);
+      dailyIncome.push({
+        day: key.slice(5),
+        total: approved
+          .filter((item) => item.reviewed_at?.slice(0, 10) === key)
+          .reduce((sum, item) => sum + Number(item.amount || 0), 0),
+      });
+    }
+
+    state = {
+      stats: {
+        approved_income: approved.reduce((sum, item) => sum + Number(item.amount || 0), 0),
+        total_credit_balance: profiles.reduce((sum, item) => sum + Number(item.credit_balance || 0), 0),
+        pending_topups: topups.filter((item) => item.status === "pending").length,
+        users: profiles.length,
+      },
+      daily_income: dailyIncome,
+      topups,
+      users: profiles,
+      ledger: ledgerResult.data || [],
+    };
+
     render();
   } catch (error) {
     console.error("Dashboard load failed:", error);
-    toast(error.message);
+    toast(error.message || "โหลดข้อมูลไม่สำเร็จ");
   }
 }
 
@@ -146,7 +170,9 @@ function renderLedger() {
 async function review(id, mode) {
   const note = prompt(mode === "approve" ? "หมายเหตุการอนุมัติ (ไม่บังคับ)" : "เหตุผลที่ปฏิเสธ") || "";
   try {
-    await api(mode === "approve" ? "approve_topup" : "reject_topup", { request_id: id, note });
+    const rpcName = mode === "approve" ? "admin_approve_topup_simple" : "admin_reject_topup_simple";
+    const { error } = await sb.rpc(rpcName, { p_request_id: id, p_note: note });
+    throwIfError(error, "ดำเนินการไม่สำเร็จ");
     toast(mode === "approve" ? "เพิ่มเครดิตแล้ว" : "ปฏิเสธรายการแล้ว");
     await load();
   } catch (error) {
@@ -161,11 +187,16 @@ function selectUser(id) {
 
 async function adjust() {
   try {
-    await api("adjust_credit", {
-      user_id: $("#adjustUserId").value.trim(),
-      amount: Number($("#adjustAmount").value),
-      note: $("#adjustNote").value.trim(),
+    const userId = $("#adjustUserId").value.trim();
+    const amount = Number($("#adjustAmount").value);
+    if (!userId || !Number.isFinite(amount) || amount === 0) throw new Error("กรอกผู้ใช้และจำนวนเครดิตให้ถูกต้อง");
+
+    const { error } = await sb.rpc("admin_adjust_credit_simple", {
+      p_user_id: userId,
+      p_amount: amount,
+      p_note: $("#adjustNote").value.trim(),
     });
+    throwIfError(error, "ปรับเครดิตไม่สำเร็จ");
     toast("ปรับเครดิตเรียบร้อย");
     $("#adjustAmount").value = "";
     $("#adjustNote").value = "";
@@ -177,10 +208,12 @@ async function adjust() {
 
 async function addLedger() {
   try {
-    await api("add_ledger", {
-      amount: Number($("#ledgerAmount").value),
-      note: $("#ledgerNote").value.trim(),
-    });
+    const amount = Number($("#ledgerAmount").value);
+    const note = $("#ledgerNote").value.trim();
+    if (!Number.isFinite(amount) || amount === 0) throw new Error("กรอกจำนวนเงินให้ถูกต้อง");
+
+    const { error } = await sb.rpc("admin_add_ledger_simple", { p_amount: amount, p_note: note });
+    throwIfError(error, "เพิ่มรายการบัญชีไม่สำเร็จ");
     toast("เพิ่มรายการบัญชีแล้ว");
     $("#ledgerAmount").value = "";
     $("#ledgerNote").value = "";
