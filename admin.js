@@ -49,12 +49,13 @@ async function boot() {
 
 async function load() {
   try {
-    const [topupResult, profileResult, ledgerResult, withdrawalResult, orderResult] = await Promise.all([
+    const [topupResult, profileResult, ledgerResult, withdrawalResult, orderResult, serviceResult] = await Promise.all([
       sb.from("topup_requests").select("*").order("created_at", { ascending: false }).limit(200),
-      sb.from("profiles").select("id,email,credit_balance,created_at").order("created_at", { ascending: false }).limit(500),
+      sb.rpc("admin_list_users"),
       sb.from("admin_ledger").select("*").order("created_at", { ascending: false }).limit(300),
       sb.from("withdrawal_requests").select("*").order("created_at", { ascending: false }).limit(200),
       sb.from("service_orders").select("*").order("created_at", { ascending: false }).limit(300),
+      sb.from("services").select("*").order("sort_order", { ascending: true }),
     ]);
 
     throwIfError(topupResult.error, "โหลดรายการเติมเงินไม่สำเร็จ");
@@ -62,6 +63,7 @@ async function load() {
     throwIfError(ledgerResult.error, "โหลดบัญชีรายรับรายจ่ายไม่สำเร็จ");
     throwIfError(withdrawalResult.error, "โหลดคำขอถอนเงินไม่สำเร็จ");
     throwIfError(orderResult.error, "โหลดออเดอร์ไม่สำเร็จ");
+    throwIfError(serviceResult.error, "โหลดบริการไม่สำเร็จ");
 
     const profiles = profileResult.data || [];
     const emailById = new Map(profiles.map((item) => [item.id, item.email]));
@@ -106,6 +108,7 @@ async function load() {
       ledger: ledgerResult.data || [],
       withdrawals,
       orders: (orderResult.data || []).map(item => ({...item,email:emailById.get(item.user_id)||null})),
+      services: serviceResult.data || [],
     };
 
     render();
@@ -129,6 +132,7 @@ function render() {
   renderWithdrawals();
   renderOrders();
   renderUsers();
+  renderServices();
   renderLedger();
 }
 
@@ -209,6 +213,41 @@ function renderUsers() {
     <tr><td>${item.email || "-"}<small>${item.id}</small></td><td><b>${money(item.credit_balance)}</b></td><td>${new Date(item.created_at).toLocaleDateString("th-TH")}</td><td><button class="btn" onclick="selectUser('${item.id}')">เลือก</button></td></tr>`
   ).join("") || '<tr><td colspan="4">ไม่มีผู้ใช้</td></tr>';
 }
+
+
+function renderServices() {
+  const box = $("#serviceRows"); if (!box) return;
+  box.innerHTML = (state.services || []).map(item => `
+    <tr><td><b>${item.name}</b><small>${item.slug}</small></td><td>${money(item.price)}</td><td>${item.is_active ? '<span class="status approved">เปิดขาย</span>' : '<span class="status rejected">ปิดขาย</span>'}</td><td>${item.sort_order ?? 0}</td><td><button class="btn" onclick='editService(${JSON.stringify(item)})'>แก้ไข</button></td></tr>`
+  ).join("") || '<tr><td colspan="5">ยังไม่มีบริการ</td></tr>';
+}
+
+function editService(item) {
+  $("#serviceId").value = item.id || "";
+  $("#serviceSlug").value = item.slug || "";
+  $("#serviceName").value = item.name || "";
+  $("#serviceDescription").value = item.description || "";
+  $("#servicePrice").value = item.price || 0;
+  $("#serviceActive").checked = !!item.is_active;
+  $("#serviceSort").value = item.sort_order || 0;
+}
+
+async function saveService() {
+  try {
+    const payload = {
+      p_id: $("#serviceId").value || null, p_slug: $("#serviceSlug").value.trim(),
+      p_name: $("#serviceName").value.trim(), p_description: $("#serviceDescription").value.trim(),
+      p_price: Number($("#servicePrice").value), p_is_active: $("#serviceActive").checked,
+      p_sort_order: Number($("#serviceSort").value || 0)
+    };
+    if (!payload.p_slug || !payload.p_name || payload.p_price < 1) throw new Error("กรอกข้อมูลบริการให้ครบ");
+    const { error } = await sb.rpc("admin_save_service", payload);
+    throwIfError(error, "บันทึกบริการไม่สำเร็จ");
+    toast("บันทึกบริการแล้ว"); clearServiceForm(); await load();
+  } catch (error) { toast(error.message); }
+}
+function clearServiceForm(){ ["serviceId","serviceSlug","serviceName","serviceDescription","servicePrice","serviceSort"].forEach(id=>$("#"+id).value=""); $("#serviceActive").checked=true; }
+window.editService = editService;
 
 function renderLedger() {
   const items = state.ledger || [];
@@ -294,6 +333,8 @@ document.querySelectorAll("[data-section]").forEach((button) => {
 $("#refreshBtn")?.addEventListener("click", load);
 $("#adjustBtn")?.addEventListener("click", adjust);
 $("#ledgerBtn")?.addEventListener("click", addLedger);
+$("#serviceSaveBtn")?.addEventListener("click", saveService);
+$("#serviceNewBtn")?.addEventListener("click", clearServiceForm);
 $("#logoutBtn")?.addEventListener("click", async () => {
   await sb.auth.signOut();
   location.href = "index.html";

@@ -1626,6 +1626,26 @@
       custom: { th: "บริการสั่งทำพิเศษ", en: "Custom request", price: "Custom" }
     };
 
+    async function loadPublicServices(){
+      if(!supabaseClient) return;
+      const {data,error}=await supabaseClient.from("services").select("slug,name,description,price,is_active,sort_order").eq("is_active",true).order("sort_order");
+      if(error||!data) return;
+      data.forEach(item=>{
+        serviceMeta[item.slug] = { th:item.name, en:item.name, price:`฿${Number(item.price).toLocaleString("th-TH")}`, credits:Number(item.price) };
+      });
+      document.querySelectorAll("[data-service]").forEach(btn=>{
+        const row=data.find(i=>i.slug===btn.dataset.service); const v=serviceMeta[btn.dataset.service];
+        if(!row||!v) return;
+        const card=btn.closest(".service-card");
+        if(card){ const title=card.querySelector("h3"); const desc=card.querySelector("p"); const price=card.querySelector(".price"); if(title)title.textContent=row.name; if(desc)desc.textContent=row.description; if(price)price.innerHTML=`เริ่มต้น ${v.price} <small>/ งาน</small>`; }
+      });
+      if(serviceSelect){
+        [...serviceSelect.options].forEach(opt=>{ const row=data.find(i=>i.slug===opt.value); if(row) opt.textContent=row.name; });
+      }
+    }
+
+    loadPublicServices();
+
     const newsDetails = {
       th: [
         {title:"เปิดให้บริการเว็บไซต์แล้ว", body:"เว็บไซต์นี้ถูกออกแบบให้เป็นหน้าร้านสำหรับบริการออนไลน์โดยเฉพาะ มีหน้าแรก ข่าวสาร รายการบริการ แบบฟอร์มจ้างงาน ช่องทางติดต่อ และระบบเปลี่ยนภาษาไทย/อังกฤษ"},
