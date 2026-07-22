@@ -19,7 +19,7 @@ create table if not exists public.withdrawal_requests (
 
 insert into public.services(slug,name,description,price,sort_order) values
 ('portfolio','รับทำ Portfolio','ออกแบบ Portfolio สำหรับสมัครเรียน สมัครงาน หรือแนะนำตัว',499,1),
-('delivery','รับส่งของหรือสินค้า','บริการรับและส่งสิ่งของตามจุดที่กำหนด',99,2)
+('delivery','รับส่งของหรือสินค้า','บริการรับและส่งสิ่งของตามจุดที่กำหนด',39,2)
 on conflict(slug) do nothing;
 
 create or replace function public.admin_list_users()
