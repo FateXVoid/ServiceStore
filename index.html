@@ -948,6 +948,41 @@
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app-config.js?v=13"></script>
+
+<style id="starry-v17-theme">
+:root{
+ --bg:#070b1d!important;--surface:#0d1430!important;--surface-2:#111a3c!important;
+ --card:#101936!important;--text:#f8f9ff!important;--muted:#aeb9d8!important;
+ --border:rgba(156,174,255,.18)!important;--primary:#7c6cff!important;
+ --secondary:#37c7ff!important;--accent:#ffd86b!important;--success:#42dba2!important;
+ --danger:#ff7198!important;--shadow:0 26px 70px rgba(1,4,18,.45)!important;
+}
+html{background:#070b1d!important;color-scheme:dark}
+body{background:
+ radial-gradient(circle at 12% 10%,rgba(78,91,255,.22),transparent 27%),
+ radial-gradient(circle at 88% 16%,rgba(42,202,255,.16),transparent 23%),
+ radial-gradient(circle at 55% 86%,rgba(132,69,255,.15),transparent 25%),#070b1d!important;color:#f8f9ff!important}
+body:before,body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1}
+body:before{background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px);background-size:48px 48px;opacity:.22;animation:starDrift 28s linear infinite}
+body:after{background-image:radial-gradient(circle at 20% 30%,#ffd86b 0 1.5px,transparent 2px),radial-gradient(circle at 78% 62%,#6be1ff 0 1.5px,transparent 2px),radial-gradient(circle at 62% 15%,#fff 0 1px,transparent 1.5px);background-size:260px 260px,320px 320px,190px 190px;animation:twinkle 5s ease-in-out infinite alternate}
+@keyframes starDrift{to{transform:translateY(48px)}}@keyframes twinkle{from{opacity:.25}to{opacity:.8}}
+header,.site-header,.navbar,.topbar{background:rgba(7,11,29,.76)!important;backdrop-filter:blur(18px);border-color:var(--border)!important}
+.card,.panel,.service-card,.news-card,.feature-card,.settings-card,.payment-card,.checkout-card,.summary-card,.hero-card{background:linear-gradient(145deg,rgba(17,27,63,.92),rgba(10,16,40,.92))!important;border:1px solid var(--border)!important;box-shadow:var(--shadow)!important;color:var(--text)!important}
+h1,h2,h3,h4,strong,b,label,.section-title,.hero-title{color:var(--text)!important;text-shadow:0 0 24px rgba(132,146,255,.12)}
+p,small,.muted,.section-subtitle{color:var(--muted)!important}
+input,textarea,select{background:#0d1634!important;border:1px solid rgba(154,174,255,.24)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important}
+input::placeholder,textarea::placeholder{color:#7885aa!important}select option{background:#0d1634;color:#fff}
+button,.primary-btn,.btn-primary,.cta-button{transition:transform .22s ease,box-shadow .22s ease,filter .22s ease!important}
+button:hover,.primary-btn:hover,.btn-primary:hover,.cta-button:hover{transform:translateY(-3px) scale(1.015);filter:brightness(1.08);box-shadow:0 14px 35px rgba(100,88,255,.3)!important}
+.primary-btn,.btn-primary,.cta-button{background:linear-gradient(135deg,#7367ff,#2cbfff)!important;color:white!important;border:0!important}
+a{color:#91cfff!important}.badge,.chip,.status-chip{background:rgba(116,104,255,.14)!important;border-color:rgba(143,135,255,.35)!important;color:#d9dcff!important}
+.hero:after,.hero-section:after{content:"✦";position:absolute;right:7%;top:11%;font-size:72px;color:#ffd86b;filter:drop-shadow(0 0 18px rgba(255,216,107,.65));animation:floatStar 4s ease-in-out infinite}
+@keyframes floatStar{50%{transform:translateY(-15px) rotate(12deg)}}
+.service-card,.news-card,.feature-card{position:relative;overflow:hidden;transition:.35s cubic-bezier(.2,.8,.2,1)!important}.service-card:hover,.news-card:hover,.feature-card:hover{transform:translateY(-9px) rotateX(1deg)!important;border-color:rgba(126,144,255,.45)!important}.service-card:after,.news-card:after{content:"";position:absolute;inset:-120% -60%;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.16) 50%,transparent 58%);transform:translateX(-55%) rotate(8deg);transition:.8s}.service-card:hover:after,.news-card:hover:after{transform:translateX(55%) rotate(8deg)}
+#authBox{display:none!important}.login-required-panel{padding:20px;border-radius:18px;background:linear-gradient(135deg,rgba(121,103,255,.16),rgba(45,196,255,.1));border:1px solid rgba(135,151,255,.28);text-align:center}.login-required-panel.hidden{display:none!important}
+.page,.section,[data-page]{animation:pageNebula .5s ease both}@keyframes pageNebula{from{opacity:0;transform:translateY(12px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
 </head>
 
 <body>
@@ -1150,7 +1185,7 @@
             <div class="market-badge">● พร้อมให้บริการ • ตัดเครดิตอัตโนมัติ</div><div class="service-icon">📦</div>
             <h3 data-i18n="services.deliveryTitle">รับส่งของหรือสินค้า</h3>
             <p data-i18n="services.deliveryDesc">บริการรับและส่งสิ่งของตามจุดที่กำหนด ราคาอ้างอิงจากระยะทาง ขนาด และรายละเอียดสินค้า</p>
-            <div class="price"><span data-i18n="services.start">เริ่มต้น</span> ฿39 <small data-i18n="services.perTrip">/ เที่ยว</small></div>
+            <div class="price"><span data-i18n="services.start">เริ่มต้น</span> ฿99 <small data-i18n="services.perTrip">/ เที่ยว</small></div>
             <button class="service-btn choose-service" data-service="delivery" data-i18n="services.select">เลือกบริการนี้</button>
             <button class="buy-credit-btn buy-now" data-service="delivery" data-i18n="services.buyCredit">ซื้อด้วยเครดิต</button>
           </article>
@@ -1269,7 +1304,7 @@
             </div>
           </div>
           <div class="wallet-card reveal">
-            <div class="auth-box" id="authBox">
+            <div id="loginRequiredPanel" class="login-required-panel"><h3>เข้าสู่ระบบเพื่อเติมเครดิต</h3><p>ระบบบัญชีแยกเป็นหน้าล็อกอินโดยเฉพาะ เพื่อใช้งานง่ายและปลอดภัยกว่าเดิม</p><button type="button" class="primary-btn" onclick="location.href='login.html?next=wallet'">เข้าสู่ระบบ / สมัครสมาชิก</button></div><div class="auth-box" id="authBox">
               <h3 data-i18n="wallet.loginTitle">เข้าสู่ระบบก่อนเติมเครดิต</h3>
               <div class="field" style="margin-top:12px">
                 <label for="authEmail">Email</label>
@@ -1622,7 +1657,7 @@
 
     const serviceMeta = {
       portfolio: { th: "รับทำ Portfolio", en: "Portfolio design", price: "฿499", credits: 499 },
-      delivery: { th: "รับส่งของหรือสินค้า", en: "Product delivery", price: "฿39", credits: 39 },
+      delivery: { th: "รับส่งของหรือสินค้า", en: "Product delivery", price: "฿99", credits: 99 },
       custom: { th: "บริการสั่งทำพิเศษ", en: "Custom request", price: "Custom" }
     };
 
@@ -1726,6 +1761,7 @@
       document.getElementById("authEmail").disabled = signedIn;
       document.getElementById("authPassword").disabled = signedIn;
       document.getElementById("authStatus").textContent = signedIn ? `เข้าสู่ระบบ: ${currentUser.email}` : "ยังไม่ได้เข้าสู่ระบบ";
+      document.getElementById("loginRequiredPanel")?.classList.toggle("hidden", signedIn);
       updateHeaderAccount();
       if (signedIn) { await loadWallet(); await loadAccountCenter(); await checkAdminAccess(); } else { creditBalance = 0; creditHistory = []; renderWallet(); document.getElementById("adminNavLink")?.classList.add("hidden"); document.getElementById("accountAdminAction")?.classList.add("hidden"); }
     }
@@ -1978,7 +2014,7 @@
       accountTrigger.setAttribute("aria-expanded", String(open));
     });
     document.addEventListener("click", event => { if (!accountMenuWrap?.contains(event.target)) closeAccountMenu(); });
-    document.getElementById("accountLoginAction")?.addEventListener("click", () => { closeAccountMenu(); location.hash="wallet"; routeTo("wallet"); setTimeout(() => document.getElementById("authEmail")?.focus(), 250); });
+    document.getElementById("accountLoginAction")?.addEventListener("click", () => { closeAccountMenu(); location.href="login.html"; });
     document.getElementById("accountWalletAction")?.addEventListener("click", () => { closeAccountMenu(); location.hash="wallet"; routeTo("wallet"); });
     document.getElementById("accountSettingsAction")?.addEventListener("click", () => { closeAccountMenu(); location.hash="settings"; routeTo("settings"); });
     document.getElementById("accountLogoutAction")?.addEventListener("click", async () => { closeAccountMenu(); if (supabaseClient) await supabaseClient.auth.signOut(); await refreshSessionUI(); showToast("ออกจากระบบแล้ว"); });
@@ -2042,7 +2078,7 @@
       document.getElementById("topupAmount").value = btn.dataset.amount;
     }));
 
-    document.getElementById("loginBtn").addEventListener("click", async () => {
+    document.getElementById("loginBtn")?.addEventListener("click", async () => {
       try {
         if (!supabaseClient) throw new Error("ยังไม่ได้ตั้งค่า Supabase");
         const email = document.getElementById("authEmail").value.trim();
@@ -2053,7 +2089,7 @@
       } catch (error) { showToast(error.message); }
     });
 
-    document.getElementById("signupBtn").addEventListener("click", async () => {
+    document.getElementById("signupBtn")?.addEventListener("click", async () => {
       try {
         if (!supabaseClient) throw new Error("ยังไม่ได้ตั้งค่า Supabase");
         const email = document.getElementById("authEmail").value.trim();

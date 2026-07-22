@@ -147,7 +147,10 @@ function renderWithdrawals() {
 }
 
 async function reviewWithdrawal(id, mode) {
-  const note = prompt(mode === "approve" ? "หมายเหตุการอนุมัติ" : "เหตุผลที่ปฏิเสธ") || "";
+  const label = mode === "approve" ? "หมายเหตุการอนุมัติ (ไม่บังคับ)" : "เหตุผลที่ปฏิเสธ (จำเป็น)";
+  const note = (prompt(label) || "").trim();
+  if (mode === "reject" && !note) return toast("กรุณาระบุเหตุผลที่ปฏิเสธ");
+  if (!confirm(mode === "approve" ? "ยืนยันอนุมัติคำขอถอนนี้?" : "ยืนยันปฏิเสธคำขอถอนนี้?")) return;
   try {
     const rpcName = mode === "approve" ? "admin_approve_withdrawal_simple" : "admin_reject_withdrawal_simple";
     const { error } = await sb.rpc(rpcName, { p_request_id: id, p_note: note });
@@ -164,7 +167,7 @@ function renderOrders() {
   const active = items.filter(x => !["completed","cancelled"].includes(x.status)).length;
   if ($("#orderPendingChip")) $("#orderPendingChip").textContent = `${active} active`;
   box.innerHTML = items.map(item => {
-    const next = item.status === "pending" ? `<button class="btn good" onclick="setOrderStatus('${item.id}','accepted')">รับงาน</button>` : item.status === "accepted" ? `<button class="btn primary" onclick="setOrderStatus('${item.id}','working')">เริ่มทำ</button>` : item.status === "working" ? `<button class="btn good" onclick="setOrderStatus('${item.id}','completed')">เสร็จแล้ว</button>` : "-";
+    const next = item.status === "pending" ? `<button class="btn good" onclick="setOrderStatus('${item.id}','accepted')">รับงาน</button> <button class="btn bad" onclick="rejectOrder('${item.id}')">ปฏิเสธ</button>` : item.status === "accepted" ? `<button class="btn primary" onclick="setOrderStatus('${item.id}','working')">เริ่มทำ</button>` : item.status === "working" ? `<button class="btn good" onclick="setOrderStatus('${item.id}','completed')">เสร็จแล้ว</button>` : "-";
     return `<tr><td><b>#${String(item.id).slice(0,8)}</b><small>${new Date(item.created_at).toLocaleString("th-TH")}</small></td><td>${item.email||"-"}<small>${item.customer_name||"-"} • ${item.contact||"-"}</small></td><td>${item.service_name||item.service_id}</td><td><b>${money(item.price)}</b></td><td style="max-width:280px;white-space:normal">${item.details||"-"}<small>${item.deadline?`กำหนด ${item.deadline}`:""}</small></td><td><span class="status ${item.status==='completed'?'approved':item.status==='cancelled'?'rejected':'pending'}">${item.status}</span></td><td>${next}</td></tr>`;
   }).join("") || '<tr><td colspan="7">ยังไม่มีออเดอร์</td></tr>';
 }
@@ -172,6 +175,15 @@ function renderOrders() {
 async function setOrderStatus(id,status){
   try{const {error}=await sb.rpc("admin_update_order_status",{p_order_id:id,p_status:status,p_note:""});throwIfError(error,"อัปเดตออเดอร์ไม่สำเร็จ");toast("อัปเดตสถานะออเดอร์แล้ว");await load();}catch(error){toast(error.message);}
 }
+
+
+async function rejectOrder(id){
+  const reason=(prompt("เหตุผลที่ปฏิเสธออเดอร์ (จำเป็น)")||"").trim();
+  if(!reason) return toast("กรุณาระบุเหตุผลที่ปฏิเสธ");
+  if(!confirm("ยืนยันปฏิเสธออเดอร์นี้?")) return;
+  try{const {error}=await sb.rpc("admin_update_order_status",{p_order_id:id,p_status:"cancelled",p_note:reason});throwIfError(error,"ปฏิเสธออเดอร์ไม่สำเร็จ");toast("ปฏิเสธออเดอร์แล้ว");await load();}catch(error){toast(error.message);}
+}
+window.rejectOrder=rejectOrder;
 
 function renderUsers() {
   const items = state.users || [];
@@ -210,8 +222,12 @@ async function saveService() {
     };
     if (!payload.p_slug || !payload.p_name || payload.p_price < 1) throw new Error("กรอกข้อมูลบริการให้ครบ");
     const { error } = await sb.rpc("admin_save_service", payload);
-    throwIfError(error, "บันทึกบริการไม่สำเร็จ");
-    toast("บันทึกบริการแล้ว"); clearServiceForm(); await load();
+    if (error) {
+      const row = {slug:payload.p_slug,name:payload.p_name,description:payload.p_description,price:payload.p_price,is_active:payload.p_is_active,sort_order:payload.p_sort_order,updated_at:new Date().toISOString()};
+      const fallback = payload.p_id ? await sb.from("services").update(row).eq("id",payload.p_id) : await sb.from("services").insert(row);
+      throwIfError(fallback.error, error.message || "บันทึกบริการไม่สำเร็จ");
+    }
+    toast("บันทึกแล้ว หน้าร้านจะเปลี่ยนตามข้อมูลล่าสุด"); clearServiceForm(); await load();
   } catch (error) { toast(error.message); }
 }
 function clearServiceForm(){ ["serviceId","serviceSlug","serviceName","serviceDescription","servicePrice","serviceSort"].forEach(id=>$("#"+id).value=""); $("#serviceActive").checked=true; }
@@ -225,16 +241,16 @@ function renderLedger() {
 }
 
 async function review(id, mode) {
-  const note = prompt(mode === "approve" ? "หมายเหตุการอนุมัติ (ไม่บังคับ)" : "เหตุผลที่ปฏิเสธ") || "";
+  const note = (prompt(mode === "approve" ? "หมายเหตุการอนุมัติ (ไม่บังคับ)" : "เหตุผลที่ปฏิเสธ (จำเป็น)") || "").trim();
+  if (mode === "reject" && !note) return toast("กรุณาระบุเหตุผลที่ปฏิเสธ");
+  if (!confirm(mode === "approve" ? "ยืนยันอนุมัติและเพิ่มเครดิต?" : "ยืนยันปฏิเสธรายการนี้?")) return;
   try {
     const rpcName = mode === "approve" ? "admin_approve_topup_simple" : "admin_reject_topup_simple";
     const { error } = await sb.rpc(rpcName, { p_request_id: id, p_note: note });
     throwIfError(error, "ดำเนินการไม่สำเร็จ");
     toast(mode === "approve" ? "เพิ่มเครดิตแล้ว" : "ปฏิเสธรายการแล้ว");
     await load();
-  } catch (error) {
-    toast(error.message);
-  }
+  } catch (error) { toast(error.message); }
 }
 
 function selectUser(id, email = "") {
