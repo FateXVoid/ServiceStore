@@ -1385,13 +1385,15 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
                   <div class="method-note">โอนเข้าหมายเลข Wallet แล้วแนบสลิปด้านล่าง</div>
                 </div>
               </div>
-              <div class="notice" style="margin-top:14px">ทุกการเติมเครดิตต้องแนบสลิป และเครดิตจะเข้าเมื่อแอดมินอนุมัติแล้วเท่านั้น</div>
+              <div class="notice" style="margin-top:14px">เติมขั้นต่ำ 10 บาท • ทุกการเติมเครดิตต้องแนบสลิป และเครดิตจะเข้าเมื่อแอดมินอนุมัติแล้วเท่านั้น</div>
               <form id="topupForm" style="margin-top:18px">
                 <div class="field">
-                  <label for="topupAmount">จำนวนเงินที่โอน</label>
-                  <input id="topupAmount" type="number" min="20" max="5000" step="1" required placeholder="100">
+                  <label for="topupAmount">จำนวนเงินที่โอน <strong style="color:#ffcf70">(ขั้นต่ำ 10 บาท)</strong></label>
+                  <input id="topupAmount" type="number" min="10" max="5000" step="1" required placeholder="ขั้นต่ำ 10 บาท" aria-describedby="topupMinimumHint">
+                  <small id="topupMinimumHint" style="display:block;margin-top:7px;color:#ffcf70;font-weight:700">⚠️ ระบบไม่รับรายการที่ต่ำกว่า 10 บาท</small>
                 </div>
                 <div class="quick-amounts">
+                  <button type="button" class="quick-amount" data-amount="10">฿10</button>
                   <button type="button" class="quick-amount" data-amount="50">฿50</button>
                   <button type="button" class="quick-amount" data-amount="100">฿100</button>
                   <button type="button" class="quick-amount" data-amount="300">฿300</button>
@@ -2244,7 +2246,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
         const amount = Number(document.getElementById("topupAmount").value);
         const reference = document.getElementById("transferReference").value.trim();
         const file = slipInput.files?.[0];
-        if (!amount || amount < 20 || amount > 5000) throw new Error("จำนวนเงินต้องอยู่ระหว่าง 20-5,000 บาท");
+        if (!Number.isInteger(amount) || amount < 10 || amount > 5000) throw new Error("เติมขั้นต่ำ 10 บาท และสูงสุด 5,000 บาท");
         if (!reference) throw new Error("กรุณากรอกเลขอ้างอิงหรือเวลาที่โอน");
         if (!file) throw new Error("กรุณาแนบสลิป");
         if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("รองรับเฉพาะ JPG, PNG หรือ WEBP");
@@ -2267,7 +2269,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
         e.target.reset(); document.getElementById("slipPreview").classList.add("hidden");
         showToast("ส่งสลิปเรียบร้อยแล้ว");
         await loadWallet();
-      } catch (error) { showToast(error.message || "ส่งสลิปไม่สำเร็จ"); }
+      } catch (error) { showToast((error.message || "ส่งสลิปไม่สำเร็จ").includes("payment_method") ? "ระบบเติมเงินยังไม่ได้อัปเดตฐานข้อมูล กรุณารัน SQL Hotfix V21.1" : (error.message || "ส่งสลิปไม่สำเร็จ")); }
       finally { button.disabled=false; button.style.opacity="1"; button.textContent="ส่งสลิปให้แอดมินตรวจ"; }
     });
 
