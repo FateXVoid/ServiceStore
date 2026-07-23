@@ -947,6 +947,10 @@
 
   
     [hidden]{display:none!important}
+    /* V22.2 hotfix: decorative layers must never block service controls */
+    .service-card::before,.service-card::after,.card-wave,.card-glow,.market-badge{pointer-events:none!important}
+    .service-card{position:relative;pointer-events:auto!important}
+    .service-card button,.choose-service,.buy-now{position:relative;z-index:20;pointer-events:auto!important;cursor:pointer!important}
     .wallet-action-tabs{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 20px}
     .wallet-action-tab{flex:1;min-width:150px;border:1px solid var(--border);background:rgba(18,28,72,.82);color:var(--text);padding:14px 18px;border-radius:16px;font-weight:800;cursor:pointer}
     .wallet-action-tab.active{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 12px 34px rgba(91,112,255,.28)}
@@ -1735,11 +1739,11 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
 
     async function loadPublicServices(){
       if(!supabaseClient) return;
-      const {data,error}=await supabaseClient.from("services")
+      const {data:serviceRows,error}=await supabaseClient.from("services")
         .select("slug,name,description,price,is_active,sort_order,icon,badge,price_label,requires_distance,is_custom")
         .eq("is_active",true).order("sort_order");
-      if(error||!data) return;
-      data = data.filter((item,index,list) => index === list.findIndex(other => other.slug === item.slug));
+      if(error||!serviceRows) return;
+      const data = serviceRows.filter((item,index,list) => index === list.findIndex(other => other.slug === item.slug));
 
       const grid=document.getElementById("serviceGrid");
       if(grid){
@@ -1791,7 +1795,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
 
     function escapeHtml(value){return String(value??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
     function bindServiceButtons(){
-      document.querySelectorAll(".choose-service,.buy-now").forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound="1";btn.addEventListener("click",()=>{serviceSelect.value=btn.dataset.service;updateServiceSummary();showPage("hire");setTimeout(()=>serviceSelect.focus(),450);});});
+      document.querySelectorAll(".choose-service,.buy-now").forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound="1";btn.addEventListener("click",()=>{serviceSelect.value=btn.dataset.service;updateServiceSummary();location.hash="hire";routeTo("hire");setTimeout(()=>serviceSelect.focus(),450);});});
     }
 
     const newsDetails = {
@@ -2149,8 +2153,8 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
       if (serviceSelect && [...serviceSelect.options].some(option => option.value === selectedId)) {
         serviceSelect.value = selectedId;
         serviceSelect.dispatchEvent(new Event("change", { bubbles:true }));
-        showPage("hire");
         location.hash = "hire";
+        routeTo("hire");
         setTimeout(() => serviceSelect.focus(), 250);
       } else {
         showToast("ไม่พบบริการนี้ กรุณารีเฟรชหน้าเว็บ");
