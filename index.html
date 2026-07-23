@@ -945,7 +945,12 @@
     .live-credit{display:flex;justify-content:space-between;align-items:center;gap:12px}.live-credit b{color:#b9ffe6}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 
-  </style>
+  
+    [hidden]{display:none!important}
+    .wallet-action-tabs{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 20px}
+    .wallet-action-tab{flex:1;min-width:150px;border:1px solid var(--border);background:rgba(18,28,72,.82);color:var(--text);padding:14px 18px;border-radius:16px;font-weight:800;cursor:pointer}
+    .wallet-action-tab.active{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 12px 34px rgba(91,112,255,.28)}
+</style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app-config.js?v=21"></script>
 
@@ -1334,6 +1339,10 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           <h2 data-i18n="wallet.title">เติมเครดิตและชำระค่าบริการ</h2>
           <p data-i18n="wallet.desc">ระบบจะเพิ่มเครดิตเฉพาะเมื่อ Payment Gateway ยืนยันว่าได้รับเงินจริงแล้ว</p>
         </div>
+        <div class="wallet-action-tabs reveal" role="tablist" aria-label="เลือกเมนูกระเป๋า">
+          <button type="button" class="wallet-action-tab active" data-wallet-panel="topup">ฝากเงิน / เติมเครดิต</button>
+          <button type="button" class="wallet-action-tab" data-wallet-panel="withdraw">ถอนเครดิต</button>
+        </div>
         <div class="wallet-grid">
           <div>
             <div class="wallet-card balance-card reveal">
@@ -1346,7 +1355,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
               <h3 data-i18n="wallet.history">ประวัติรายการ</h3>
               <div class="history-list" id="historyList"></div>
             </div>
-            <div class="wallet-card reveal" id="withdrawWalletCard" style="margin-top:24px">
+            <div class="wallet-card reveal" id="withdrawWalletCard" style="margin-top:24px" hidden>
               <h3>ถอนเครดิต</h3>
               
               <div class="withdraw-note">คำขอถอนจะถูกตรวจโดยแอดมิน และยอดเครดิตจะถูกหักเมื่อคำขอได้รับอนุมัติ</div>
@@ -1362,7 +1371,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
             </div>
 
           </div>
-          <div class="wallet-card reveal">
+          <div class="wallet-card reveal" id="topupWalletCard">
             <div id="loginRequiredPanel" class="login-required-panel"><h3>เข้าสู่ระบบเพื่อเติมเครดิต</h3><p>ระบบบัญชีแยกเป็นหน้าล็อกอินโดยเฉพาะ เพื่อใช้งานง่ายและปลอดภัยกว่าเดิม</p><button type="button" class="primary-btn" onclick="location.href='login.html?next=wallet'">เข้าสู่ระบบ / สมัครสมาชิก</button></div><div class="auth-box hidden" id="authBox" aria-hidden="true">
               <h3 data-i18n="wallet.loginTitle">เข้าสู่ระบบก่อนเติมเครดิต</h3>
               <div class="field" style="margin-top:12px">
@@ -1493,40 +1502,40 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
         <div class="section-head reveal">
           <span class="eyebrow" data-i18n="contact.badge">ช่องทางติดต่อ</span>
           <h2 data-i18n="contact.title">ติดต่อเรา</h2>
-          <p data-i18n="contact.desc">ข้อมูลด้านล่างเป็นช่องว่างตัวอย่าง สามารถเปลี่ยนเป็นข้อมูลจริงของคุณได้ในไฟล์ index.html</p>
+          <p data-i18n="contact.desc">ติดต่อสอบถามบริการ แจ้งปัญหา หรือติดตามงานผ่านช่องทางด้านล่าง</p>
         </div>
 
         <div class="contact-layout">
           <div class="contact-card reveal">
-            <a class="contact-item" href="tel:0000000000">
+            <a class="contact-item" href="tel:0957213642">
               <div class="contact-icon">📞</div>
               <div>
                 <small data-i18n="contact.phone">เบอร์โทร</small>
-                <strong>000-000-0000</strong>
+                <strong>095-721-3642</strong>
               </div>
             </a>
 
-            <a class="contact-item" href="mailto:yourmail@example.com">
+            <a class="contact-item" href="mailto:fatex099@gmail.com">
               <div class="contact-icon">✉️</div>
               <div>
                 <small data-i18n="contact.email">อีเมล</small>
-                <strong>yourmail@example.com</strong>
+                <strong>fatex099@gmail.com</strong>
               </div>
             </a>
 
-            <a class="contact-item" href="https://instagram.com/" target="_blank" rel="noopener">
+            <a class="contact-item" href="https://instagram.com/im4ftex" target="_blank" rel="noopener">
               <div class="contact-icon">📸</div>
               <div>
                 <small>Instagram</small>
-                <strong>@yourinstagram</strong>
+                <strong>@im4ftex</strong>
               </div>
             </a>
 
-            <a class="contact-item" href="https://facebook.com/" target="_blank" rel="noopener">
+            <a class="contact-item" href="https://www.facebook.com/search/top?q=Fatex%20Crc" target="_blank" rel="noopener">
               <div class="contact-icon">ⓕ</div>
               <div>
                 <small>Facebook</small>
-                <strong>Your Facebook Page</strong>
+                <strong>Fatex Crc</strong>
               </div>
             </a>
           </div>
@@ -1629,7 +1638,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
         wallet:{badge:"กระเป๋าเครดิต",title:"เติมเครดิตและชำระค่าบริการ",desc:"เติมเครดิตผ่านบัญชีธนาคารหรือ TrueMoney แล้วใช้เครดิตซื้อบริการภายในเว็บไซต์",balanceShort:"เครดิต",available:"เครดิตคงเหลือ",localNote:"",serverNote:"ยอดเครดิตถูกเก็บในฐานข้อมูลและแก้จากหน้าเว็บไม่ได้",refresh:"รีเฟรชยอดเครดิต",reset:"",history:"ประวัติรายการ",topup:"เติมเครดิต",bank:"ธนาคาร",bankName:"ธนาคารตัวอย่าง",accountName:"ชื่อบัญชี: YOUR NAME",tmName:"ชื่อบัญชี: YOUR NAME",amount:"จำนวนเงิน",reference:"เลขอ้างอิง/เวลาที่โอน",referencePh:"เช่น 123456 / 14:30",slip:"แนบหลักฐานการโอน",demoNotice:"",confirm:"",loginTitle:"เข้าสู่ระบบก่อนเติมเครดิต",password:"รหัสผ่าน",login:"เข้าสู่ระบบ",signup:"สมัครสมาชิก",logout:"ออกจากระบบ",autoVerify:"ตรวจสอบยอดอัตโนมัติ",gatewayNote:"QR จะถูกสร้างโดย Payment Gateway และมีจำนวนเงินกำหนดไว้",tmGatewayNote:"ผู้ชำระจะยืนยันรายการผ่าน TrueMoney ตามหน้าที่ Gateway แสดง",phone:"เบอร์ TrueMoney",liveNotice:"เครดิตจะยังไม่เพิ่มตอนกดปุ่ม ระบบจะรอ Webhook ยืนยันการจ่ายเงินจริงก่อน",createPayment:"สร้างรายการชำระเงิน",openPayment:"เปิดหน้าชำระเงิน",empty:"ยังไม่มีรายการ",topupText:"เติมเครดิต",purchaseText:"ซื้อบริการ",insufficient:"เครดิตไม่เพียงพอ กรุณาเติมเครดิตก่อน",purchased:"ชำระด้วยเครดิตสำเร็จ",resetDone:"รีเซ็ตเครดิตแล้ว"},
         contact:{
           badge:"ช่องทางติดต่อ",title:"ติดต่อเรา",
-          desc:"ข้อมูลด้านล่างเป็นช่องว่างตัวอย่าง สามารถเปลี่ยนเป็นข้อมูลจริงของคุณได้ในไฟล์ index.html",
+          desc:"ติดต่อสอบถามบริการ แจ้งปัญหา หรือติดตามงานผ่านช่องทางด้านล่าง",
           phone:"เบอร์โทร",email:"อีเมล",quickTitle:"ส่งข้อความด่วน",name:"ชื่อ",namePh:"ชื่อของคุณ",
           reply:"อีเมลหรือเบอร์ติดต่อกลับ",replyPh:"ช่องทางติดต่อกลับ",message:"ข้อความ",
           messagePh:"พิมพ์ข้อความที่ต้องการติดต่อ",copy:"สร้างและคัดลอกข้อความ"
@@ -1696,7 +1705,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
         wallet:{badge:"Credit wallet",title:"Top up credits and pay for services",desc:"Add credits via bank transfer or TrueMoney and spend them on services in this website",balanceShort:"Credits",available:"Available credits",localNote:"",serverNote:"Credits are stored securely in the database",refresh:"Refresh balance",reset:"",history:"Transaction history",topup:"Top up credits",bank:"Bank transfer",bankName:"Sample bank",accountName:"Account name: YOUR NAME",tmName:"Account name: YOUR NAME",amount:"Amount",reference:"Transfer reference/time",referencePh:"Example: 123456 / 14:30",slip:"Attach transfer proof",demoNotice:"",confirm:"",loginTitle:"Sign in before topping up",password:"Password",login:"Sign in",signup:"Sign up",logout:"Sign out",autoVerify:"Automatic verification",gatewayNote:"The payment gateway generates a fixed-amount QR",tmGatewayNote:"Confirm the payment through the TrueMoney flow shown by the gateway",phone:"TrueMoney phone number",liveNotice:"Credits are added only after the webhook verifies a successful real payment",createPayment:"Create payment",openPayment:"Open payment page",empty:"No transactions yet",topupText:"Credit top up",purchaseText:"Service purchase",insufficient:"Insufficient credits. Please top up first",purchased:"Paid with credits successfully",resetDone:"Demo credits reset"},
         contact:{
           badge:"Contact channels",title:"Contact us",
-          desc:"The information below is placeholder content. Replace it with your real details in index.html.",
+          desc:"Contact us for service inquiries, support, or order follow-up.",
           phone:"Phone",email:"Email",quickTitle:"Quick message",name:"Name",namePh:"Your name",
           reply:"Email or callback number",replyPh:"Your contact information",message:"Message",
           messagePh:"Type your message",copy:"Generate and copy message"
@@ -1730,6 +1739,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
         .select("slug,name,description,price,is_active,sort_order,icon,badge,price_label,requires_distance,is_custom")
         .eq("is_active",true).order("sort_order");
       if(error||!data) return;
+      data = data.filter((item,index,list) => index === list.findIndex(other => other.slug === item.slug));
 
       const grid=document.getElementById("serviceGrid");
       if(grid){
@@ -2130,6 +2140,65 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
     serviceSelect?.addEventListener("change", updateServiceSummary);
     document.getElementById("deliveryDistance")?.addEventListener("change", updateServiceSummary);
 
+    // V22.1: robust service selection and context-sensitive fields
+    document.addEventListener("click", event => {
+      const button = event.target.closest(".choose-service,.buy-now");
+      if (!button) return;
+      event.preventDefault();
+      const selectedId = button.dataset.service;
+      if (serviceSelect && [...serviceSelect.options].some(option => option.value === selectedId)) {
+        serviceSelect.value = selectedId;
+        serviceSelect.dispatchEvent(new Event("change", { bubbles:true }));
+        showPage("hire");
+        location.hash = "hire";
+        setTimeout(() => serviceSelect.focus(), 250);
+      } else {
+        showToast("ไม่พบบริการนี้ กรุณารีเฟรชหน้าเว็บ");
+      }
+    });
+
+    document.querySelectorAll(".wallet-action-tab").forEach(tab => tab.addEventListener("click", () => {
+      const panel = tab.dataset.walletPanel;
+      document.querySelectorAll(".wallet-action-tab").forEach(x => x.classList.toggle("active", x === tab));
+      const topupCard = document.getElementById("topupWalletCard");
+      const withdrawCard = document.getElementById("withdrawWalletCard");
+      if (topupCard) topupCard.hidden = panel !== "topup";
+      if (withdrawCard) withdrawCard.hidden = panel !== "withdraw";
+    }));
+
+    document.getElementById("hireForm")?.addEventListener("submit", async event => {
+      event.preventDefault();
+      try {
+        if (!currentUser) throw new Error("กรุณาเข้าสู่ระบบก่อนสั่งบริการ");
+        const serviceId = serviceSelect?.value;
+        const meta = serviceMeta[serviceId];
+        if (!serviceId || !meta) throw new Error("กรุณาเลือกบริการใหม่");
+        const payload = {
+          service_id: serviceId,
+          customer_name: document.getElementById("customerName").value.trim(),
+          contact: document.getElementById("customerContact").value.trim(),
+          deadline: document.getElementById("deadline").value || null,
+          details: document.getElementById("details").value.trim()
+        };
+        if (!payload.customer_name || !payload.contact || !payload.details) throw new Error("กรุณากรอกข้อมูลให้ครบ");
+        if (meta.variablePrice) payload.quoted_price = Number(document.getElementById("deliveryDistance").value);
+        if (meta.customQuote) {
+          payload.proposed_price = Number(document.getElementById("proposedPrice").value);
+          if (!Number.isInteger(payload.proposed_price) || payload.proposed_price < 1) throw new Error("กรุณากรอกราคาเสนอ");
+          const { error } = await supabaseClient.rpc("submit_custom_request", { p_payload: payload });
+          if (error) throw error;
+          showToast("ส่ง Custom request ให้แอดมินแล้ว");
+        } else {
+          await purchaseService(payload);
+          showToast("สั่งซื้อบริการสำเร็จ");
+        }
+        event.target.reset();
+        updateServiceSummary();
+        location.hash = "my-orders";
+        routeTo("my-orders");
+      } catch (error) { showToast(error.message || "ส่งคำสั่งซื้อไม่สำเร็จ"); }
+    });
+
     document.querySelectorAll("[data-news]").forEach(btn => {
       btn.addEventListener("click", () => {
         const item = newsDetails[currentLang][Number(btn.dataset.news)];
@@ -2192,9 +2261,8 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           if(uploadError) throw uploadError;
           avatarUrl=supabaseClient.storage.from("avatars").getPublicUrl(path).data.publicUrl;
         }
-        const profilePayload={nickname,avatar_url:avatarUrl};
-        let {error}=await supabaseClient.from("profiles").update(profilePayload).eq("id",currentUser.id);
-        if(error && error.code === "PGRST116") error=null;
+        const profilePayload={id:currentUser.id,nickname,avatar_url:avatarUrl};
+        const {error}=await supabaseClient.from("profiles").upsert(profilePayload,{onConflict:"id"});
         if(error) throw new Error(error.message || "อัปเดตโปรไฟล์ไม่สำเร็จ");
         await supabaseClient.auth.updateUser({data:{display_name:nickname,avatar_url:avatarUrl}});
         await loadAccountCenter(); showToast("บันทึกโปรไฟล์แล้ว");
