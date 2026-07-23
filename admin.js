@@ -130,7 +130,7 @@ function renderTopups() {
     const actions = item.status === "pending"
       ? `<button class="btn good" onclick="review('${item.id}','approve')">อนุมัติ</button> <button class="btn bad" onclick="review('${item.id}','reject')">ปฏิเสธ</button>`
       : "-";
-    return `<tr><td>${slip}</td><td>${item.email || "-"}<small>${safeId}</small></td><td><b>${money(item.amount)}</b></td><td>${item.transfer_reference || "-"}</td><td>${new Date(item.created_at).toLocaleString("th-TH")}</td><td><span class="status ${item.status}">${item.status}</span></td><td>${actions}</td></tr>`;
+    return `<tr><td>${slip}</td><td>${item.email || "-"}<small>${safeId}</small></td><td><b>${money(item.amount)}</b></td><td>${item.transfer_reference || "-"}</td><td>${new Date(item.created_at).toLocaleString("th-TH")}</td><td><span class="status ${item.status}">${item.status}</span>${item.admin_note?`<small class="review-reason">${item.admin_note}</small>`:""}</td><td>${actions}</td></tr>`;
   }).join("") || '<tr><td colspan="7">ไม่มีรายการ</td></tr>';
 }
 
@@ -142,7 +142,7 @@ function renderWithdrawals() {
     const actions = item.status === "pending"
       ? `<button class="btn good" onclick="reviewWithdrawal('${item.id}','approve')">อนุมัติ</button> <button class="btn bad" onclick="reviewWithdrawal('${item.id}','reject')">ปฏิเสธ</button>`
       : "-";
-    return `<tr><td>${item.email || "-"}<small>${String(item.user_id||"").slice(0,8)}</small></td><td><b>${money(item.amount)}</b></td><td>${item.payout_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}</td><td>${item.payout_account || "-"}<small>${item.payout_name || "-"}</small></td><td>${new Date(item.created_at).toLocaleString("th-TH")}</td><td><span class="status ${item.status}">${item.status}</span></td><td>${actions}</td></tr>`;
+    return `<tr><td>${item.email || "-"}<small>${String(item.user_id||"").slice(0,8)}</small></td><td><b>${money(item.amount)}</b></td><td>${item.payout_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}</td><td>${item.payout_account || "-"}<small>${item.payout_name || "-"}</small></td><td>${new Date(item.created_at).toLocaleString("th-TH")}</td><td><span class="status ${item.status}">${item.status}</span>${item.admin_note?`<small class="review-reason">${item.admin_note}</small>`:""}</td><td>${actions}</td></tr>`;
   }).join("") || '<tr><td colspan="7">ไม่มีคำขอถอน</td></tr>';
 }
 
@@ -168,7 +168,7 @@ function renderOrders() {
   if ($("#orderPendingChip")) $("#orderPendingChip").textContent = `${active} active`;
   box.innerHTML = items.map(item => {
     const next = item.status === "pending" ? `<button class="btn good" onclick="setOrderStatus('${item.id}','accepted')">รับงาน</button> <button class="btn bad" onclick="rejectOrder('${item.id}')">ปฏิเสธ</button>` : item.status === "accepted" ? `<button class="btn primary" onclick="setOrderStatus('${item.id}','working')">เริ่มทำ</button>` : item.status === "working" ? `<button class="btn good" onclick="setOrderStatus('${item.id}','completed')">เสร็จแล้ว</button>` : "-";
-    return `<tr><td><b>#${String(item.id).slice(0,8)}</b><small>${new Date(item.created_at).toLocaleString("th-TH")}</small></td><td>${item.email||"-"}<small>${item.customer_name||"-"} • ${item.contact||"-"}</small></td><td>${item.service_name||item.service_id}</td><td><b>${money(item.price)}</b></td><td style="max-width:280px;white-space:normal">${item.details||"-"}<small>${item.deadline?`กำหนด ${item.deadline}`:""}</small></td><td><span class="status ${item.status==='completed'?'approved':item.status==='cancelled'?'rejected':'pending'}">${item.status}</span></td><td>${next}</td></tr>`;
+    return `<tr><td><b>#${String(item.id).slice(0,8)}</b><small>${new Date(item.created_at).toLocaleString("th-TH")}</small></td><td>${item.email||"-"}<small>${item.customer_name||"-"} • ${item.contact||"-"}</small></td><td>${item.service_name||item.service_id}</td><td><b>${money(item.price)}</b></td><td style="max-width:280px;white-space:normal">${item.details||"-"}<small>${item.deadline?`กำหนด ${item.deadline}`:""}</small></td><td><span class="status ${item.status==='completed'?'approved':item.status==='cancelled'?'rejected':'pending'}">${item.status}</span>${item.admin_note?`<small class="review-reason">${item.admin_note}</small>`:""}</td><td>${next}</td></tr>`;
   }).join("") || '<tr><td colspan="7">ยังไม่มีออเดอร์</td></tr>';
 }
 
@@ -198,7 +198,7 @@ function renderUsers() {
 function renderServices() {
   const box = $("#serviceRows"); if (!box) return;
   box.innerHTML = (state.services || []).map(item => `
-    <tr><td><b>${item.name}</b><small>${item.slug}</small></td><td>${money(item.price)}</td><td>${item.is_active ? '<span class="status approved">เปิดขาย</span>' : '<span class="status rejected">ปิดขาย</span>'}</td><td>${item.sort_order ?? 0}</td><td><button class="btn" onclick='editService(${JSON.stringify(item)})'>แก้ไข</button></td></tr>`
+    <tr><td><b>${item.name}</b><small>${item.slug}</small></td><td>${money(item.price)}</td><td>${(item.is_active ?? item.active) ? '<span class="status approved">เปิดขาย</span>' : '<span class="status rejected">ปิดขาย</span>'}</td><td>${item.sort_order ?? 0}</td><td><button class="btn" onclick='editService(${JSON.stringify(item)})'>แก้ไข</button></td></tr>`
   ).join("") || '<tr><td colspan="5">ยังไม่มีบริการ</td></tr>';
 }
 
@@ -208,7 +208,7 @@ function editService(item) {
   $("#serviceName").value = item.name || "";
   $("#serviceDescription").value = item.description || "";
   $("#servicePrice").value = item.price || 0;
-  $("#serviceActive").checked = !!item.is_active;
+  $("#serviceActive").checked = !!(item.is_active ?? item.active);
   $("#serviceSort").value = item.sort_order || 0;
 }
 
