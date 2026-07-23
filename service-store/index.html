@@ -1,0 +1,2480 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="เว็บไซต์ร้านบริการออนไลน์ รับทำ Portfolio และบริการรับส่งสินค้า" />
+  <title>FateX Cat Cosmos</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #070b16;
+      --bg-soft: #0d1426;
+      --card: rgba(18, 27, 49, 0.72);
+      --card-strong: #121b31;
+      --text: #f7f9ff;
+      --muted: #9ca9c6;
+      --primary: #7c5cff;
+      --primary-2: #00d9ff;
+      --success: #35e6a5;
+      --danger: #ff6b8a;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 24px;
+      --header-h: 76px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Kanit", "Inter", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 15%, rgba(124,92,255,.22), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(0,217,255,.13), transparent 28%),
+        radial-gradient(circle at 70% 85%, rgba(53,230,165,.10), transparent 28%),
+        var(--bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(16px);
+      opacity: .22;
+      z-index: -1;
+      animation: floatOrb 12s ease-in-out infinite alternate;
+    }
+
+    .orb-1 { width: 220px; height: 220px; background: var(--primary); left: -70px; top: 25%; }
+    .orb-2 { width: 180px; height: 180px; background: var(--primary-2); right: -45px; top: 12%; animation-delay: -4s; }
+    .orb-3 { width: 200px; height: 200px; background: var(--success); right: 12%; bottom: -80px; animation-delay: -7s; }
+
+    @keyframes floatOrb {
+      from { transform: translate3d(0,0,0) scale(1); }
+      to { transform: translate3d(35px,-45px,0) scale(1.12); }
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: auto;
+    }
+
+    header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: var(--header-h);
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(7,11,22,.72);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      min-width: max-content;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 10px 28px rgba(124,92,255,.35);
+      transform: rotate(-5deg);
+    }
+
+    .brand-logo span {
+      transform: rotate(5deg);
+      font-weight: 800;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      position: relative;
+      padding: 10px 14px;
+      border-radius: 14px;
+      color: var(--muted);
+      transition: .25s ease;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text);
+      background: rgba(255,255,255,.07);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clock {
+      font-size: .88rem;
+      color: var(--muted);
+      min-width: max-content;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .icon-btn, .lang-btn, .primary-btn, .secondary-btn, .service-btn, .submit-btn {
+      border: 0;
+      cursor: pointer;
+      transition: transform .22s ease, box-shadow .22s ease, opacity .22s ease, background .22s ease;
+    }
+
+    .icon-btn:active, .lang-btn:active, .primary-btn:active, .secondary-btn:active,
+    .service-btn:active, .submit-btn:active {
+      transform: scale(.96);
+    }
+
+    .lang-btn, .icon-btn {
+      color: var(--text);
+      background: rgba(255,255,255,.07);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 13px;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      display: none;
+      place-items: center;
+      font-size: 1.25rem;
+    }
+
+    main {
+      padding-top: var(--header-h);
+    }
+
+    .page {
+      display: none;
+      min-height: calc(100vh - var(--header-h));
+      padding: 70px 0 60px;
+      animation: pageIn .5s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(16px) scale(.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .hero {
+      min-height: 72vh;
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      align-items: center;
+      gap: 46px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #d9d2ff;
+      border: 1px solid rgba(124,92,255,.35);
+      background: rgba(124,92,255,.10);
+      border-radius: 999px;
+      padding: 8px 13px;
+      margin-bottom: 18px;
+      font-size: .9rem;
+    }
+
+    .pulse-dot {
+      width: 9px;
+      height: 9px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(53,230,165,.55);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      70% { box-shadow: 0 0 0 10px rgba(53,230,165,0); }
+      100% { box-shadow: 0 0 0 0 rgba(53,230,165,0); }
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 6vw, 5.5rem);
+      line-height: .98;
+      letter-spacing: -2px;
+      margin-bottom: 22px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #a993ff, #72e8ff 55%, #83ffd0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.12rem;
+      line-height: 1.8;
+      max-width: 650px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .primary-btn, .secondary-btn, .submit-btn {
+      padding: 14px 20px;
+      border-radius: 16px;
+      font-weight: 600;
+    }
+
+    .primary-btn, .submit-btn {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), #5c7cff);
+      box-shadow: 0 12px 35px rgba(124,92,255,.28);
+    }
+
+    .primary-btn:hover, .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 42px rgba(124,92,255,.38);
+    }
+
+    .secondary-btn {
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+    }
+
+    .secondary-btn:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,.10);
+    }
+
+    .hero-card-wrap {
+      perspective: 1100px;
+    }
+
+    .hero-card {
+      position: relative;
+      min-height: 480px;
+      border: 1px solid var(--border);
+      background: linear-gradient(160deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+      backdrop-filter: blur(20px);
+      border-radius: 34px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform .2s ease;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(124,92,255,.45), rgba(0,217,255,.25));
+      right: -110px;
+      top: -100px;
+      filter: blur(4px);
+    }
+
+    .mock-window {
+      position: relative;
+      z-index: 2;
+      background: #10182b;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 24px;
+      overflow: hidden;
+      margin-top: 48px;
+      animation: floatCard 4.8s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      50% { transform: translateY(-12px); }
+    }
+
+    .mock-topbar {
+      padding: 15px;
+      display: flex;
+      gap: 7px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #ff6685; }
+    .dot:nth-child(2) { background: #ffd15c; }
+    .dot:nth-child(3) { background: #38e6a8; }
+
+    .mock-body { padding: 24px; }
+
+    .mock-title {
+      height: 24px;
+      width: 64%;
+      border-radius: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-2));
+      margin-bottom: 14px;
+    }
+
+    .mock-line {
+      height: 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.12);
+      margin-bottom: 10px;
+    }
+
+    .mock-line.short { width: 72%; }
+
+    .mock-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .mini-card {
+      min-height: 100px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(124,92,255,.20), rgba(0,217,255,.07));
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .mini-icon {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .floating-badge {
+      position: absolute;
+      z-index: 4;
+      padding: 12px 16px;
+      border-radius: 18px;
+      background: rgba(13,20,38,.92);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      animation: badgeFloat 4s ease-in-out infinite;
+    }
+
+    .badge-1 { left: -18px; top: 34px; }
+    .badge-2 { right: -18px; bottom: 34px; animation-delay: -2s; }
+
+    @keyframes badgeFloat {
+      50% { transform: translateY(-8px) rotate(1deg); }
+    }
+
+    .section-head {
+      margin-bottom: 32px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      margin-bottom: 10px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 700px;
+      line-height: 1.75;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 46px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.045);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.65rem;
+      margin-bottom: 5px;
+    }
+
+    .stat span { color: var(--muted); }
+
+    .service-grid, .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .service-card, .news-card, .contact-card, .order-panel {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .service-card {
+      padding: 24px;
+      overflow: hidden;
+      transition: .28s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(124,92,255,.45);
+    }
+
+    .service-card::after {
+      content: "";
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      right: -45px;
+      top: -45px;
+      background: radial-gradient(circle, rgba(124,92,255,.25), transparent 70%);
+    }
+
+    .service-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 17px;
+      background: linear-gradient(135deg, rgba(124,92,255,.25), rgba(0,217,255,.15));
+      border: 1px solid var(--border);
+      font-size: 1.6rem;
+      margin-bottom: 18px;
+    }
+
+    .service-card h3 { font-size: 1.35rem; margin-bottom: 10px; }
+    .service-card p { color: var(--muted); line-height: 1.7; min-height: 82px; }
+
+    .price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 20px 0 14px;
+    }
+
+    .price small {
+      font-size: .88rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .service-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 15px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), #5f79ff);
+    }
+
+    .service-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(124,92,255,.30);
+    }
+
+    .news-card {
+      overflow: hidden;
+      transition: .25s ease;
+    }
+
+    .news-card:hover { transform: translateY(-7px); }
+
+    .news-cover {
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      font-size: 4rem;
+      background:
+        linear-gradient(135deg, rgba(124,92,255,.38), rgba(0,217,255,.14)),
+        #11192d;
+    }
+
+    .news-content { padding: 22px; }
+    .news-date { color: #9e8cff; font-size: .9rem; margin-bottom: 8px; }
+    .news-content h3 { margin-bottom: 10px; }
+    .news-content p { color: var(--muted); line-height: 1.7; }
+
+    .read-more {
+      margin-top: 16px;
+      color: #bfb4ff;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .contact-layout, .hire-layout {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .contact-card, .order-panel { padding: 26px; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: rgba(255,255,255,.035);
+      margin-bottom: 12px;
+      transition: .22s ease;
+    }
+
+    .contact-item:hover {
+      transform: translateX(5px);
+      background: rgba(255,255,255,.07);
+    }
+
+    .contact-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: rgba(124,92,255,.18);
+    }
+
+    .contact-item small { color: var(--muted); display: block; }
+    .contact-item strong { font-weight: 500; }
+
+    form {
+      display: grid;
+      gap: 15px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    label {
+      color: #dfe5f7;
+      font-size: .95rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      color: var(--text);
+      background: rgba(255,255,255,.055);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 13px 14px;
+      outline: none;
+      transition: border .2s ease, box-shadow .2s ease;
+    }
+
+    option { background: #11192d; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(124,92,255,.65);
+      box-shadow: 0 0 0 4px rgba(124,92,255,.12);
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .summary-box {
+      background: rgba(255,255,255,.045);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(255,255,255,.10);
+    }
+
+    .summary-line:last-child { border-bottom: 0; }
+    .summary-line span { color: var(--muted); }
+
+    .notice {
+      padding: 14px 16px;
+      border-radius: 15px;
+      background: rgba(53,230,165,.08);
+      border: 1px solid rgba(53,230,165,.20);
+      color: #bfffe7;
+      font-size: .92rem;
+      line-height: 1.6;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      background: rgba(7,11,22,.72);
+      padding: 25px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(3,6,13,.72);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+    }
+
+    .modal.open {
+      display: grid;
+      animation: fadeIn .25s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-card {
+      width: min(560px, 100%);
+      max-height: 85vh;
+      overflow: auto;
+      padding: 26px;
+      border-radius: 25px;
+      background: #10182b;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      animation: modalIn .32s cubic-bezier(.2,.8,.2,1);
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(24px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .close-btn {
+      border: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.07);
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .modal-card p { color: var(--muted); line-height: 1.8; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 30px);
+      z-index: 3000;
+      padding: 13px 18px;
+      border-radius: 14px;
+      background: #16213a;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 960px) {
+      .nav-links {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        top: 86px;
+        display: grid;
+        padding: 12px;
+        border-radius: 20px;
+        background: rgba(13,20,38,.97);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        transform: translateY(-20px);
+        opacity: 0;
+        pointer-events: none;
+        transition: .28s ease;
+      }
+
+      .nav-links.open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .icon-btn { display: grid; }
+      .clock { display: none; }
+      .hero, .contact-layout, .hire-layout { grid-template-columns: 1fr; }
+      .hero { padding-top: 15px; }
+      .hero-card-wrap { max-width: 650px; width: 100%; margin: auto; }
+      .service-grid, .news-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      :root { --header-h: 68px; }
+      .brand span:last-child { display: none; }
+      .page { padding-top: 44px; }
+      h1 { letter-spacing: -1px; }
+      .service-grid, .news-grid, .stats, .form-row { grid-template-columns: 1fr; }
+      .hero-card { min-height: 390px; padding: 18px; }
+      .floating-badge { font-size: .84rem; }
+      .badge-1 { left: 8px; top: 20px; }
+      .badge-2 { right: 8px; bottom: 20px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+      .lang-btn { padding: 9px 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+    .credit-pill {
+      display:flex; align-items:center; gap:8px; padding:9px 12px;
+      border-radius:14px; border:1px solid rgba(53,230,165,.24);
+      background:rgba(53,230,165,.08); color:#cffff0; white-space:nowrap;
+      font-size:.9rem; cursor:pointer;
+    }
+    .wallet-grid { display:grid; grid-template-columns:.9fr 1.1fr; gap:24px; align-items:start; }
+    .wallet-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow); backdrop-filter:blur(16px); }
+    .balance-card { background:linear-gradient(135deg, rgba(124,92,255,.28), rgba(0,217,255,.13)); }
+    .balance-value { font-size:clamp(2.6rem,7vw,5rem); font-weight:700; line-height:1; margin:18px 0 10px; }
+    .payment-tabs { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:18px 0; }
+    .pay-tab { padding:13px; border-radius:15px; border:1px solid var(--border); background:rgba(255,255,255,.045); color:var(--text); cursor:pointer; }
+    .pay-tab.active { background:linear-gradient(135deg,var(--primary),#5f79ff); border-color:transparent; }
+    .payment-panel { display:none; }
+    .payment-panel.active { display:block; animation:pageIn .3s ease; }
+    .account-box { padding:16px; border:1px dashed rgba(255,255,255,.18); border-radius:17px; background:rgba(255,255,255,.035); margin-bottom:15px; }
+    .quick-amounts { display:grid; grid-template-columns:repeat(4,1fr); gap:9px; margin:12px 0; }
+    .quick-amount { padding:10px; border-radius:13px; border:1px solid var(--border); background:rgba(255,255,255,.04); color:var(--text); cursor:pointer; }
+    .history-list { display:grid; gap:10px; margin-top:16px; }
+    .history-item { display:flex; justify-content:space-between; gap:14px; align-items:center; padding:14px; border-radius:15px; border:1px solid var(--border); background:rgba(255,255,255,.035); }
+    .history-item small { color:var(--muted); display:block; }
+    .amount-plus { color:var(--success); } .amount-minus { color:var(--danger); }
+    .buy-credit-btn { width:100%; margin-top:10px; padding:13px; border-radius:15px; border:0; cursor:pointer; color:white; background:linear-gradient(135deg,#11b981,#35e6a5); font-weight:600; }
+    @media(max-width:960px){ .wallet-grid{grid-template-columns:1fr;} .credit-pill{display:none;} }
+    @media(max-width:640px){ .quick-amounts{grid-template-columns:repeat(2,1fr);} }
+
+    .auth-box { margin-bottom:18px; padding:18px; border:1px solid var(--border); border-radius:18px; background:rgba(255,255,255,.04); }
+    .auth-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+    .auth-status { color:var(--muted); margin-top:10px; font-size:.92rem; }
+    .payment-result { display:none; margin-top:18px; text-align:center; padding:18px; border:1px solid var(--border); border-radius:18px; background:rgba(255,255,255,.04); }
+    .payment-result.active { display:block; }
+    .payment-qr { width:min(280px,100%); border-radius:16px; background:white; padding:10px; margin:14px auto; display:block; }
+    .status-chip { display:inline-flex; padding:7px 11px; border-radius:999px; background:rgba(255,209,92,.12); color:#ffe49c; border:1px solid rgba(255,209,92,.25); }
+    .hidden { display:none !important; }
+
+    /* Account control */
+    .account-menu-wrap { position:relative; }
+    .account-trigger {
+      min-width:148px; height:44px; padding:0 13px; display:flex; align-items:center; gap:10px;
+      border:1px solid var(--border); border-radius:16px; color:var(--text); cursor:pointer;
+      background:rgba(255,255,255,.065); transition:.22s ease;
+    }
+    .account-trigger:hover { background:rgba(255,255,255,.11); transform:translateY(-1px); }
+    .account-avatar {
+      width:29px; height:29px; flex:0 0 29px; display:grid; place-items:center; border-radius:10px;
+      font-size:.78rem; font-weight:800; background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      box-shadow:0 8px 20px rgba(124,92,255,.28);
+    }
+    .account-copy { min-width:0; flex:1; text-align:left; line-height:1.05; }
+    .account-copy strong { display:block; max-width:105px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.9rem; }
+    .account-copy small { display:block; margin-top:4px; color:var(--muted); font-size:.68rem; }
+    .account-chevron { color:var(--muted); font-size:.72rem; transition:transform .2s ease; }
+    .account-menu-wrap.open .account-chevron { transform:rotate(180deg); }
+    .account-dropdown {
+      position:absolute; top:54px; right:0; width:230px; padding:9px; z-index:1300;
+      border:1px solid var(--border); border-radius:18px; background:rgba(13,20,38,.98);
+      box-shadow:0 22px 55px rgba(0,0,0,.46); backdrop-filter:blur(18px);
+      opacity:0; transform:translateY(-8px) scale(.98); pointer-events:none; transition:.2s ease;
+    }
+    .account-menu-wrap.open .account-dropdown { opacity:1; transform:none; pointer-events:auto; }
+    .account-dropdown-head { padding:10px 11px 12px; border-bottom:1px solid var(--border); margin-bottom:7px; }
+    .account-dropdown-head strong { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .account-dropdown-head small { color:var(--muted); }
+    .account-item {
+      width:100%; padding:11px 12px; display:flex; align-items:center; gap:10px; border:0; border-radius:12px;
+      color:var(--text); background:transparent; cursor:pointer; text-align:left;
+    }
+    .account-item:hover { background:rgba(255,255,255,.075); }
+    .account-item.danger { color:#ff9db1; }
+    @media(max-width:1120px){ .account-trigger{min-width:44px;width:44px;padding:0;justify-content:center}.account-copy,.account-chevron{display:none}.account-dropdown{right:0} }
+    @media(max-width:640px){ .account-trigger{width:40px;height:40px}.account-avatar{width:27px;height:27px;flex-basis:27px}.nav-actions{gap:7px} }
+
+
+    /* Account Center v12 */
+    .settings-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:24px;align-items:start}
+    .settings-card{background:linear-gradient(145deg,rgba(18,27,49,.88),rgba(10,17,34,.82));border:1px solid var(--border);border-radius:26px;padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(18px);position:relative;overflow:hidden}
+    .settings-card::before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(124,92,255,.16);filter:blur(30px);right:-70px;top:-80px;pointer-events:none}
+    .profile-avatar-large{width:118px;height:118px;border-radius:32px;object-fit:cover;display:grid;place-items:center;margin:0 auto 18px;background:linear-gradient(135deg,var(--primary),var(--primary-2));font-size:2.4rem;font-weight:800;border:3px solid rgba(255,255,255,.16);box-shadow:0 18px 45px rgba(0,0,0,.35);animation:avatarFloat 4s ease-in-out infinite}
+    @keyframes avatarFloat{50%{transform:translateY(-7px) rotate(1deg)}}
+    .profile-upload{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    .profile-upload input{max-width:100%}
+    .settings-tabs,.payment-tabs-v2{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+    .settings-tab,.pay-method{border:1px solid var(--border);background:rgba(255,255,255,.045);color:var(--muted);padding:11px 15px;border-radius:14px;cursor:pointer;transition:.25s ease}
+    .settings-tab.active,.pay-method.active{color:#fff;background:linear-gradient(135deg,rgba(124,92,255,.42),rgba(0,217,255,.22));border-color:rgba(124,92,255,.6);transform:translateY(-2px);box-shadow:0 10px 24px rgba(124,92,255,.18)}
+    .settings-panel,.pay-info{display:none}.settings-panel.active,.pay-info.active{display:block;animation:panelPop .35s cubic-bezier(.2,.8,.2,1)}
+    @keyframes panelPop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+    .account-detail{display:grid;gap:10px;margin-top:16px}.account-detail div{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.035)}
+    .timeline-list{display:grid;gap:12px}.timeline-item{position:relative;padding:15px 16px 15px 48px;border-radius:17px;border:1px solid var(--border);background:rgba(255,255,255,.035);transition:.22s ease}.timeline-item:hover{transform:translateX(4px);background:rgba(255,255,255,.06)}
+    .timeline-icon{position:absolute;left:13px;top:15px;width:25px;height:25px;border-radius:9px;display:grid;place-items:center;background:rgba(124,92,255,.2)}
+    .timeline-item small{display:block;color:var(--muted);margin-top:4px}.timeline-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .status.pending{color:#ffd67a}.status.approved{color:var(--success)}.status.rejected{color:var(--danger)}
+    .bank-hero{padding:20px;border:1px solid var(--border);border-radius:20px;background:linear-gradient(135deg,rgba(53,230,165,.10),rgba(0,217,255,.08));text-align:center}
+    .bank-number{font-size:1.5rem;font-weight:800;letter-spacing:1px;margin:8px 0}.method-note{color:var(--muted);font-size:.9rem;margin-top:8px}
+    .account-avatar.has-image{background-size:cover;background-position:center;color:transparent}
+    .withdraw-note{padding:12px 14px;border-left:3px solid var(--primary-2);background:rgba(0,217,255,.07);border-radius:10px;color:var(--muted);margin:12px 0}
+    @media(max-width:900px){.settings-grid{grid-template-columns:1fr}.settings-card{padding:19px}}
+    @media(prefers-reduced-motion:reduce){.profile-avatar-large{animation:none}.settings-tab,.pay-method,.timeline-item{transition:none}}
+  
+    /* v13 premium marketplace upgrade */
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,black,transparent 88%)}
+    .service-card{isolation:isolate;min-height:360px;display:flex;flex-direction:column;transform-style:preserve-3d;background:linear-gradient(155deg,rgba(23,35,65,.92),rgba(8,13,28,.88));transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s}
+    .service-card:hover{transform:translateY(-12px) rotateX(2deg);box-shadow:0 32px 90px rgba(0,0,0,.5),0 0 0 1px rgba(124,92,255,.16),0 0 55px rgba(124,92,255,.12)}
+    .service-card .price{margin-top:auto}.service-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(130deg,rgba(255,255,255,.34),transparent 30%,rgba(0,217,255,.2));-webkit-mask-:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+    .service-icon{font-size:1.7rem;box-shadow:inset 0 0 24px rgba(255,255,255,.05),0 12px 30px rgba(0,0,0,.25);animation:iconHover 4s ease-in-out infinite}@keyframes iconHover{50%{transform:translateY(-7px) rotate(4deg)}}
+    .market-badge{display:inline-flex;gap:7px;align-items:center;font-size:.78rem;color:#baffea;background:rgba(53,230,165,.09);border:1px solid rgba(53,230,165,.22);padding:6px 10px;border-radius:999px;margin-bottom:13px}
+    .checkout-panel{position:relative;overflow:hidden}.checkout-panel::after{content:"SECURE CHECKOUT";position:absolute;right:-22px;top:24px;transform:rotate(35deg);font:700 10px Inter;letter-spacing:1.8px;color:rgba(255,255,255,.14)}
+    .credit-checkout{margin-top:16px;padding:16px;border-radius:18px;background:linear-gradient(135deg,rgba(124,92,255,.14),rgba(0,217,255,.07));border:1px solid rgba(124,92,255,.26)}
+    .credit-checkout strong{font-size:1.4rem}.checkout-status{display:flex;align-items:center;gap:9px;color:#b9ffe6;font-size:.9rem;margin-top:10px}.checkout-status::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 16px var(--success);animation:pulsePay 1.4s infinite}@keyframes pulsePay{50%{opacity:.35;transform:scale(.75)}}
+    .submit-btn{position:relative;overflow:hidden;background:linear-gradient(110deg,#684cff,#3b83ff,#00c9e9);background-size:200% 100%;animation:buttonFlow 4s linear infinite;box-shadow:0 16px 38px rgba(74,92,255,.34)}@keyframes buttonFlow{to{background-position:200% 0}}
+    .submit-btn::after,.buy-credit-btn::after{content:"";position:absolute;inset:-2px;transform:translateX(-120%) skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:.7s}.submit-btn:hover::after,.buy-credit-btn:hover::after{transform:translateX(120%) skewX(-20deg)}
+    .buy-credit-btn{position:relative;overflow:hidden;box-shadow:0 13px 30px rgba(53,230,165,.18);transition:.25s}.buy-credit-btn:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(53,230,165,.28)}
+    .order-success{padding:22px;border-radius:22px;background:linear-gradient(145deg,rgba(53,230,165,.14),rgba(0,217,255,.08));border:1px solid rgba(53,230,165,.3);text-align:center}.order-success .check{width:64px;height:64px;border-radius:22px;margin:0 auto 13px;display:grid;place-items:center;font-size:2rem;background:linear-gradient(135deg,#20c88b,#35e6a5);box-shadow:0 16px 40px rgba(53,230,165,.3);animation:successPop .55s cubic-bezier(.2,1.5,.5,1)}@keyframes successPop{from{transform:scale(.2) rotate(-20deg);opacity:0}}
+    .live-credit{display:flex;justify-content:space-between;align-items:center;gap:12px}.live-credit b{color:#b9ffe6}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+  
+    [hidden]{display:none!important}
+    /* V22.2 hotfix: decorative layers must never block service controls */
+    .service-card::before,.service-card::after,.card-wave,.card-glow,.market-badge{pointer-events:none!important}
+    .service-card{position:relative;pointer-events:auto!important}
+    .service-card button,.choose-service,.buy-now{position:relative;z-index:20;pointer-events:auto!important;cursor:pointer!important}
+    .wallet-action-tabs{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 20px}
+    .wallet-action-tab{flex:1;min-width:150px;border:1px solid var(--border);background:rgba(18,28,72,.82);color:var(--text);padding:14px 18px;border-radius:16px;font-weight:800;cursor:pointer}
+    .wallet-action-tab.active{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 12px 34px rgba(91,112,255,.28)}
+</style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app-config.js?v=21"></script>
+
+
+
+
+
+
+
+
+
+
+<style id="cat-galaxy-v20">
+:root{--bg:#070b24!important;--bg2:#0d1438!important;--surface:rgba(18,27,72,.82)!important;--surface-solid:#121b45!important;--text:#fffaf0!important;--muted:#b8c2df!important;--border:rgba(184,196,255,.18)!important;--primary:#8b78ff!important;--secondary:#54d8ff!important;--accent:#ffb39a!important;--success:#6ee7b7!important;--danger:#ff839d!important;--shadow:0 24px 70px rgba(0,0,0,.34)!important}
+html{background:var(--bg)} body{background:radial-gradient(circle at 18% 8%,rgba(139,120,255,.18),transparent 28%),radial-gradient(circle at 86% 16%,rgba(84,216,255,.12),transparent 26%),linear-gradient(180deg,#080c27,#070b1d 72%)!important;color:var(--text)!important;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.4px),radial-gradient(circle,#ffd89a 0 1px,transparent 1.6px);background-size:54px 54px,91px 91px;background-position:0 0,23px 17px;opacity:.18;animation:starDrift 38s linear infinite}
+body:after{content:"🐾";position:fixed;right:3vw;bottom:4vh;pointer-events:none;z-index:-1;font-size:clamp(42px,7vw,90px);color:rgba(255,179,154,.055);transform:rotate(-12deg)}
+@keyframes starDrift{to{background-position:54px 54px,114px 108px}}
+.header{background:rgba(7,11,36,.82)!important;border-bottom:1px solid var(--border)!important;backdrop-filter:blur(18px)}
+.brand-logo{border-radius:15px 15px 18px 18px!important;background:linear-gradient(145deg,#9b86ff,#43d6ff)!important;box-shadow:0 12px 30px rgba(89,109,255,.28)!important;position:relative}.brand-logo:before,.brand-logo:after{content:"";position:absolute;top:-5px;width:12px;height:12px;background:#9b86ff;transform:rotate(45deg);border-radius:3px}.brand-logo:before{left:5px}.brand-logo:after{right:5px}
+.nav-link,.account-trigger,.clock,.lang-btn,.credit-pill,.icon-btn{color:var(--text)!important}.nav-link:hover,.nav-link.active{background:rgba(139,120,255,.16)!important;color:#fff!important}
+.page{position:relative}.hero-card,.service-card,.news-card,.wallet-card,.form-card,.summary-card,.settings-card,.mission-card,.contact-card,.stat{background:linear-gradient(145deg,rgba(23,34,88,.92),rgba(11,18,55,.92))!important;border:1px solid var(--border)!important;color:var(--text)!important;box-shadow:var(--shadow)!important;overflow:hidden!important;isolation:isolate}
+.hero-card:after,.service-card:after,.news-card:after,.wallet-card:after,.form-card:after,.summary-card:after,.mission-card:after{content:"";position:absolute;left:-20%;right:-20%;bottom:-72px;height:145px;border-radius:48% 52% 0 0/60% 60% 0 0;background:linear-gradient(90deg,rgba(139,120,255,.16),rgba(84,216,255,.13),rgba(255,179,154,.12));z-index:-1;animation:softWave 7s ease-in-out infinite;transform-origin:center}
+@keyframes softWave{0%,100%{transform:translate3d(-2%,0,0) rotate(-1deg)}50%{transform:translate3d(3%,-12px,0) rotate(1deg)}}
+.service-card:nth-child(2n):after,.news-card:nth-child(2n):after{animation-delay:-2.4s}.service-card:nth-child(3n):after,.news-card:nth-child(3n):after{animation-delay:-4.1s}
+.hero h1,.section-title h2,.page-title h1,h1,h2,h3,h4,strong,b,label{color:var(--text)!important;text-shadow:none!important}.gradient-text{background:linear-gradient(90deg,#b5a6ff,#67dcff 52%,#ffd0bd)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}.muted,p,.section-title p,.hero p,small{color:var(--muted)!important}
+input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196,255,.2)!important;color:var(--text)!important}input::placeholder,textarea::placeholder{color:#8390b3!important}select option{background:#10183d;color:#fff}.primary-btn,.submit-btn{background:linear-gradient(135deg,#8b78ff,#49cfff)!important;color:white!important}.secondary-btn{background:rgba(255,255,255,.055)!important;color:var(--text)!important;border-color:var(--border)!important}
+.primary-btn,.secondary-btn,.submit-btn,.service-card,.news-card,.mission-card{transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease,border-color .25s ease}.service-card:hover,.news-card:hover,.mission-card:hover{transform:translateY(-7px) scale(1.01);border-color:rgba(139,120,255,.42)!important}.primary-btn:active,.secondary-btn:active,.submit-btn:active{transform:scale(.97)!important}
+.auth-box{display:none!important}.login-required-panel{background:linear-gradient(145deg,rgba(23,34,88,.92),rgba(11,18,55,.92))!important;border:1px solid var(--border)!important;color:var(--text)!important}
+.mission-progress{grid-template-columns:repeat(4,1fr)!important}.mission-step{background:rgba(255,255,255,.09)!important}.mission-step.on{background:linear-gradient(90deg,#a18fff,#54d8ff)!important}.mission-status{background:rgba(139,120,255,.17)!important;color:#e9e4ff!important}.mission-reason{background:rgba(255,131,157,.12)!important;border-color:rgba(255,131,157,.3)!important;color:#ffd5df!important}
+.paw-chip{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,179,154,.24);background:rgba(255,179,154,.08);color:#ffd0c2;border-radius:999px;padding:8px 12px}
+@media(max-width:780px){body:after{display:none}.hero-card,.service-card,.news-card,.wallet-card,.form-card,.summary-card{border-radius:22px!important}.nav-links{background:#0a1234!important}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+
+<style id="v22-admin-content-css">
+.dynamic-empty{grid-column:1/-1;padding:38px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:24px}.service-card .service-icon{font-size:2.2rem}.news-card .news-cover{font-size:3rem}.wallet-card#withdrawWalletCard{border-color:rgba(139,120,255,.3)!important}.field-context{display:block;color:var(--muted);margin-top:7px}.announcement-pin{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(255,207,112,.12);color:#ffdc8a;font-size:.78rem;margin-bottom:8px}
+</style>
+
+<style id="v23-live-home">
+.hero{position:relative}.hero-live-orb{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(70px);background:radial-gradient(circle,rgba(86,221,255,.24),rgba(132,91,255,.13) 45%,transparent 70%);right:-80px;top:-90px;animation:orbFloat 8s ease-in-out infinite;pointer-events:none}.live-strip{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.live-pill{padding:10px 14px;border:1px solid rgba(116,222,255,.24);border-radius:999px;background:rgba(13,30,70,.58);backdrop-filter:blur(12px);box-shadow:0 8px 30px rgba(0,0,0,.18)}.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#42edb1;box-shadow:0 0 14px #42edb1;margin-right:7px;animation:livePulse 1.6s infinite}.contact-history{display:grid;gap:12px;margin-top:18px}.contact-ticket{padding:16px;border:1px solid var(--border);border-radius:18px;background:rgba(15,25,66,.72)}.contact-ticket .reply{margin-top:10px;padding:12px;border-radius:14px;background:rgba(58,218,168,.08);border:1px solid rgba(58,218,168,.2)}@keyframes orbFloat{50%{transform:translate(-35px,40px) scale(1.12)}}@keyframes livePulse{50%{opacity:.35;transform:scale(.75)}}
+</style></head>
+
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <header>
+    <div class="container nav">
+      <a href="#home" class="brand" data-route="home" aria-label="Home">
+        <div class="brand-logo"><span>FX</span></div>
+        <span>FateX Service</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="nav-link active" data-route="home" data-i18n="nav.home">หน้าแรก</a>
+        <a href="#news" class="nav-link" data-route="news" data-i18n="nav.news">ข่าวสาร</a>
+        <a href="#services" class="nav-link" data-route="services" data-i18n="nav.services">บริการ</a>
+        <a href="#hire" class="nav-link" data-route="hire" data-i18n="nav.hire">จ้างบริการ</a>
+        <a href="#my-orders" class="nav-link" data-route="my-orders">งานของฉัน</a>
+        <a href="#wallet" class="nav-link" data-route="wallet" data-i18n="nav.wallet">เครดิต</a>
+        <a href="#settings" class="nav-link" data-route="settings">ตั้งค่า</a>
+        <a href="admin.html" class="nav-link hidden" id="adminNavLink">Admin</a>
+        <a href="#contact" class="nav-link" data-route="contact" data-i18n="nav.contact">ติดต่อ</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="credit-pill" data-go="wallet">💳 <span data-i18n="wallet.balanceShort">เครดิต</span> <strong id="headerCredit">฿0</strong></button>
+        <div class="clock" id="clock">--:--:--</div>
+        <button class="lang-btn" id="langBtn" aria-label="Change language">EN</button>
+
+        <div class="account-menu-wrap" id="accountMenuWrap">
+          <button class="account-trigger" id="accountTrigger" type="button" aria-label="Account" aria-expanded="false">
+            <span class="account-avatar" id="accountAvatar">F</span>
+            <span class="account-copy">
+              <strong id="accountName">เข้าสู่ระบบ</strong>
+              <small id="accountSubtext">บัญชีของคุณ</small>
+            </span>
+            <span class="account-chevron">▼</span>
+          </button>
+          <div class="account-dropdown" id="accountDropdown">
+            <div class="account-dropdown-head">
+              <strong id="accountDropdownName">ยังไม่ได้เข้าสู่ระบบ</strong>
+              <small id="accountDropdownEmail">เข้าสู่ระบบเพื่อใช้งานเครดิต</small>
+            </div>
+            <button class="account-item" id="accountLoginAction" type="button">🔐 <span>เข้าสู่ระบบ / สมัครสมาชิก</span></button>
+            <button class="account-item hidden" id="accountWalletAction" type="button">💳 <span>กระเป๋าเครดิต</span></button>
+            <button class="account-item hidden" id="accountSettingsAction" type="button">👤 <span>ตั้งค่าบัญชี</span></button>
+            <a class="account-item hidden" id="accountAdminAction" href="admin.html">⚙️ <span>Owner Control Center</span></a>
+            <button class="account-item danger hidden" id="accountLogoutAction" type="button">↪ <span>ออกจากระบบ</span></button>
+          </div>
+        </div>
+        <button class="icon-btn" id="menuBtn" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page active" id="home">
+      <div class="container">
+        <div class="hero"><div class="hero-live-orb"></div>
+          <div class="reveal">
+            <div class="eyebrow">
+              <span class="pulse-dot"></span>
+              <span data-i18n="home.badge">พร้อมรับงานออนไลน์</span>
+            </div>
+
+            <h1>
+              <span id="siteHeroTitle" data-i18n="home.title1">บริการดิจิทัล</span><br>
+              <span id="siteHeroAccent" class="gradient-text" data-i18n="home.title2">ที่ดูดีและใช้งานได้จริง</span>
+            </h1>
+
+            <p data-i18n="home.desc">
+              รับทำ Portfolio และบริการรับส่งสินค้า พร้อมระบบแจ้งข่าวสาร
+              ออกแบบทันสมัย ใช้งานง่าย และรองรับทุกอุปกรณ์
+            </p>
+
+            <div class="live-strip"><span class="live-pill"><span class="live-dot"></span><b id="liveServiceCount">0</b> บริการพร้อมใช้</span><span class="live-pill">📣 <b id="liveNewsCount">0</b> อัปเดตล่าสุด</span><span class="live-pill">⚡ อัปเดตแบบเรียลไทม์</span></div><div class="hero-actions">
+              <button class="primary-btn" data-go="services" data-i18n="home.viewServices">ดูบริการทั้งหมด</button>
+              <button class="secondary-btn" data-go="hire" data-i18n="home.startHire">เริ่มจ้างงาน</button>
+            </div>
+
+            <div class="stats">
+              <div class="stat">
+                <strong>2+</strong>
+                <span data-i18n="home.stat1">ประเภทบริการ</span>
+              </div>
+              <div class="stat">
+                <strong>100%</strong>
+                <span data-i18n="home.stat2">รองรับมือถือ</span>
+              </div>
+              <div class="stat">
+                <strong>TH / EN</strong>
+                <span data-i18n="home.stat3">สองภาษา</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-card-wrap reveal" id="tiltWrap">
+            <div class="hero-card" id="tiltCard">
+              <div class="floating-badge badge-1">✨ Smooth UI</div>
+              <div class="floating-badge badge-2">⚡ Ready to use</div>
+
+              <div class="mock-window">
+                <div class="mock-topbar">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+                <div class="mock-body">
+                  <div class="mock-title"></div>
+                  <div class="mock-line"></div>
+                  <div class="mock-line short"></div>
+                  <div class="mock-grid">
+                    <div class="mini-card">
+                      <div class="mini-icon">💼</div>
+                      <strong>Portfolio</strong>
+                    </div>
+                    <div class="mini-card">
+                      <div class="mini-icon">📦</div>
+                      <strong>Delivery</strong>
+                    </div>
+                    <div class="mini-card">
+                      <div class="mini-icon">📰</div>
+                      <strong>News</strong>
+                    </div>
+                    <div class="mini-card">
+                      <div class="mini-icon">💬</div>
+                      <strong>Contact</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="news">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="news.badge">อัปเดตล่าสุด</span>
+          <h2 data-i18n="news.title">ข่าวสารและประกาศ</h2>
+          <p data-i18n="news.desc">พื้นที่สำหรับแจ้งโปรโมชัน วันหยุด การเปิดรับงาน และข้อมูลสำคัญต่าง ๆ</p>
+        </div>
+
+        <div class="news-grid" id="newsGrid">
+          <article class="news-card reveal">
+            <div class="news-cover">🎉</div>
+            <div class="news-content">
+              <div class="news-date">21 JUL 2026</div>
+              <h3 data-i18n="news.n1title">เปิดให้บริการเว็บไซต์แล้ว</h3>
+              <p data-i18n="news.n1desc">พบกับบริการรับทำ Portfolio และบริการรับส่งสินค้าที่ติดต่อได้ง่ายขึ้น</p>
+              <button class="read-more" data-news="0" data-i18n="news.read">อ่านเพิ่มเติม →</button>
+            </div>
+          </article>
+
+          <article class="news-card reveal">
+            <div class="news-cover">💼</div>
+            <div class="news-content">
+              <div class="news-date">20 JUL 2026</div>
+              <h3 data-i18n="news.n2title">เปิดคิวรับทำ Portfolio</h3>
+              <p data-i18n="news.n2desc">รับออกแบบ Portfolio สำหรับสมัครเรียน สมัครงาน และนำเสนอผลงาน</p>
+              <button class="read-more" data-news="1" data-i18n="news.read">อ่านเพิ่มเติม →</button>
+            </div>
+          </article>
+
+          <article class="news-card reveal">
+            <div class="news-cover">📦</div>
+            <div class="news-content">
+              <div class="news-date">18 JUL 2026</div>
+              <h3 data-i18n="news.n3title">บริการรับส่งสินค้า</h3>
+              <p data-i18n="news.n3desc">เปิดรับงานส่งของและสินค้า สามารถกรอกรายละเอียดเพื่อประเมินราคาได้</p>
+              <button class="read-more" data-news="2" data-i18n="news.read">อ่านเพิ่มเติม →</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="services">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="services.badge">เลือกบริการ</span>
+          <h2 data-i18n="services.title">บริการของเรา</h2>
+          <p data-i18n="services.desc">เลือกบริการที่ต้องการ แล้วระบบจะพาไปหน้ากรอกรายละเอียดทันที</p>
+        </div>
+
+        <div class="service-grid" id="serviceGrid">
+          <article class="service-card reveal">
+            <div class="market-badge">● พร้อมรับงาน • ซื้อผ่านเว็บได้ทันที</div><div class="service-icon">💼</div>
+            <h3 data-i18n="services.portTitle">รับทำ Portfolio</h3>
+            <p data-i18n="services.portDesc">ออกแบบ Portfolio สำหรับสมัครเรียน สมัครงาน หรือแนะนำตัว พร้อมจัดหน้าให้ดูเป็นมืออาชีพ</p>
+            <div class="price"><span data-i18n="services.start">เริ่มต้น</span> ฿499 <small data-i18n="services.perJob">/ งาน</small></div>
+            <button class="service-btn choose-service" data-service="portfolio" data-i18n="services.select">เลือกบริการนี้</button>
+            <button class="buy-credit-btn buy-now" data-service="portfolio" data-i18n="services.buyCredit">ซื้อด้วยเครดิต</button>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="market-badge">● พร้อมให้บริการ • ตัดเครดิตอัตโนมัติ</div><div class="service-icon">📦</div>
+            <h3 data-i18n="services.deliveryTitle">รับส่งของภายในตัวเมือง</h3>
+            <p data-i18n="services.deliveryDesc">รับของจากจุดหนึ่งไปส่งอีกจุดภายในตัวเมือง คิดราคา 30–100 บาทตามระยะทาง</p>
+            <div class="price">฿30–100 <small data-i18n="services.perTrip">/ เที่ยว</small></div>
+            <button class="service-btn choose-service" data-service="delivery" data-i18n="services.select">เลือกบริการนี้</button>
+            <button class="buy-credit-btn buy-now" data-service="delivery" data-i18n="services.buyCredit">ซื้อด้วยเครดิต</button>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="market-badge">● เหมาะกับนักเรียน • ส่งไฟล์พร้อมใช้</div><div class="service-icon">📊</div>
+            <h3>ออกแบบสไลด์นำเสนอ</h3>
+            <p>จัดสไลด์รายงาน โครงงาน หรือพรีเซนต์หน้าชั้นให้อ่านง่าย สวย และเป็นระเบียบ โดยลูกค้าต้องส่งเนื้อหามาเอง</p>
+            <div class="price"><span>เริ่มต้น</span> ฿149 <small>/ งาน</small></div>
+            <button class="service-btn choose-service" data-service="presentation">เลือกบริการนี้</button>
+            <button class="buy-credit-btn buy-now" data-service="presentation">ซื้อด้วยเครดิต</button>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="market-badge">● งานกิจกรรม • พร้อมโพสต์</div><div class="service-icon">🎨</div>
+            <h3>ออกแบบโปสเตอร์และโพสต์</h3>
+            <p>โปสเตอร์กิจกรรมโรงเรียน ป้ายประชาสัมพันธ์ เมนู หรือภาพโพสต์โซเชียล พร้อมไฟล์ภาพคุณภาพสูง</p>
+            <div class="price"><span>เริ่มต้น</span> ฿99 <small>/ ชิ้น</small></div>
+            <button class="service-btn choose-service" data-service="poster">เลือกบริการนี้</button>
+            <button class="buy-credit-btn buy-now" data-service="poster">ซื้อด้วยเครดิต</button>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="market-badge">● จัดหน้าเท่านั้น • ไม่รับทำการบ้านแทน</div><div class="service-icon">📝</div>
+            <h3>จัดรูปแบบรายงานและเอกสาร</h3>
+            <p>จัดหน้าปก สารบัญ เลขหน้า ฟอนต์ ระยะขอบ และความเรียบร้อยของเอกสารจากเนื้อหาที่ลูกค้าเตรียมไว้</p>
+            <div class="price"><span>เริ่มต้น</span> ฿79 <small>/ งาน</small></div>
+            <button class="service-btn choose-service" data-service="document">เลือกบริการนี้</button>
+            <button class="buy-credit-btn buy-now" data-service="document">ซื้อด้วยเครดิต</button>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="service-icon">🛠️</div>
+            <h3 data-i18n="services.customTitle">บริการสั่งทำพิเศษ</h3>
+            <p data-i18n="services.customDesc">สำหรับงานอื่น ๆ ที่ต้องการพูดคุยรายละเอียดเพิ่มเติม สามารถส่งข้อมูลเพื่อขอประเมินราคาได้</p>
+            <div class="price"><span data-i18n="services.quote">ประเมินราคา</span> <small data-i18n="services.byDetail">ตามรายละเอียด</small></div>
+            <button class="service-btn choose-service" data-service="custom" data-i18n="services.select">เลือกบริการนี้</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="hire">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="hire.badge">ส่งรายละเอียดงาน</span>
+          <h2 data-i18n="hire.title">หน้าจ้างบริการ</h2>
+          <p data-i18n="hire.desc">กรอกข้อมูลให้ครบ ระบบจะสร้างสรุปคำสั่งจ้างให้คุณตรวจสอบก่อนส่ง</p>
+        </div>
+
+        <div class="hire-layout">
+          <div class="order-panel checkout-panel reveal">
+            <h3 style="margin-bottom:8px" data-i18n="hire.formTitle">สั่งซื้อบริการผ่านเว็บไซต์</h3>
+            <p style="color:var(--muted);margin-bottom:20px">กรอกรายละเอียด ยืนยันคำสั่งซื้อ และระบบจะหักเครดิตทันทีอย่างปลอดภัย</p>
+
+            <form id="hireForm">
+              <div class="form-row">
+                <div class="field">
+                  <label for="customerName" data-i18n="hire.name">ชื่อผู้ติดต่อ</label>
+                  <input id="customerName" required data-i18n-placeholder="hire.namePh" placeholder="กรอกชื่อของคุณ">
+                </div>
+                <div class="field">
+                  <label for="customerContact" data-i18n="hire.contact">ช่องทางติดต่อ</label>
+                  <input id="customerContact" required data-i18n-placeholder="hire.contactPh" placeholder="เบอร์โทร / Line / Email">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="serviceSelect" data-i18n="hire.service">เลือกบริการ</label>
+                <select id="serviceSelect" required>
+                  <option value="portfolio" data-i18n="hire.optPortfolio">รับทำ Portfolio</option>
+                  <option value="delivery" data-i18n="hire.optDelivery">รับส่งของภายในตัวเมือง</option>
+                  <option value="presentation">ออกแบบสไลด์นำเสนอ</option>
+                  <option value="poster">ออกแบบโปสเตอร์และโพสต์</option>
+                  <option value="document">จัดรูปแบบรายงานและเอกสาร</option>
+                  <option value="custom" data-i18n="hire.optCustom">บริการสั่งทำพิเศษ</option>
+                </select>
+              </div>
+
+              <div class="field" id="deliveryDistanceField" hidden>
+                <label for="deliveryDistance">ระยะทางรับส่งภายในตัวเมือง</label>
+                <select id="deliveryDistance">
+                  <option value="30">ไม่เกิน 2 กม. — 30 บาท</option>
+                  <option value="50">มากกว่า 2–5 กม. — 50 บาท</option>
+                  <option value="70">มากกว่า 5–8 กม. — 70 บาท</option>
+                  <option value="100">มากกว่า 8–12 กม. — 100 บาท</option>
+                </select>
+                <small style="display:block;color:var(--muted);margin-top:7px">ระยะทางเกิน 12 กม. กรุณาเลือก Custom request เพื่อคุยรายละเอียด</small>
+              </div>
+
+              <div class="field" id="customQuoteField" hidden>
+                <label for="proposedPrice">ราคาเสนอสำหรับ Custom request</label>
+                <input id="proposedPrice" type="number" min="1" step="1" placeholder="เช่น 300">
+                <small style="display:block;color:var(--muted);margin-top:7px">เป็นราคาที่คุณเสนอ แอดมินจะตรวจรายละเอียดและติดต่อกลับก่อนเริ่มงาน ยังไม่หักเครดิตทันที</small>
+              </div>
+
+              <div class="field" id="deadlineField">
+                <label for="deadline" data-i18n="hire.deadline">วันที่ต้องการงาน</label>
+                <input id="deadline" type="date">
+              </div>
+
+              <div class="field">
+                <label for="details" data-i18n="hire.details">รายละเอียดงาน</label>
+                <textarea id="details" required data-i18n-placeholder="hire.detailsPh" placeholder="อธิบายรายละเอียดงานที่ต้องการ"></textarea>
+              </div>
+
+              <button class="submit-btn" type="submit" data-i18n="hire.submit">ยืนยันซื้อบริการและหักเครดิต</button>
+            </form>
+          </div>
+
+          <aside class="order-panel reveal">
+            <h3 style="margin-bottom:18px" data-i18n="hire.summaryTitle">สรุปเบื้องต้น</h3>
+
+            <div class="summary-box">
+              <div class="summary-line">
+                <span data-i18n="hire.sumService">บริการ</span>
+                <strong id="sumService">รับทำ Portfolio</strong>
+              </div>
+              <div class="summary-line">
+                <span data-i18n="hire.sumPrice">ราคาเริ่มต้น</span>
+                <strong id="sumPrice">฿499</strong>
+              </div>
+              <div class="summary-line">
+                <span data-i18n="hire.sumStatus">สถานะ</span>
+                <strong id="sumStatusText">พร้อมสั่งซื้อ</strong>
+              </div>
+            </div>
+
+            <div class="credit-checkout">
+              <div class="live-credit"><span>เครดิตปัจจุบัน</span><b id="checkoutBalance">฿0</b></div>
+              <div class="checkout-status">ชำระด้วยเครดิตและสร้างออเดอร์จริงในระบบ</div>
+            </div>
+            <div class="notice">หลังยืนยัน ระบบจะบันทึกออเดอร์ให้แอดมินเห็นทันที และหักเครดิตแบบธุรกรรมเดียว ป้องกันยอดผิดพลาด</div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="page" id="wallet">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="wallet.badge">กระเป๋าเครดิต</span>
+          <h2 data-i18n="wallet.title">เติมเครดิตและชำระค่าบริการ</h2>
+          <p data-i18n="wallet.desc">ระบบจะเพิ่มเครดิตเฉพาะเมื่อ Payment Gateway ยืนยันว่าได้รับเงินจริงแล้ว</p>
+        </div>
+        <div class="wallet-action-tabs reveal" role="tablist" aria-label="เลือกเมนูกระเป๋า">
+          <button type="button" class="wallet-action-tab active" data-wallet-panel="topup">ฝากเงิน / เติมเครดิต</button>
+          <button type="button" class="wallet-action-tab" data-wallet-panel="withdraw">ถอนเครดิต</button>
+        </div>
+        <div class="wallet-grid">
+          <div>
+            <div class="wallet-card balance-card reveal">
+              <span data-i18n="wallet.available">เครดิตคงเหลือ</span>
+              <div class="balance-value" id="walletBalance">฿0</div>
+              <p style="color:var(--muted)" data-i18n="wallet.serverNote">ยอดเครดิตถูกเก็บในฐานข้อมูลและแก้จากหน้าเว็บไม่ได้</p>
+              <button class="secondary-btn" id="refreshWalletBtn" style="margin-top:18px" data-i18n="wallet.refresh">รีเฟรชยอดเครดิต</button>
+            </div>
+            <div class="wallet-card reveal" style="margin-top:24px">
+              <h3 data-i18n="wallet.history">ประวัติรายการ</h3>
+              <div class="history-list" id="historyList"></div>
+            </div>
+            <div class="wallet-card reveal" id="withdrawWalletCard" style="margin-top:24px" hidden>
+              <h3>ถอนเครดิต</h3>
+              
+              <div class="withdraw-note">คำขอถอนจะถูกตรวจโดยแอดมิน และยอดเครดิตจะถูกหักเมื่อคำขอได้รับอนุมัติ</div>
+              <form id="withdrawForm">
+                <div class="field"><label for="withdrawAmount">จำนวนเครดิตที่ต้องการถอน</label><input id="withdrawAmount" type="number" min="50" max="50000" required placeholder="100"></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawChannel">ช่องทางรับเงิน</label><select id="withdrawChannel"><option value="bank">ธนาคาร</option><option value="truemoney">TrueMoney Wallet</option></select></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawAccount">เลขบัญชี / เบอร์ Wallet</label><input id="withdrawAccount" maxlength="60" required></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawAccountName">ชื่อบัญชี</label><input id="withdrawAccountName" maxlength="80" required></div>
+                <button class="submit-btn" type="submit" style="width:100%;margin-top:16px">ส่งคำขอถอน</button>
+              </form>
+            </div>
+          
+            </div>
+
+          </div>
+          <div class="wallet-card reveal" id="topupWalletCard">
+            <div id="loginRequiredPanel" class="login-required-panel"><h3>เข้าสู่ระบบเพื่อเติมเครดิต</h3><p>ระบบบัญชีแยกเป็นหน้าล็อกอินโดยเฉพาะ เพื่อใช้งานง่ายและปลอดภัยกว่าเดิม</p><button type="button" class="primary-btn" onclick="location.href='login.html?next=wallet'">เข้าสู่ระบบ / สมัครสมาชิก</button></div><div class="auth-box hidden" id="authBox" aria-hidden="true">
+              <h3 data-i18n="wallet.loginTitle">เข้าสู่ระบบก่อนเติมเครดิต</h3>
+              <div class="field" style="margin-top:12px">
+                <label for="authEmail">Email</label>
+                <input id="authEmail" type="email" placeholder="student@example.com">
+              </div>
+              <div class="field" style="margin-top:10px">
+                <label for="authPassword" data-i18n="wallet.password">รหัสผ่าน</label>
+                <input id="authPassword" type="password" minlength="6" placeholder="อย่างน้อย 6 ตัวอักษร">
+              </div>
+              <div class="auth-actions">
+                <button class="primary-btn" type="button" id="loginBtn" data-i18n="wallet.login">เข้าสู่ระบบ</button>
+                <button class="secondary-btn" type="button" id="signupBtn" data-i18n="wallet.signup">สมัครสมาชิก</button>
+              </div>
+              <button class="secondary-btn hidden" type="button" id="logoutBtn" style="margin-top:12px;width:100%" data-i18n="wallet.logout">ออกจากระบบ</button>
+              <div class="auth-status" id="authStatus">ยังไม่ได้เข้าสู่ระบบ</div>
+            </div>
+
+            <div id="topupArea" class="hidden">
+              <h3>เติมเครดิตด้วยสลิป</h3>
+              <div class="payment-tabs-v2">
+                <button class="pay-method active" type="button" data-payment="bank">🏦 ธนาคารกสิกร</button>
+                <button class="pay-method" type="button" data-payment="truemoney">🟠 TrueMoney Wallet</button>
+              </div>
+              <div class="pay-info active" data-pay-panel="bank">
+                <div class="bank-hero">
+                  <small>โอนผ่านธนาคารกสิกรไทย</small>
+                  <h3 id="bankAccountName">นายกรณพัฒน์ สายวงค์สอน</h3>
+                  <div class="bank-number" id="bankAccountNumber">179-8-83569-2</div>
+                  <img id="bankQrImage" class="payment-qr" src="promptpay-qr.png" alt="Bank payment QR" style="display:block;margin:16px auto 8px;max-width:230px">
+                  <div class="method-note">ตรวจชื่อผู้รับและยอดเงินก่อนโอนทุกครั้ง</div>
+                </div>
+              </div>
+              <div class="pay-info" data-pay-panel="truemoney">
+                <div class="bank-hero">
+                  <small>TrueMoney Wallet</small>
+                  <h3 id="trueMoneyName">นายกรณพัฒน์ สายวงค์สอน</h3>
+                  <div class="bank-number" id="trueMoneyNumber">095-721-3642</div>
+                  <div class="method-note">โอนเข้าหมายเลข Wallet แล้วแนบสลิปด้านล่าง</div>
+                </div>
+              </div>
+              <div class="notice" style="margin-top:14px">เติมขั้นต่ำ 10 บาท • ทุกการเติมเครดิตต้องแนบสลิป และเครดิตจะเข้าเมื่อแอดมินอนุมัติแล้วเท่านั้น</div>
+              <form id="topupForm" style="margin-top:18px">
+                <div class="field">
+                  <label for="topupAmount">จำนวนเงินที่โอน <strong style="color:#ffcf70">(ขั้นต่ำ 10 บาท)</strong></label>
+                  <input id="topupAmount" type="number" min="10" max="5000" step="1" required placeholder="ขั้นต่ำ 10 บาท" aria-describedby="topupMinimumHint">
+                  <small id="topupMinimumHint" style="display:block;margin-top:7px;color:#ffcf70;font-weight:700">⚠️ ระบบไม่รับรายการที่ต่ำกว่า 10 บาท</small>
+                </div>
+                <div class="quick-amounts">
+                  <button type="button" class="quick-amount" data-amount="10">฿10</button>
+                  <button type="button" class="quick-amount" data-amount="50">฿50</button>
+                  <button type="button" class="quick-amount" data-amount="100">฿100</button>
+                  <button type="button" class="quick-amount" data-amount="300">฿300</button>
+                  <button type="button" class="quick-amount" data-amount="500">฿500</button>
+                </div>
+                <div class="field" style="margin-top:14px">
+                  <label for="transferReference">เลขอ้างอิง/เวลาที่โอน</label>
+                  <input id="transferReference" maxlength="100" required placeholder="เช่น 123456 / 22:45">
+                </div>
+                <div class="field" style="margin-top:14px">
+                  <label for="slipFile">แนบสลิป (JPG, PNG, WEBP ไม่เกิน 5MB)</label>
+                  <input id="slipFile" type="file" accept="image/jpeg,image/png,image/webp" required>
+                </div>
+                <img id="slipPreview" class="hidden" alt="Slip preview" style="width:100%;max-height:330px;object-fit:contain;border-radius:18px;border:1px solid var(--border);margin-top:14px;background:#080d1b">
+                <div class="notice" style="margin-top:14px">หลังส่งสลิป รายการจะแสดงสถานะ “รอตรวจสอบ” แอดมินจะอนุมัติเครดิตจากหน้าหลังบ้าน</div>
+                <button class="submit-btn" id="topupSubmitBtn" type="submit" style="width:100%;margin-top:16px">ส่งสลิปให้แอดมินตรวจ</button>
+              </form>
+              <div class="payment-result" id="paymentResult">
+                <span class="status-chip" id="paymentStatus">รอตรวจสอบ</span>
+                <p id="paymentHint" style="color:var(--muted);margin-top:14px"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="page" id="my-orders">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">My Missions 🐾</span>
+          <h2>ติดตามสถานะงานของฉัน</h2>
+          <p>ดูความคืบหน้า เหตุผลการปฏิเสธ และรายละเอียดงานที่จ้างทั้งหมดได้จากหน้านี้</p>
+        </div>
+        <div id="myOrdersLoginNotice" class="notice reveal">กรุณาเข้าสู่ระบบเพื่อดูสถานะงาน</div>
+        <div id="myOrdersGrid" class="mission-grid hidden"></div>
+      </div>
+    </section>
+
+    <section class="page" id="settings">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Account Center</span>
+          <h2>ตั้งค่าบัญชีและประวัติทั้งหมด</h2>
+          <p>แก้ไขโปรไฟล์ ดูรายการซื้อ เติมเครดิต และคำขอถอนเงินได้ในหน้าเดียว</p>
+        </div>
+        <div id="settingsLoginNotice" class="notice reveal">กรุณาเข้าสู่ระบบก่อนใช้งานหน้าตั้งค่า</div>
+        <div id="settingsArea" class="settings-grid hidden">
+          <aside class="settings-card reveal">
+            <img id="profileAvatarPreview" class="profile-avatar-large" alt="Profile avatar">
+            <div style="text-align:center"><h3 id="settingsDisplayName">บัญชีของฉัน</h3><p id="settingsEmail" style="color:var(--muted)">-</p></div>
+            <div class="account-detail">
+              <div><span>เครดิตคงเหลือ</span><strong id="settingsCredit">฿0</strong></div>
+              <div><span>สมาชิกตั้งแต่</span><strong id="settingsJoined">-</strong></div>
+            </div>
+          </aside>
+          <div class="settings-card reveal">
+            <div class="settings-tabs">
+              <button class="settings-tab active" type="button" data-settings-tab="profile">โปรไฟล์</button>
+              <button class="settings-tab" type="button" data-settings-tab="history">ประวัติ</button>
+              
+            </div>
+            <div class="settings-panel active" data-settings-panel="profile">
+              <form id="profileForm">
+                <div class="field"><label for="nicknameInput">ชื่อเล่น</label><input id="nicknameInput" maxlength="40" placeholder="ชื่อที่ใช้แสดงบนเว็บไซต์"></div>
+                <div class="field" style="margin-top:14px"><label for="avatarFile">รูปโปรไฟล์ (JPG, PNG, WEBP ไม่เกิน 3MB)</label><input id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp"></div>
+                <button class="submit-btn" type="submit" style="width:100%;margin-top:16px">บันทึกโปรไฟล์</button>
+              </form>
+            </div>
+            <div class="settings-panel" data-settings-panel="history">
+              <div class="timeline-list" id="fullHistoryList"><div class="notice">กำลังโหลด...</div></div>
+            </div>
+            </div></div></section>
+
+    <section class="page" id="contact">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="contact.badge">ช่องทางติดต่อ</span>
+          <h2 data-i18n="contact.title">ติดต่อเรา</h2>
+          <p data-i18n="contact.desc">ติดต่อสอบถามบริการ แจ้งปัญหา หรือติดตามงานผ่านช่องทางด้านล่าง</p>
+        </div>
+
+        <div class="contact-layout">
+          <div class="contact-card reveal">
+            <a class="contact-item" href="tel:0957213642">
+              <div class="contact-icon">📞</div>
+              <div>
+                <small data-i18n="contact.phone">เบอร์โทร</small>
+                <strong>095-721-3642</strong>
+              </div>
+            </a>
+
+            <a class="contact-item" href="mailto:fatex099@gmail.com">
+              <div class="contact-icon">✉️</div>
+              <div>
+                <small data-i18n="contact.email">อีเมล</small>
+                <strong>fatex099@gmail.com</strong>
+              </div>
+            </a>
+
+            <a class="contact-item" href="https://instagram.com/im4ftex" target="_blank" rel="noopener">
+              <div class="contact-icon">📸</div>
+              <div>
+                <small>Instagram</small>
+                <strong>@im4ftex</strong>
+              </div>
+            </a>
+
+            <a class="contact-item" href="https://www.facebook.com/search/top?q=Fatex%20Crc" target="_blank" rel="noopener">
+              <div class="contact-icon">ⓕ</div>
+              <div>
+                <small>Facebook</small>
+                <strong>Fatex Crc</strong>
+              </div>
+            </a>
+          </div>
+
+          <div class="contact-card reveal">
+            <h3 style="margin-bottom:18px" data-i18n="contact.quickTitle">ส่งข้อความด่วน</h3>
+
+            <form id="contactForm">
+              <div class="field">
+                <label for="contactName" data-i18n="contact.name">ชื่อ</label>
+                <input id="contactName" required data-i18n-placeholder="contact.namePh" placeholder="ชื่อของคุณ">
+              </div>
+              <div class="field">
+                <label for="contactEmail" data-i18n="contact.reply">อีเมลหรือเบอร์ติดต่อกลับ</label>
+                <input id="contactEmail" required data-i18n-placeholder="contact.replyPh" placeholder="ช่องทางติดต่อกลับ">
+              </div>
+              <div class="field">
+                <label for="contactMessage" data-i18n="contact.message">ข้อความ</label>
+                <textarea id="contactMessage" required data-i18n-placeholder="contact.messagePh" placeholder="พิมพ์ข้อความที่ต้องการติดต่อ"></textarea>
+              </div>
+              <button class="submit-btn" type="submit" data-i18n="contact.copy">ส่งข้อความถึงแอดมิน</button>
+            </form><div id="contactHistory" class="contact-history"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© <span id="year"></span> FateX Service. <span data-i18n="footer.rights">สงวนลิขสิทธิ์โดยเจ้าของเว็บไซต์</span></div>
+      <div data-i18n="footer.made">Designed with smooth motion & modern UI</div>
+    </div>
+  </footer>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h3 id="modalTitle">รายละเอียด</h3>
+        </div>
+        <button class="close-btn" id="closeModal" aria-label="Close">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">คัดลอกแล้ว</div>
+
+  <script>
+    const translations = {
+      th: {
+        nav:{home:"หน้าแรก",news:"ข่าวสาร",services:"บริการ",hire:"จ้างบริการ",wallet:"เครดิต",contact:"ติดต่อ"},
+        home:{
+          badge:"พร้อมรับงานออนไลน์",
+          title1:"บริการดิจิทัล",
+          title2:"ที่ดูดีและใช้งานได้จริง",
+          desc:"รับทำ Portfolio และบริการรับส่งสินค้า พร้อมระบบแจ้งข่าวสาร ออกแบบทันสมัย ใช้งานง่าย และรองรับทุกอุปกรณ์",
+          viewServices:"ดูบริการทั้งหมด",
+          startHire:"เริ่มจ้างงาน",
+          stat1:"ประเภทบริการ",
+          stat2:"รองรับมือถือ",
+          stat3:"สองภาษา"
+        },
+        news:{
+          badge:"อัปเดตล่าสุด",title:"ข่าวสารและประกาศ",
+          desc:"พื้นที่สำหรับแจ้งโปรโมชัน วันหยุด การเปิดรับงาน และข้อมูลสำคัญต่าง ๆ",
+          n1title:"เปิดให้บริการเว็บไซต์แล้ว",
+          n1desc:"พบกับบริการรับทำ Portfolio และบริการรับส่งสินค้าที่ติดต่อได้ง่ายขึ้น",
+          n2title:"เปิดคิวรับทำ Portfolio",
+          n2desc:"รับออกแบบ Portfolio สำหรับสมัครเรียน สมัครงาน และนำเสนอผลงาน",
+          n3title:"บริการรับส่งสินค้า",
+          n3desc:"เปิดรับงานส่งของและสินค้า สามารถกรอกรายละเอียดเพื่อประเมินราคาได้",
+          read:"อ่านเพิ่มเติม →"
+        },
+        services:{
+          badge:"เลือกบริการ",title:"บริการของเรา",
+          desc:"เลือกบริการที่ต้องการ แล้วระบบจะพาไปหน้ากรอกรายละเอียดทันที",
+          portTitle:"รับทำ Portfolio",
+          portDesc:"ออกแบบ Portfolio สำหรับสมัครเรียน สมัครงาน หรือแนะนำตัว พร้อมจัดหน้าให้ดูเป็นมืออาชีพ",
+          deliveryTitle:"รับส่งของภายในตัวเมือง",
+          deliveryDesc:"บริการรับและส่งสิ่งของตามจุดที่กำหนด ราคาอ้างอิงจากระยะทาง ขนาด และรายละเอียดสินค้า",
+          customTitle:"บริการสั่งทำพิเศษ",
+          customDesc:"สำหรับงานอื่น ๆ ที่ต้องการพูดคุยรายละเอียดเพิ่มเติม สามารถส่งข้อมูลเพื่อขอประเมินราคาได้",
+          start:"เริ่มต้น",perJob:"/ งาน",perTrip:"/ เที่ยว",
+          quote:"ประเมินราคา",byDetail:"ตามรายละเอียด",select:"เลือกบริการนี้",buyCredit:"ซื้อด้วยเครดิต"
+        },
+        hire:{
+          badge:"ส่งรายละเอียดงาน",title:"หน้าจ้างบริการ",
+          desc:"เลือกบริการ กรอกรายละเอียด และชำระด้วยเครดิตผ่านเว็บไซต์ได้ทันที",
+          formTitle:"สั่งซื้อบริการผ่านเว็บไซต์",name:"ชื่อผู้ติดต่อ",namePh:"กรอกชื่อของคุณ",
+          contact:"ช่องทางติดต่อ",contactPh:"เบอร์โทร / Line / Email",
+          service:"เลือกบริการ",optPortfolio:"รับทำ Portfolio",optDelivery:"รับส่งของภายในตัวเมือง",optCustom:"บริการสั่งทำพิเศษ",
+          budget:"งบประมาณโดยประมาณ",budgetPh:"เช่น 500",deadline:"วันที่ต้องการงาน",
+          details:"รายละเอียดงาน",detailsPh:"อธิบายรายละเอียด สิ่งที่ต้องการ จุดรับ-ส่ง หรือข้อมูลอื่น ๆ",
+          submit:"ยืนยันซื้อบริการและหักเครดิต",summaryTitle:"สรุปเบื้องต้น",sumService:"บริการ",sumPrice:"ราคาเริ่มต้น",
+          sumStatus:"สถานะ",waitInfo:"รอข้อมูล",
+          notice:"ระบบจะหักเครดิตและสร้างออเดอร์จริงให้แอดมินดำเนินงานต่อ"
+        },
+        wallet:{badge:"กระเป๋าเครดิต",title:"เติมเครดิตและชำระค่าบริการ",desc:"เติมเครดิตผ่านบัญชีธนาคารหรือ TrueMoney แล้วใช้เครดิตซื้อบริการภายในเว็บไซต์",balanceShort:"เครดิต",available:"เครดิตคงเหลือ",localNote:"",serverNote:"ยอดเครดิตถูกเก็บในฐานข้อมูลและแก้จากหน้าเว็บไม่ได้",refresh:"รีเฟรชยอดเครดิต",reset:"",history:"ประวัติรายการ",topup:"เติมเครดิต",bank:"ธนาคาร",bankName:"ธนาคารตัวอย่าง",accountName:"ชื่อบัญชี: YOUR NAME",tmName:"ชื่อบัญชี: YOUR NAME",amount:"จำนวนเงิน",reference:"เลขอ้างอิง/เวลาที่โอน",referencePh:"เช่น 123456 / 14:30",slip:"แนบหลักฐานการโอน",demoNotice:"",confirm:"",loginTitle:"เข้าสู่ระบบก่อนเติมเครดิต",password:"รหัสผ่าน",login:"เข้าสู่ระบบ",signup:"สมัครสมาชิก",logout:"ออกจากระบบ",autoVerify:"ตรวจสอบยอดอัตโนมัติ",gatewayNote:"QR จะถูกสร้างโดย Payment Gateway และมีจำนวนเงินกำหนดไว้",tmGatewayNote:"ผู้ชำระจะยืนยันรายการผ่าน TrueMoney ตามหน้าที่ Gateway แสดง",phone:"เบอร์ TrueMoney",liveNotice:"เครดิตจะยังไม่เพิ่มตอนกดปุ่ม ระบบจะรอ Webhook ยืนยันการจ่ายเงินจริงก่อน",createPayment:"สร้างรายการชำระเงิน",openPayment:"เปิดหน้าชำระเงิน",empty:"ยังไม่มีรายการ",topupText:"เติมเครดิต",purchaseText:"ซื้อบริการ",insufficient:"เครดิตไม่เพียงพอ กรุณาเติมเครดิตก่อน",purchased:"ชำระด้วยเครดิตสำเร็จ",resetDone:"รีเซ็ตเครดิตแล้ว"},
+        contact:{
+          badge:"ช่องทางติดต่อ",title:"ติดต่อเรา",
+          desc:"ติดต่อสอบถามบริการ แจ้งปัญหา หรือติดตามงานผ่านช่องทางด้านล่าง",
+          phone:"เบอร์โทร",email:"อีเมล",quickTitle:"ส่งข้อความด่วน",name:"ชื่อ",namePh:"ชื่อของคุณ",
+          reply:"อีเมลหรือเบอร์ติดต่อกลับ",replyPh:"ช่องทางติดต่อกลับ",message:"ข้อความ",
+          messagePh:"พิมพ์ข้อความที่ต้องการติดต่อ",copy:"ส่งข้อความถึงแอดมิน"
+        },
+        footer:{rights:"สงวนลิขสิทธิ์โดยเจ้าของเว็บไซต์",made:"ออกแบบด้วยแอนิเมชันที่ลื่นไหลและ UI สมัยใหม่"},
+        modal:{
+          orderTitle:"สรุปคำสั่งจ้าง",
+          copy:"คัดลอกข้อความ",
+          close:"ปิด",
+          copied:"คัดลอกข้อความแล้ว",
+          required:"กรุณากรอกข้อมูลที่จำเป็นให้ครบ",
+          contactCopied:"ส่งข้อความถึงแอดมินติดต่อแล้ว"
+        }
+      },
+
+      en: {
+        nav:{home:"Home",news:"News",services:"Services",hire:"Hire",wallet:"Credits",contact:"Contact"},
+        home:{
+          badge:"Available for online work",
+          title1:"Digital services",
+          title2:"that look great and work",
+          desc:"Portfolio design and delivery services with a built-in news area, modern design, simple navigation, and full mobile support.",
+          viewServices:"View all services",
+          startHire:"Start a project",
+          stat1:"Service types",
+          stat2:"Mobile friendly",
+          stat3:"Two languages"
+        },
+        news:{
+          badge:"Latest updates",title:"News & announcements",
+          desc:"A place for promotions, holidays, availability updates, and important announcements.",
+          n1title:"Our website is now live",
+          n1desc:"Explore portfolio design and delivery services with a faster contact experience.",
+          n2title:"Portfolio queue is open",
+          n2desc:"Portfolio design for education, job applications, and personal presentation.",
+          n3title:"Delivery service available",
+          n3desc:"Submit pickup and delivery details to request a price estimate.",
+          read:"Read more →"
+        },
+        services:{
+          badge:"Choose a service",title:"Our services",
+          desc:"Select a service and you will be taken directly to the project request form.",
+          portTitle:"Portfolio design",
+          portDesc:"Professional portfolio layouts for education, job applications, or personal introductions.",
+          deliveryTitle:"Product delivery",
+          deliveryDesc:"Pickup and delivery based on distance, parcel size, and item details.",
+          customTitle:"Custom request",
+          customDesc:"For other projects that need additional discussion and a custom quotation.",
+          start:"From",perJob:"/ project",perTrip:"/ trip",
+          quote:"Custom quote",byDetail:"based on details",select:"Choose service",buyCredit:"Buy with credits"
+        },
+        hire:{
+          badge:"Send project details",title:"Hire a service",
+          desc:"Choose a service, enter project details, and pay securely with website credits.",
+          formTitle:"Purchase service",name:"Contact name",namePh:"Enter your name",
+          contact:"Contact method",contactPh:"Phone / Line / Email",
+          service:"Select service",optPortfolio:"Portfolio design",optDelivery:"Product delivery",optCustom:"Custom request",
+          budget:"Estimated budget",budgetPh:"Example: 500",deadline:"Preferred deadline",
+          details:"Project details",detailsPh:"Describe your requirements, pickup and delivery points, or other information",
+          submit:"Confirm purchase and spend credits",summaryTitle:"Initial summary",sumService:"Service",sumPrice:"Starting price",
+          sumStatus:"Status",waitInfo:"Waiting for details",
+          notice:"This demo form generates a summary that can be copied and sent through your contact channels. You can connect a backend or database later."
+        },
+        wallet:{badge:"Credit wallet",title:"Top up credits and pay for services",desc:"Add credits via bank transfer or TrueMoney and spend them on services in this website",balanceShort:"Credits",available:"Available credits",localNote:"",serverNote:"Credits are stored securely in the database",refresh:"Refresh balance",reset:"",history:"Transaction history",topup:"Top up credits",bank:"Bank transfer",bankName:"Sample bank",accountName:"Account name: YOUR NAME",tmName:"Account name: YOUR NAME",amount:"Amount",reference:"Transfer reference/time",referencePh:"Example: 123456 / 14:30",slip:"Attach transfer proof",demoNotice:"",confirm:"",loginTitle:"Sign in before topping up",password:"Password",login:"Sign in",signup:"Sign up",logout:"Sign out",autoVerify:"Automatic verification",gatewayNote:"The payment gateway generates a fixed-amount QR",tmGatewayNote:"Confirm the payment through the TrueMoney flow shown by the gateway",phone:"TrueMoney phone number",liveNotice:"Credits are added only after the webhook verifies a successful real payment",createPayment:"Create payment",openPayment:"Open payment page",empty:"No transactions yet",topupText:"Credit top up",purchaseText:"Service purchase",insufficient:"Insufficient credits. Please top up first",purchased:"Paid with credits successfully",resetDone:"Demo credits reset"},
+        contact:{
+          badge:"Contact channels",title:"Contact us",
+          desc:"Contact us for service inquiries, support, or order follow-up.",
+          phone:"Phone",email:"Email",quickTitle:"Quick message",name:"Name",namePh:"Your name",
+          reply:"Email or callback number",replyPh:"Your contact information",message:"Message",
+          messagePh:"Type your message",copy:"Generate and copy message"
+        },
+        footer:{rights:"All rights reserved by the website owner",made:"Designed with smooth motion & modern UI"},
+        modal:{
+          orderTitle:"Request summary",
+          copy:"Copy message",
+          close:"Close",
+          copied:"Message copied",
+          required:"Please complete all required fields",
+          contactCopied:"Contact message generated and copied"
+        }
+      }
+    };
+
+    let currentLang = localStorage.getItem("siteLang") || "th";
+
+    const serviceMeta = {
+      portfolio: { th: "รับทำ Portfolio", en: "Portfolio design", price: "฿499", credits: 499 },
+      delivery: { th: "รับส่งของภายในตัวเมือง", en: "In-town delivery", price: "฿30", credits: 30, variablePrice: true },
+      presentation: { th: "ออกแบบสไลด์นำเสนอ", en: "Presentation design", price: "฿149", credits: 149 },
+      poster: { th: "ออกแบบโปสเตอร์และโพสต์", en: "Poster & social post", price: "฿99", credits: 99 },
+      document: { th: "จัดรูปแบบรายงานและเอกสาร", en: "Document formatting", price: "฿79", credits: 79 },
+      custom: { th: "บริการสั่งทำพิเศษ", en: "Custom request", price: "เสนอราคา", customQuote: true }
+    };
+
+    async function loadPublicServices(){
+      if(!supabaseClient) return;
+      const {data:serviceRows,error}=await supabaseClient.from("services")
+        .select("slug,name,description,price,price_min,price_max,price_mode,is_active,sort_order,icon,badge,price_label,requires_distance,is_custom")
+        .eq("is_active",true).order("sort_order");
+      if(error||!serviceRows) return;
+      const data = serviceRows.filter((item,index,list) => index === list.findIndex(other => other.slug === item.slug));
+
+      const grid=document.getElementById("serviceGrid");
+      if(grid){
+        grid.innerHTML=data.map(item=>{
+          const isCustom=!!item.is_custom||item.slug==="custom";
+          const isDelivery=!!item.requires_distance||item.slug==="delivery";
+          const min=Number(item.price_min??item.price??0),max=Number(item.price_max??min); const priceText=(item.price_mode==="quote"||isCustom)?"เสนอราคา":(item.price_mode==="range"||max>min)?`฿${min.toLocaleString("th-TH")}–${max.toLocaleString("th-TH")}`:`เริ่มต้น ฿${min.toLocaleString("th-TH")}`;
+          const unit=isCustom?"ตามรายละเอียด":isDelivery?"/ เที่ยว":(item.price_label||"/ งาน");
+          return `<article class="service-card reveal visible">
+            ${item.badge?`<div class="market-badge">${escapeHtml(item.badge)}</div>`:""}
+            <div class="service-icon">${escapeHtml(item.icon||"✨")}</div>
+            <h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.description||"")}</p>
+            <div class="price">${priceText} <small>${escapeHtml(unit)}</small></div>
+            <button class="service-btn choose-service" data-service="${escapeHtml(item.slug)}">เลือกบริการนี้</button>
+            ${isCustom?"":`<button class="buy-credit-btn buy-now" data-service="${escapeHtml(item.slug)}">ซื้อด้วยเครดิต</button>`}
+          </article>`;
+        }).join("")||'<div class="dynamic-empty">ยังไม่มีบริการที่เปิดขาย</div>';
+      }
+
+      Object.keys(serviceMeta).forEach(k=>{ if(!data.some(x=>x.slug===k)) delete serviceMeta[k]; });
+      data.forEach(item=>{
+        const isCustom=!!item.is_custom||item.slug==="custom";
+        const variable=!!item.requires_distance||item.slug==="delivery";
+        serviceMeta[item.slug]={th:item.name,en:item.name,price:isCustom?"เสนอราคา":variable?"฿30–100":`฿${Number(item.price||0).toLocaleString("th-TH")}`,credits:Number(item.price_min ?? item.price ?? 0),priceMin:Number(item.price_min ?? item.price ?? 0),priceMax:Number(item.price_max ?? item.price_min ?? item.price ?? 0),customQuote:isCustom||item.price_mode==="quote",variablePrice:variable,description:item.description||""};
+      });
+      if(serviceSelect){
+        const selected=serviceSelect.value;
+        serviceSelect.innerHTML=data.map(x=>`<option value="${escapeHtml(x.slug)}">${escapeHtml(x.name)}</option>`).join("");
+        if(data.some(x=>x.slug===selected)) serviceSelect.value=selected;
+      }
+      document.getElementById("liveServiceCount")&&(document.getElementById("liveServiceCount").textContent=data.length);
+      bindServiceButtons();
+      updateServiceSummary();
+    }
+
+    async function loadPublicAnnouncements(){
+      if(!supabaseClient) return;
+      const {data,error}=await supabaseClient.from("announcements").select("id,title,summary,content,icon,published_at,is_pinned").eq("is_published",true).order("is_pinned",{ascending:false}).order("published_at",{ascending:false}).limit(12);
+      if(error||!data) return;
+      const grid=document.getElementById("newsGrid"); if(!grid) return;
+      document.getElementById("liveNewsCount")&&(document.getElementById("liveNewsCount").textContent=data.length);
+      grid.innerHTML=data.map((item,index)=>`<article class="news-card reveal visible">
+        <div class="news-cover">${escapeHtml(item.icon||"📣")}</div><div class="news-content">
+        ${item.is_pinned?'<span class="announcement-pin">ประกาศสำคัญ</span>':''}
+        <div class="news-date">${new Date(item.published_at).toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})}</div>
+        <h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary||item.content||"")}</p>
+        <button class="read-more dynamic-news" data-title="${encodeURIComponent(item.title)}" data-content="${encodeURIComponent(item.content||item.summary||"")}">อ่านเพิ่มเติม →</button>
+        </div></article>`).join("")||'<div class="dynamic-empty">ยังไม่มีประกาศ</div>';
+      grid.querySelectorAll(".dynamic-news").forEach(btn=>btn.addEventListener("click",()=>{modalTitle.textContent=decodeURIComponent(btn.dataset.title);modalBody.textContent=decodeURIComponent(btn.dataset.content);modal.classList.add("open");}));
+    }
+
+    function escapeHtml(value){return String(value??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
+    function bindServiceButtons(){
+      document.querySelectorAll(".choose-service,.buy-now").forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound="1";btn.addEventListener("click",()=>{serviceSelect.value=btn.dataset.service;updateServiceSummary();location.hash="hire";routeTo("hire");setTimeout(()=>serviceSelect.focus(),450);});});
+    }
+
+    const newsDetails = {
+      th: [
+        {title:"เปิดให้บริการเว็บไซต์แล้ว", body:"เว็บไซต์นี้ถูกออกแบบให้เป็นหน้าร้านสำหรับบริการออนไลน์โดยเฉพาะ มีหน้าแรก ข่าวสาร รายการบริการ แบบฟอร์มจ้างงาน ช่องทางติดต่อ และระบบเปลี่ยนภาษาไทย/อังกฤษ"},
+        {title:"เปิดคิวรับทำ Portfolio", body:"เหมาะสำหรับนักเรียน นักศึกษา ผู้สมัครงาน หรือผู้ที่ต้องการนำเสนอผลงาน สามารถกรอกเป้าหมาย รูปแบบ สี และวันส่งงานได้ในหน้าจ้างบริการ"},
+        {title:"บริการรับส่งสินค้า", body:"ลูกค้าสามารถแจ้งจุดรับ จุดส่ง ประเภทสินค้า ขนาดโดยประมาณ และเวลาที่ต้องการ เพื่อใช้ประเมินราคาเบื้องต้น"}
+      ],
+      en: [
+        {title:"Our website is now live", body:"This website is designed as a complete service storefront with home, news, services, hiring form, contact channels, and Thai/English language support."},
+        {title:"Portfolio queue is open", body:"Suitable for students, job applicants, and anyone who needs to present their work. Submit your goals, preferred style, colors, and deadline through the hire page."},
+        {title:"Delivery service available", body:"Customers can provide pickup point, destination, item type, approximate size, and preferred time for an initial quotation."}
+      ]
+    };
+
+    const pages = [...document.querySelectorAll(".page")];
+    const navLinks = [...document.querySelectorAll(".nav-link")];
+    const navMenu = document.getElementById("navLinks");
+    const menuBtn = document.getElementById("menuBtn");
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const toast = document.getElementById("toast");
+    const serviceSelect = document.getElementById("serviceSelect");
+    let creditBalance = 0;
+    let creditHistory = [];
+    let selectedPaymentMethod = "bank";
+    let currentProfile = null;
+    let fullAccountHistory = [];
+    let currentUser = null;
+    let walletPollTimer = null;
+    const appConfig = window.APP_CONFIG || {};
+    const supabaseClient = (appConfig.supabaseUrl && appConfig.supabaseAnonKey && window.supabase)
+      ? window.supabase.createClient(appConfig.supabaseUrl, appConfig.supabaseAnonKey)
+      : null;
+    loadPublicServices();
+    loadPublicAnnouncements();
+    window.addEventListener("DOMContentLoaded", () => {
+      const qr = document.getElementById("bankQrImage");
+      if (qr && appConfig.bankQrImage) qr.src = appConfig.bankQrImage;
+      const bankName = document.getElementById("bankAccountName");
+      if (bankName) bankName.textContent = appConfig.bankAccountName || "นายกรณพัฒน์ สายวงค์สอน";
+      const bankNumber = document.getElementById("bankAccountNumber");
+      if (bankNumber) bankNumber.textContent = appConfig.bankAccountNumber || "179-8-83569-2";
+      const tmName = document.getElementById("trueMoneyName");
+      if (tmName) tmName.textContent = appConfig.trueMoneyName || appConfig.bankAccountName || "นายกรณพัฒน์ สายวงค์สอน";
+      const tmNumber = document.getElementById("trueMoneyNumber");
+      if (tmNumber) tmNumber.textContent = appConfig.trueMoneyNumber || "095-721-3642";
+    });
+
+    function formatMoney(value) { return `฿${Number(value || 0).toLocaleString()}`; }
+
+    function renderWallet() {
+      document.getElementById("walletBalance").textContent = formatMoney(creditBalance);
+      document.getElementById("headerCredit").textContent = formatMoney(creditBalance);
+      const list = document.getElementById("historyList");
+      if (!creditHistory.length) {
+        list.innerHTML = `<div class="notice">${translations[currentLang].wallet.empty}</div>`;
+        return;
+      }
+      list.innerHTML = creditHistory.map(item => `
+        <div class="history-item">
+          <div><strong>${item.transaction_type === "topup" ? translations[currentLang].wallet.topupText : translations[currentLang].wallet.purchaseText}</strong><small>${new Date(item.created_at).toLocaleString(currentLang === "th" ? "th-TH" : "en-GB")}</small></div>
+          <strong class="${item.amount >= 0 ? "amount-plus" : "amount-minus"}">${item.amount >= 0 ? "+" : "-"}${formatMoney(Math.abs(item.amount))}</strong>
+        </div>`).join("");
+    }
+
+    async function refreshSessionUI() {
+      if (!supabaseClient) {
+        document.getElementById("authStatus").textContent = "กรุณาตั้งค่า app-config.js ก่อน";
+        return;
+      }
+      const { data } = await supabaseClient.auth.getSession();
+      currentUser = data.session?.user || null;
+      const signedIn = Boolean(currentUser);
+      document.getElementById("topupArea").classList.toggle("hidden", !signedIn);
+      document.getElementById("settingsArea")?.classList.toggle("hidden", !signedIn);
+      document.getElementById("settingsLoginNotice")?.classList.toggle("hidden", signedIn);
+      document.getElementById("myOrdersLoginNotice")?.classList.toggle("hidden", signedIn);
+      document.getElementById("myOrdersGrid")?.classList.toggle("hidden", !signedIn);
+      document.getElementById("logoutBtn").classList.toggle("hidden", !signedIn);
+      document.getElementById("loginBtn").classList.toggle("hidden", signedIn);
+      document.getElementById("signupBtn").classList.toggle("hidden", signedIn);
+      document.getElementById("authEmail").disabled = signedIn;
+      document.getElementById("authPassword").disabled = signedIn;
+      document.getElementById("authStatus").textContent = signedIn ? `เข้าสู่ระบบ: ${currentUser.email}` : "ยังไม่ได้เข้าสู่ระบบ";
+      document.getElementById("loginRequiredPanel")?.classList.toggle("hidden", signedIn);
+      updateHeaderAccount();
+      if (signedIn) { await loadWallet(); await loadAccountCenter(); await checkAdminAccess(); } else { creditBalance = 0; creditHistory = []; renderWallet(); document.getElementById("adminNavLink")?.classList.add("hidden"); document.getElementById("accountAdminAction")?.classList.add("hidden"); }
+    }
+
+    function getAccountLabel() {
+      if (!currentUser) return "เข้าสู่ระบบ";
+      const metadataName = currentProfile?.nickname || currentUser.user_metadata?.display_name || currentUser.user_metadata?.username;
+      return metadataName || currentUser.email?.split("@")[0] || "Account";
+    }
+
+    function updateHeaderAccount() {
+      const signedIn = Boolean(currentUser);
+      const label = getAccountLabel();
+      const avatar = document.getElementById("accountAvatar");
+      const name = document.getElementById("accountName");
+      const sub = document.getElementById("accountSubtext");
+      const dropName = document.getElementById("accountDropdownName");
+      const dropEmail = document.getElementById("accountDropdownEmail");
+      if (avatar) {
+        const avatarUrl = currentProfile?.avatar_url || currentUser?.user_metadata?.avatar_url;
+        avatar.classList.toggle("has-image", Boolean(signedIn && avatarUrl));
+        avatar.style.backgroundImage = signedIn && avatarUrl ? `url("${avatarUrl}")` : "";
+        avatar.textContent = (signedIn ? label : "F").trim().charAt(0).toUpperCase();
+      }
+      if (name) name.textContent = signedIn ? label : "เข้าสู่ระบบ";
+      if (sub) sub.textContent = signedIn ? "บัญชีของฉัน" : "Login / Register";
+      if (dropName) dropName.textContent = signedIn ? label : "ยังไม่ได้เข้าสู่ระบบ";
+      if (dropEmail) dropEmail.textContent = signedIn ? currentUser.email : "เข้าสู่ระบบเพื่อใช้งานเครดิต";
+      document.getElementById("accountLoginAction")?.classList.toggle("hidden", signedIn);
+      document.getElementById("accountWalletAction")?.classList.toggle("hidden", !signedIn);
+      document.getElementById("accountSettingsAction")?.classList.toggle("hidden", !signedIn);
+      document.getElementById("accountLogoutAction")?.classList.toggle("hidden", !signedIn);
+    }
+
+    function closeAccountMenu() {
+      document.getElementById("accountMenuWrap")?.classList.remove("open");
+      document.getElementById("accountTrigger")?.setAttribute("aria-expanded", "false");
+    }
+
+    async function loadWallet() {
+      if (!supabaseClient || !currentUser) return;
+      const [{ data: profile, error: profileError }, { data: tx, error: txError }] = await Promise.all([
+        supabaseClient.from("profiles").select("credit_balance").eq("id", currentUser.id).single(),
+        supabaseClient.from("credit_transactions").select("amount,transaction_type,description,created_at").eq("user_id", currentUser.id).order("created_at", { ascending:false }).limit(30)
+      ]);
+      if (profileError) console.error(profileError);
+      if (txError) console.error(txError);
+      creditBalance = Number(profile?.credit_balance || 0);
+      creditHistory = tx || [];
+      renderWallet();
+      const checkoutBalance = document.getElementById("checkoutBalance");
+      if (checkoutBalance) checkoutBalance.textContent = formatMoney(creditBalance);
+    }
+
+    function statusThai(status) {
+      return ({pending:"รอแอดมินรับงาน",accepted:"รับงานแล้ว",working:"กำลังดำเนินงาน",completed:"งานเสร็จแล้ว",cancelled:"ปฏิเสธ/ยกเลิก",approved:"อนุมัติแล้ว",rejected:"ปฏิเสธ"})[status] || status || "-";
+    }
+
+    function avatarFallback(name) {
+      const letter = (name || "F").trim().charAt(0).toUpperCase();
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#7c5cff"/><stop offset="1" stop-color="#00d9ff"/></linearGradient></defs><rect width="240" height="240" rx="60" fill="url(#g)"/><text x="120" y="145" text-anchor="middle" font-family="Arial" font-size="100" font-weight="700" fill="white">${letter}</text></svg>`)}`;
+    }
+
+    async function loadAccountCenter() {
+      if (!supabaseClient || !currentUser) return;
+      const [profileRes, txRes, topupRes, withdrawRes, orderRes] = await Promise.all([
+        supabaseClient.from("profiles").select("id,email,credit_balance,nickname,avatar_url,created_at").eq("id", currentUser.id).maybeSingle(),
+        supabaseClient.from("credit_transactions").select("id,amount,transaction_type,description,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100),
+        supabaseClient.from("topup_requests").select("id,amount,payment_method,status,admin_note,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100),
+        supabaseClient.from("withdrawal_requests").select("id,amount,payout_method,status,admin_note,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100),
+        supabaseClient.from("service_orders").select("id,service_id,service_name,price,status,details,admin_note,updated_at,created_at").eq("user_id", currentUser.id).order("created_at", {ascending:false}).limit(100)
+      ]);
+      currentProfile = profileRes.data || {id:currentUser.id,email:currentUser.email,credit_balance:creditBalance};
+      const nickname = currentProfile.nickname || currentUser.user_metadata?.display_name || currentUser.email?.split("@")[0] || "สมาชิก";
+      const avatarUrl = currentProfile.avatar_url || currentUser.user_metadata?.avatar_url || avatarFallback(nickname);
+      const avatarPreview = document.getElementById("profileAvatarPreview");
+      if (avatarPreview) avatarPreview.src = avatarUrl;
+      document.getElementById("settingsDisplayName").textContent = nickname;
+      document.getElementById("settingsEmail").textContent = currentUser.email || "-";
+      document.getElementById("settingsCredit").textContent = formatMoney(currentProfile.credit_balance || creditBalance);
+      document.getElementById("settingsJoined").textContent = new Date(currentProfile.created_at || currentUser.created_at).toLocaleDateString("th-TH");
+      document.getElementById("nicknameInput").value = currentProfile.nickname || "";
+      fullAccountHistory = [
+        ...(txRes.data || []).map(x=>({...x,kind:"transaction"})),
+        ...(topupRes.data || []).map(x=>({...x,kind:"topup"})),
+        ...(withdrawRes.data || []).map(x=>({...x,kind:"withdraw"})),
+        ...(orderRes.data || []).map(x=>({...x,kind:"order",amount:-Number(x.price||0)}))
+      ].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+      renderFullHistory();
+      renderMyOrders(orderRes.data || []);
+      updateHeaderAccount();
+    }
+
+    function renderFullHistory() {
+      const box = document.getElementById("fullHistoryList");
+      if (!box) return;
+      if (!fullAccountHistory.length) { box.innerHTML='<div class="notice">ยังไม่มีประวัติรายการ</div>'; return; }
+      box.innerHTML = fullAccountHistory.map(item => {
+        let icon="🧾", title="รายการเครดิต", detail=item.description || "";
+        if(item.kind==="topup"){ icon="💰"; title=`ฝากเงินผ่าน ${item.payment_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}`; detail=statusThai(item.status); }
+        else if(item.kind==="withdraw"){ icon="📤"; title=`ถอนเงินผ่าน ${item.payout_method === "truemoney" ? "TrueMoney" : "ธนาคาร"}`; detail=statusThai(item.status); }
+        else if(item.kind==="order"){ icon="🛒"; title=item.service_name || "คำสั่งซื้อบริการ"; detail=`สถานะ: ${statusThai(item.status)} • #${String(item.id).slice(0,8)}`; }
+        else if(item.transaction_type==="purchase"){ icon="🛍️"; title="ซื้อบริการ"; }
+        else if(item.transaction_type==="topup"){ icon="✅"; title="เครดิตจากการฝากเงิน"; }
+        const amount=Number(item.amount||0); const sign=item.kind==="withdraw"||amount<0?"-":"+";
+        return `<div class="timeline-item"><span class="timeline-icon">${icon}</span><div class="timeline-row"><div><strong>${title}</strong><small>${detail || "-"} • ${new Date(item.created_at).toLocaleString("th-TH")}</small></div><strong class="${sign==='+'?'amount-plus':'amount-minus'}">${sign}${formatMoney(Math.abs(amount))}</strong></div></div>`;
+      }).join("");
+    }
+
+
+    function renderMyOrders(orders = []) {
+      const box = document.getElementById("myOrdersGrid");
+      const notice = document.getElementById("myOrdersLoginNotice");
+      if (!box) return;
+      const signedIn = Boolean(currentUser);
+      notice?.classList.toggle("hidden", signedIn);
+      box.classList.toggle("hidden", !signedIn);
+      if (!signedIn) return;
+      if (!orders.length) { box.innerHTML = '<div class="notice">ยังไม่มีงานที่จ้างไว้ ลองเลือกบริการที่ชอบได้เลย ✦</div>'; return; }
+      const rank={pending:1,accepted:2,working:3,completed:4,cancelled:1};
+      box.innerHTML=orders.map((o,i)=>{
+        const steps=Array.from({length:4},(_,n)=>`<span class="mission-step ${n<=(rank[o.status]||1)-1?'on':''}"></span>`).join('');
+        const reason=o.admin_note && ["cancelled","rejected"].includes(o.status)?`<div class="mission-reason"><b>เหตุผลจากแอดมิน:</b> ${escapeHtml(o.admin_note)}</div>`:'';
+        return `<article class="mission-card" style="animation-delay:${Math.min(i*.06,.4)}s"><span class="mission-status">${statusThai(o.status)}</span><h3>${escapeHtml(o.service_name||'บริการ')}</h3><div class="mission-meta"><span>#${String(o.id).slice(0,8)}</span><span>${new Date(o.created_at).toLocaleString('th-TH')}</span><span>${formatMoney(o.price)}</span></div><div class="mission-progress">${steps}</div><div class="mission-details">${escapeHtml(o.details||'ไม่มีรายละเอียดเพิ่มเติม')}</div>${reason}</article>`;
+      }).join('');
+    }
+    function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+
+    // Lightweight synthesized SFX: no external audio files required.
+    const SFX={enabled:localStorage.getItem('fx_sfx')!=='off',ctx:null,play(type='click'){if(!this.enabled)return;try{this.ctx=this.ctx||new (window.AudioContext||window.webkitAudioContext)();const c=this.ctx,o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);const map={click:[520,.035,'sine'],login:[660,.12,'triangle'],pay:[780,.16,'sine'],hire:[620,.18,'triangle'],success:[920,.2,'sine'],error:[180,.15,'sawtooth']}[type]||[520,.04,'sine'];o.type=map[2];o.frequency.setValueAtTime(map[0],c.currentTime);if(type==='success')o.frequency.exponentialRampToValueAtTime(1320,c.currentTime+map[1]);if(type==='error')o.frequency.exponentialRampToValueAtTime(110,c.currentTime+map[1]);g.gain.setValueAtTime(.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(.07,c.currentTime+.008);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+map[1]);o.start();o.stop(c.currentTime+map[1]+.02)}catch(e){}}};
+    document.addEventListener('click',e=>{if(e.target.closest('button,a,.service-card'))SFX.play('click')});
+    const sfxBtn=document.getElementById('sfxToggle'); if(sfxBtn){sfxBtn.textContent=SFX.enabled?'🔊':'🔇';sfxBtn.onclick=()=>{SFX.enabled=!SFX.enabled;localStorage.setItem('fx_sfx',SFX.enabled?'on':'off');sfxBtn.textContent=SFX.enabled?'🔊':'🔇';if(SFX.enabled)SFX.play('click')}}
+
+    async function callFunction(name, body) {
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      const token = sessionData.session?.access_token;
+      if (!token) throw new Error("กรุณาเข้าสู่ระบบ");
+      const response = await fetch(`${appConfig.supabaseUrl}/functions/v1/${name}`, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}`, apikey:appConfig.supabaseAnonKey },
+        body:JSON.stringify(body || {})
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Server error");
+      return result;
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+    }
+
+    function copyText(text, successText) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => showToast(successText));
+      } else {
+        const temp = document.createElement("textarea");
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        temp.remove();
+        showToast(successText);
+      }
+    }
+
+    function routeTo(route) {
+      const validRoute = document.getElementById(route) ? route : "home";
+
+      pages.forEach(page => page.classList.toggle("active", page.id === validRoute));
+      navLinks.forEach(link => link.classList.toggle("active", link.dataset.route === validRoute));
+
+      navMenu.classList.remove("open");
+      menuBtn.textContent = "☰";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      setTimeout(initReveal, 50);
+    }
+
+    window.addEventListener("hashchange", () => routeTo(location.hash.replace("#","")));
+    document.querySelectorAll("[data-route]").forEach(el => {
+      el.addEventListener("click", () => routeTo(el.dataset.route));
+    });
+    document.querySelectorAll("[data-go]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        location.hash = btn.dataset.go;
+        routeTo(btn.dataset.go);
+      });
+    });
+
+    menuBtn.addEventListener("click", () => {
+      navMenu.classList.toggle("open");
+      menuBtn.textContent = navMenu.classList.contains("open") ? "✕" : "☰";
+    });
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem("siteLang", lang);
+      document.documentElement.lang = lang;
+      document.getElementById("langBtn").textContent = lang === "th" ? "EN" : "TH";
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const keys = el.dataset.i18n.split(".");
+        let value = translations[lang];
+        keys.forEach(key => value = value?.[key]);
+        if (value) el.textContent = value;
+      });
+
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const keys = el.dataset.i18nPlaceholder.split(".");
+        let value = translations[lang];
+        keys.forEach(key => value = value?.[key]);
+        if (value) el.placeholder = value;
+      });
+
+      updateServiceSummary();
+      renderWallet();
+    }
+
+    document.getElementById("langBtn").addEventListener("click", () => {
+      applyLanguage(currentLang === "th" ? "en" : "th");
+    });
+
+    function updateClock() {
+      const now = new Date();
+      const locale = currentLang === "th" ? "th-TH" : "en-GB";
+      const date = now.toLocaleDateString(locale, { day:"2-digit", month:"short" });
+      const time = now.toLocaleTimeString(locale, { hour12:false });
+      document.getElementById("clock").textContent = `${date} • ${time}`;
+    }
+    setInterval(updateClock, 1000);
+
+    function updateServiceSummary() {
+      if(!serviceSelect) return;
+      const serviceId = serviceSelect.value;
+      const meta = serviceMeta[serviceId] || {th:"บริการ",en:"Service",price:"-",credits:0};
+      const isDelivery = !!meta.variablePrice;
+      const isCustom = !!meta.customQuote;
+      const distanceField = document.getElementById("deliveryDistanceField");
+      const quoteField = document.getElementById("customQuoteField");
+      const distanceSelect = document.getElementById("deliveryDistance");
+      const quoteInput = document.getElementById("proposedPrice");
+      if(distanceField) distanceField.hidden = !isDelivery;
+      if(quoteField) quoteField.hidden = !isCustom;
+      if(distanceSelect) distanceSelect.required = isDelivery;
+      if(quoteInput) quoteInput.required = isCustom;
+      const detailInput = document.getElementById("details");
+      if(detailInput) detailInput.placeholder = isDelivery ? "ระบุจุดรับ จุดส่ง ชนิดของ และเวลาที่สะดวก" : isCustom ? "อธิบายงานที่ต้องการให้ละเอียด เพื่อให้แอดมินพิจารณาราคาเสนอ" : "อธิบายรายละเอียดงานที่ต้องการ";
+      const deliveryPrice = Number(distanceSelect?.value || meta.credits || 30);
+      document.getElementById("sumService").textContent = meta[currentLang] || meta.th || "บริการ";
+      document.getElementById("sumPrice").textContent = isDelivery ? `฿${deliveryPrice}` : meta.price;
+      document.getElementById("sumStatusText").textContent = isCustom ? "รอแอดมินตรวจราคาเสนอ" : "พร้อมสั่งซื้อ";
+      const submit = document.querySelector('#hireForm button[type="submit"]');
+      if(submit) submit.textContent = isCustom ? "ส่ง Custom request ให้แอดมิน" : "ยืนยันซื้อบริการและหักเครดิต";
+    }
+
+    serviceSelect?.addEventListener("change", updateServiceSummary);
+    document.getElementById("deliveryDistance")?.addEventListener("change", updateServiceSummary);
+
+    // V22.1: robust service selection and context-sensitive fields
+    document.addEventListener("click", event => {
+      const button = event.target.closest(".choose-service,.buy-now");
+      if (!button) return;
+      event.preventDefault();
+      const selectedId = button.dataset.service;
+      if (serviceSelect && [...serviceSelect.options].some(option => option.value === selectedId)) {
+        serviceSelect.value = selectedId;
+        serviceSelect.dispatchEvent(new Event("change", { bubbles:true }));
+        location.hash = "hire";
+        routeTo("hire");
+        setTimeout(() => serviceSelect.focus(), 250);
+      } else {
+        showToast("ไม่พบบริการนี้ กรุณารีเฟรชหน้าเว็บ");
+      }
+    });
+
+    document.querySelectorAll(".wallet-action-tab").forEach(tab => tab.addEventListener("click", () => {
+      const panel = tab.dataset.walletPanel;
+      document.querySelectorAll(".wallet-action-tab").forEach(x => x.classList.toggle("active", x === tab));
+      const topupCard = document.getElementById("topupWalletCard");
+      const withdrawCard = document.getElementById("withdrawWalletCard");
+      if (topupCard) topupCard.hidden = panel !== "topup";
+      if (withdrawCard) withdrawCard.hidden = panel !== "withdraw";
+    }));
+
+    document.getElementById("hireForm")?.addEventListener("submit", async event => {
+      event.preventDefault();
+      try {
+        if (!currentUser) throw new Error("กรุณาเข้าสู่ระบบก่อนสั่งบริการ");
+        const serviceId = serviceSelect?.value;
+        const meta = serviceMeta[serviceId];
+        if (!serviceId || !meta) throw new Error("กรุณาเลือกบริการใหม่");
+        const payload = {
+          service_id: serviceId,
+          customer_name: document.getElementById("customerName").value.trim(),
+          contact: document.getElementById("customerContact").value.trim(),
+          deadline: document.getElementById("deadline").value || null,
+          details: document.getElementById("details").value.trim()
+        };
+        if (!payload.customer_name || !payload.contact || !payload.details) throw new Error("กรุณากรอกข้อมูลให้ครบ");
+        if (meta.variablePrice) payload.quoted_price = Number(document.getElementById("deliveryDistance").value);
+        if (meta.customQuote) {
+          payload.proposed_price = Number(document.getElementById("proposedPrice").value);
+          if (!Number.isInteger(payload.proposed_price) || payload.proposed_price < 1) throw new Error("กรุณากรอกราคาเสนอ");
+          const { error } = await supabaseClient.rpc("submit_custom_request", { p_payload: payload });
+          if (error) throw error;
+          showToast("ส่ง Custom request ให้แอดมินแล้ว");
+        } else {
+          await purchaseService(payload);
+          showToast("สั่งซื้อบริการสำเร็จ");
+        }
+        event.target.reset();
+        updateServiceSummary();
+        location.hash = "my-orders";
+        routeTo("my-orders");
+      } catch (error) { showToast(error.message || "ส่งคำสั่งซื้อไม่สำเร็จ"); }
+    });
+
+    document.querySelectorAll("[data-news]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const item = newsDetails[currentLang][Number(btn.dataset.news)];
+        modalTitle.textContent = item.title;
+        modalBody.innerHTML = `<p>${item.body}</p>`;
+        modal.classList.add("open");
+      });
+    });
+
+    document.getElementById("closeModal").addEventListener("click", () => modal.classList.remove("open"));
+    modal.addEventListener("click", e => {
+      if (e.target === modal) modal.classList.remove("open");
+    });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") modal.classList.remove("open");
+    });
+
+    const accountMenuWrap = document.getElementById("accountMenuWrap");
+    const accountTrigger = document.getElementById("accountTrigger");
+    accountTrigger?.addEventListener("click", event => {
+      event.stopPropagation();
+      const open = accountMenuWrap.classList.toggle("open");
+      accountTrigger.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", event => { if (!accountMenuWrap?.contains(event.target)) closeAccountMenu(); });
+    document.getElementById("accountLoginAction")?.addEventListener("click", () => { closeAccountMenu(); location.href="login.html"; });
+    document.getElementById("accountWalletAction")?.addEventListener("click", () => { closeAccountMenu(); location.hash="wallet"; routeTo("wallet"); });
+    document.getElementById("accountSettingsAction")?.addEventListener("click", () => { closeAccountMenu(); location.hash="settings"; routeTo("settings"); });
+    document.getElementById("accountLogoutAction")?.addEventListener("click", async () => { closeAccountMenu(); if (supabaseClient) await supabaseClient.auth.signOut(); await refreshSessionUI(); showToast("ออกจากระบบแล้ว"); });
+
+    document.querySelectorAll(".pay-method").forEach(btn => btn.addEventListener("click", () => {
+      selectedPaymentMethod = btn.dataset.payment;
+      document.querySelectorAll(".pay-method").forEach(x=>x.classList.toggle("active",x===btn));
+      document.querySelectorAll("[data-pay-panel]").forEach(x=>x.classList.toggle("active",x.dataset.payPanel===selectedPaymentMethod));
+    }));
+
+    document.querySelectorAll(".settings-tab").forEach(btn => btn.addEventListener("click", () => {
+      document.querySelectorAll(".settings-tab").forEach(x=>x.classList.toggle("active",x===btn));
+      document.querySelectorAll("[data-settings-panel]").forEach(x=>x.classList.toggle("active",x.dataset.settingsPanel===btn.dataset.settingsTab));
+    }));
+
+    document.getElementById("avatarFile")?.addEventListener("change", e => {
+      const file=e.target.files?.[0]; if(file) document.getElementById("profileAvatarPreview").src=URL.createObjectURL(file);
+    });
+
+    document.getElementById("profileForm")?.addEventListener("submit", async e => {
+      e.preventDefault();
+      try{
+        if(!currentUser) throw new Error("กรุณาเข้าสู่ระบบ");
+        const nickname=document.getElementById("nicknameInput").value.trim();
+        if(!nickname) throw new Error("กรุณากรอกชื่อเล่น");
+        let avatarUrl=currentProfile?.avatar_url || null;
+        const file=document.getElementById("avatarFile").files?.[0];
+        if(file){
+          if(!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("รองรับเฉพาะ JPG, PNG หรือ WEBP");
+          if(file.size>3*1024*1024) throw new Error("รูปต้องไม่เกิน 3MB");
+          const ext=(file.name.split(".").pop()||"jpg").replace(/[^a-z0-9]/gi,"");
+          const path=`${currentUser.id}/avatar-${Date.now()}.${ext}`;
+          const {error:uploadError}=await supabaseClient.storage.from("avatars").upload(path,file,{contentType:file.type,upsert:true});
+          if(uploadError) throw uploadError;
+          avatarUrl=supabaseClient.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+        }
+        const profilePayload={id:currentUser.id,nickname,avatar_url:avatarUrl};
+        const {error}=await supabaseClient.from("profiles").upsert(profilePayload,{onConflict:"id"});
+        if(error) throw new Error(error.message || "อัปเดตโปรไฟล์ไม่สำเร็จ");
+        await supabaseClient.auth.updateUser({data:{display_name:nickname,avatar_url:avatarUrl}});
+        await loadAccountCenter(); showToast("บันทึกโปรไฟล์แล้ว");
+      }catch(error){showToast(error.message||"บันทึกไม่สำเร็จ");}
+    });
+
+    document.getElementById("withdrawForm")?.addEventListener("submit", async e => {
+      e.preventDefault();
+      try{
+        if(!currentUser) throw new Error("กรุณาเข้าสู่ระบบ");
+        const amount=Number(document.getElementById("withdrawAmount").value);
+        const payout_method=document.getElementById("withdrawChannel").value;
+        const payout_account=document.getElementById("withdrawAccount").value.trim();
+        const payout_name=document.getElementById("withdrawAccountName").value.trim();
+        if(amount<50) throw new Error("ถอนขั้นต่ำ 50 เครดิต");
+        if(amount>creditBalance) throw new Error("เครดิตคงเหลือไม่เพียงพอ");
+        const {error}=await supabaseClient.from("withdrawal_requests").insert({user_id:currentUser.id,amount,payout_method,payout_account,payout_name});
+        if(error) throw error;
+        e.target.reset(); await loadAccountCenter(); showToast("ส่งคำขอถอนแล้ว");
+      }catch(error){showToast(error.message||"ส่งคำขอไม่สำเร็จ");}
+    });
+
+    document.querySelectorAll(".quick-amount").forEach(btn => btn.addEventListener("click", () => {
+      document.getElementById("topupAmount").value = btn.dataset.amount;
+    }));
+
+    document.getElementById("loginBtn")?.addEventListener("click", async () => {
+      try {
+        if (!supabaseClient) throw new Error("ยังไม่ได้ตั้งค่า Supabase");
+        const email = document.getElementById("authEmail").value.trim();
+        const password = document.getElementById("authPassword").value;
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        await refreshSessionUI(); SFX.play("login"); location.hash="home"; routeTo("home"); showToast("เข้าสู่ระบบสำเร็จ");
+      } catch (error) { showToast(error.message); }
+    });
+
+    document.getElementById("signupBtn")?.addEventListener("click", async () => {
+      try {
+        if (!supabaseClient) throw new Error("ยังไม่ได้ตั้งค่า Supabase");
+        const email = document.getElementById("authEmail").value.trim();
+        const password = document.getElementById("authPassword").value;
+        const { error } = await supabaseClient.auth.signUp({ email, password });
+        if (error) throw error;
+        showToast("สมัครแล้ว กรุณาตรวจอีเมลยืนยันหากระบบร้องขอ");
+        await refreshSessionUI();
+      } catch (error) { showToast(error.message); }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      if (supabaseClient) await supabaseClient.auth.signOut();
+      await refreshSessionUI(); showToast("ออกจากระบบแล้ว");
+    });
+
+    document.getElementById("refreshWalletBtn").addEventListener("click", async () => {
+      await loadWallet(); showToast("อัปเดตยอดแล้ว");
+    });
+
+    const slipInput = document.getElementById("slipFile");
+    slipInput.addEventListener("change", () => {
+      const file = slipInput.files?.[0];
+      const preview = document.getElementById("slipPreview");
+      if (!file) return preview.classList.add("hidden");
+      preview.src = URL.createObjectURL(file);
+      preview.classList.remove("hidden");
+    });
+
+    async function checkAdminAccess() {
+      const link = document.getElementById("adminNavLink");
+      const accountAdmin = document.getElementById("accountAdminAction");
+      if (!link || !currentUser || !supabaseClient) {
+        link?.classList.add("hidden");
+        accountAdmin?.classList.add("hidden");
+        return;
+      }
+      try {
+        const { data: isAdmin, error } = await supabaseClient.rpc("is_admin");
+        if (error) throw error;
+        link.classList.toggle("hidden", !isAdmin);
+        accountAdmin?.classList.toggle("hidden", !isAdmin);
+      } catch (_) {
+        link.classList.add("hidden");
+        accountAdmin?.classList.add("hidden");
+      }
+    }
+
+    document.getElementById("topupForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const button = document.getElementById("topupSubmitBtn");
+      try {
+        if (!supabaseClient || !currentUser) throw new Error("กรุณาเข้าสู่ระบบ");
+        const amount = Number(document.getElementById("topupAmount").value);
+        const reference = document.getElementById("transferReference").value.trim();
+        const file = slipInput.files?.[0];
+        if (!Number.isInteger(amount) || amount < 10 || amount > 5000) throw new Error("เติมขั้นต่ำ 10 บาท และสูงสุด 5,000 บาท");
+        if (!reference) throw new Error("กรุณากรอกเลขอ้างอิงหรือเวลาที่โอน");
+        if (!file) throw new Error("กรุณาแนบสลิป");
+        if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("รองรับเฉพาะ JPG, PNG หรือ WEBP");
+        if (file.size > 5 * 1024 * 1024) throw new Error("ไฟล์สลิปต้องไม่เกิน 5MB");
+        button.disabled = true; button.style.opacity = ".6"; button.textContent = "กำลังอัปโหลด...";
+        const ext = file.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+        const objectPath = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
+        const { error: uploadError } = await supabaseClient.storage.from("payment-slips").upload(objectPath, file, { contentType:file.type, upsert:false });
+        if (uploadError) throw uploadError;
+        const { data, error } = await supabaseClient.from("topup_requests").insert({
+          user_id: currentUser.id, amount, payment_method: selectedPaymentMethod, transfer_reference: reference, slip_path: objectPath
+        }).select("id,status,created_at").single();
+        if (error) {
+          await supabaseClient.storage.from("payment-slips").remove([objectPath]);
+          throw error;
+        }
+        document.getElementById("paymentResult").classList.add("active");
+        document.getElementById("paymentStatus").textContent = "รอตรวจสอบ";
+        document.getElementById("paymentHint").textContent = `ส่งรายการ ${data.id.slice(0,8)} แล้ว แอดมินจะตรวจและเพิ่มเครดิตให้`;
+        e.target.reset(); document.getElementById("slipPreview").classList.add("hidden");
+        showToast("ส่งสลิปเรียบร้อยแล้ว");
+        await loadWallet();
+      } catch (error) { showToast((error.message || "ส่งสลิปไม่สำเร็จ").includes("payment_method") ? "ระบบเติมเงินยังไม่ได้อัปเดตฐานข้อมูล กรุณารัน SQL Hotfix V21.1" : (error.message || "ส่งสลิปไม่สำเร็จ")); }
+      finally { button.disabled=false; button.style.opacity="1"; button.textContent="ส่งสลิปให้แอดมินตรวจ"; }
+    });
+
+    async function purchaseService(payload) {
+      if (!supabaseClient || !currentUser) throw new Error("กรุณาเข้าสู่ระบบก่อนซื้อบริการ");
+      const { data, error } = await supabaseClient.rpc("purchase_service", { p_payload: payload });
+      if (error) throw error;
+      await Promise.all([loadWallet(), loadAccountCenter()]);
+      return data;
+    }
+
+    document.getElementById("contactForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      try{
+        if(!supabaseClient) throw new Error("ยังไม่ได้เชื่อมต่อฐานข้อมูล");
+        const {data:{user}}=await supabaseClient.auth.getUser();
+        if(!user) throw new Error("กรุณาเข้าสู่ระบบก่อนส่งข้อความ เพื่อรับคำตอบจากแอดมิน");
+        const row={user_id:user.id,sender_name:document.getElementById("contactName").value.trim(),reply_contact:document.getElementById("contactEmail").value.trim(),message:document.getElementById("contactMessage").value.trim(),status:"pending"};
+        if(!row.sender_name||!row.reply_contact||!row.message) throw new Error("กรุณากรอกข้อมูลให้ครบ");
+        const {error}=await supabaseClient.from("contact_messages").insert(row); if(error) throw error;
+        showToast("ส่งข้อความถึงแอดมินแล้ว"); e.target.reset(); await loadMyContactMessages();
+      }catch(err){showToast(err.message||"ส่งข้อความไม่สำเร็จ")}
+    });
+
+    function initReveal() {
+      const activePage = document.querySelector(".page.active");
+      if (!activePage) return;
+
+      const items = activePage.querySelectorAll(".reveal");
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12 });
+
+      items.forEach((item, index) => {
+        item.style.transitionDelay = `${Math.min(index * 70, 280)}ms`;
+        observer.observe(item);
+      });
+    }
+
+    const tiltWrap = document.getElementById("tiltWrap");
+    const tiltCard = document.getElementById("tiltCard");
+
+    tiltWrap.addEventListener("mousemove", e => {
+      const rect = tiltWrap.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - .5;
+      const y = (e.clientY - rect.top) / rect.height - .5;
+      tiltCard.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+    });
+
+    tiltWrap.addEventListener("mouseleave", () => {
+      tiltCard.style.transform = "rotateY(0) rotateX(0)";
+    });
+
+    if (supabaseClient) {
+      supabaseClient.auth.onAuthStateChange(() => setTimeout(refreshSessionUI, 0));
+      refreshSessionUI();
+    } else {
+      updateHeaderAccount();
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    applyLanguage(currentLang);
+    updateClock();
+    renderWallet();
+    routeTo(location.hash.replace("#","") || "home");
+    initReveal();
+  </script>
+<button id="sfxToggle" class="sfx-toggle" title="เปิด/ปิดเสียง">🔊</button>
+
+    async function loadMyContactMessages(){
+      if(!supabaseClient)return; const {data:{user}}=await supabaseClient.auth.getUser(); const box=document.getElementById("contactHistory"); if(!box)return;
+      if(!user){box.innerHTML='<div class="notice">เข้าสู่ระบบเพื่อดูคำถามและคำตอบของคุณ</div>';return;}
+      const {data,error}=await supabaseClient.from("contact_messages").select("*").eq("user_id",user.id).order("created_at",{ascending:false}).limit(20);
+      if(error){box.innerHTML='';return;} box.innerHTML=(data||[]).map(x=>`<div class="contact-ticket"><b>${escapeHtml(x.message)}</b><small style="display:block;margin-top:6px">ส่งเมื่อ ${new Date(x.created_at).toLocaleString('th-TH')}</small>${x.admin_reply?`<div class="reply"><b>คำตอบแอดมิน</b><p>${escapeHtml(x.admin_reply)}</p><small>${x.answered_at?new Date(x.answered_at).toLocaleString('th-TH'):''}</small></div>`:'<small style="display:block;margin-top:9px">⏳ รอแอดมินตอบ</small>'}</div>`).join('');
+    }
+    function enableRealtimeV23(){if(!supabaseClient)return;supabaseClient.channel('store-live-v23').on('postgres_changes',{event:'*',schema:'public',table:'services'},loadPublicServices).on('postgres_changes',{event:'*',schema:'public',table:'announcements'},loadPublicAnnouncements).on('postgres_changes',{event:'*',schema:'public',table:'site_settings'},()=>location.reload()).on('postgres_changes',{event:'*',schema:'public',table:'contact_messages'},loadMyContactMessages).subscribe();}
+    loadMyContactMessages(); enableRealtimeV23();
+<script id="paw-click-v19">document.addEventListener('click',e=>{const t=e.target.closest('button,a,.service-card');if(!t)return;const p=document.createElement('span');p.className='paw-pop';p.textContent=Math.random()>.5?'🐾':'✦';p.style.left=(e.clientX-8)+'px';p.style.top=(e.clientY-8)+'px';document.body.appendChild(p);setTimeout(()=>p.remove(),700)});</script>
+<script id="site-settings-v20">
+(async()=>{try{const cfg=window.APP_CONFIG||{};if(!window.supabase||!cfg.supabaseUrl)return;const c=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);const {data}=await c.from('site_settings').select('key,value');const m=Object.fromEntries((data||[]).map(x=>[x.key,x.value]));if(m.hero_title)document.getElementById('siteHeroTitle').textContent=m.hero_title;if(m.hero_accent)document.getElementById('siteHeroAccent').textContent=m.hero_accent;if(m.site_name){document.querySelectorAll('.brand-name').forEach(x=>x.textContent=m.site_name);document.title=m.site_name+' • Digital Services'}}catch(e){console.warn('site settings',e)}})();
+</script>
+</body>
+</html>
