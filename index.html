@@ -993,7 +993,10 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
 <style id="v22-admin-content-css">
 .dynamic-empty{grid-column:1/-1;padding:38px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:24px}.service-card .service-icon{font-size:2.2rem}.news-card .news-cover{font-size:3rem}.wallet-card#withdrawWalletCard{border-color:rgba(139,120,255,.3)!important}.field-context{display:block;color:var(--muted);margin-top:7px}.announcement-pin{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(255,207,112,.12);color:#ffdc8a;font-size:.78rem;margin-bottom:8px}
 </style>
-</head>
+
+<style id="v23-live-home">
+.hero{position:relative}.hero-live-orb{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(70px);background:radial-gradient(circle,rgba(86,221,255,.24),rgba(132,91,255,.13) 45%,transparent 70%);right:-80px;top:-90px;animation:orbFloat 8s ease-in-out infinite;pointer-events:none}.live-strip{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.live-pill{padding:10px 14px;border:1px solid rgba(116,222,255,.24);border-radius:999px;background:rgba(13,30,70,.58);backdrop-filter:blur(12px);box-shadow:0 8px 30px rgba(0,0,0,.18)}.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#42edb1;box-shadow:0 0 14px #42edb1;margin-right:7px;animation:livePulse 1.6s infinite}.contact-history{display:grid;gap:12px;margin-top:18px}.contact-ticket{padding:16px;border:1px solid var(--border);border-radius:18px;background:rgba(15,25,66,.72)}.contact-ticket .reply{margin-top:10px;padding:12px;border-radius:14px;background:rgba(58,218,168,.08);border:1px solid rgba(58,218,168,.2)}@keyframes orbFloat{50%{transform:translate(-35px,40px) scale(1.12)}}@keyframes livePulse{50%{opacity:.35;transform:scale(.75)}}
+</style></head>
 
 <body>
   <div class="bg-orb orb-1"></div>
@@ -1053,7 +1056,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
   <main>
     <section class="page active" id="home">
       <div class="container">
-        <div class="hero">
+        <div class="hero"><div class="hero-live-orb"></div>
           <div class="reveal">
             <div class="eyebrow">
               <span class="pulse-dot"></span>
@@ -1070,7 +1073,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
               ออกแบบทันสมัย ใช้งานง่าย และรองรับทุกอุปกรณ์
             </p>
 
-            <div class="hero-actions">
+            <div class="live-strip"><span class="live-pill"><span class="live-dot"></span><b id="liveServiceCount">0</b> บริการพร้อมใช้</span><span class="live-pill">📣 <b id="liveNewsCount">0</b> อัปเดตล่าสุด</span><span class="live-pill">⚡ อัปเดตแบบเรียลไทม์</span></div><div class="hero-actions">
               <button class="primary-btn" data-go="services" data-i18n="home.viewServices">ดูบริการทั้งหมด</button>
               <button class="secondary-btn" data-go="hire" data-i18n="home.startHire">เริ่มจ้างงาน</button>
             </div>
@@ -1560,8 +1563,8 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
                 <label for="contactMessage" data-i18n="contact.message">ข้อความ</label>
                 <textarea id="contactMessage" required data-i18n-placeholder="contact.messagePh" placeholder="พิมพ์ข้อความที่ต้องการติดต่อ"></textarea>
               </div>
-              <button class="submit-btn" type="submit" data-i18n="contact.copy">สร้างและคัดลอกข้อความ</button>
-            </form>
+              <button class="submit-btn" type="submit" data-i18n="contact.copy">ส่งข้อความถึงแอดมิน</button>
+            </form><div id="contactHistory" class="contact-history"></div>
           </div>
         </div>
       </div>
@@ -1645,7 +1648,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           desc:"ติดต่อสอบถามบริการ แจ้งปัญหา หรือติดตามงานผ่านช่องทางด้านล่าง",
           phone:"เบอร์โทร",email:"อีเมล",quickTitle:"ส่งข้อความด่วน",name:"ชื่อ",namePh:"ชื่อของคุณ",
           reply:"อีเมลหรือเบอร์ติดต่อกลับ",replyPh:"ช่องทางติดต่อกลับ",message:"ข้อความ",
-          messagePh:"พิมพ์ข้อความที่ต้องการติดต่อ",copy:"สร้างและคัดลอกข้อความ"
+          messagePh:"พิมพ์ข้อความที่ต้องการติดต่อ",copy:"ส่งข้อความถึงแอดมิน"
         },
         footer:{rights:"สงวนลิขสิทธิ์โดยเจ้าของเว็บไซต์",made:"ออกแบบด้วยแอนิเมชันที่ลื่นไหลและ UI สมัยใหม่"},
         modal:{
@@ -1654,7 +1657,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           close:"ปิด",
           copied:"คัดลอกข้อความแล้ว",
           required:"กรุณากรอกข้อมูลที่จำเป็นให้ครบ",
-          contactCopied:"สร้างและคัดลอกข้อความติดต่อแล้ว"
+          contactCopied:"ส่งข้อความถึงแอดมินติดต่อแล้ว"
         }
       },
 
@@ -1740,7 +1743,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
     async function loadPublicServices(){
       if(!supabaseClient) return;
       const {data:serviceRows,error}=await supabaseClient.from("services")
-        .select("slug,name,description,price,is_active,sort_order,icon,badge,price_label,requires_distance,is_custom")
+        .select("slug,name,description,price,price_min,price_max,price_mode,is_active,sort_order,icon,badge,price_label,requires_distance,is_custom")
         .eq("is_active",true).order("sort_order");
       if(error||!serviceRows) return;
       const data = serviceRows.filter((item,index,list) => index === list.findIndex(other => other.slug === item.slug));
@@ -1750,7 +1753,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
         grid.innerHTML=data.map(item=>{
           const isCustom=!!item.is_custom||item.slug==="custom";
           const isDelivery=!!item.requires_distance||item.slug==="delivery";
-          const priceText=isCustom?"เสนอราคา":isDelivery?"฿30–100":`เริ่มต้น ฿${Number(item.price||0).toLocaleString("th-TH")}`;
+          const min=Number(item.price_min??item.price??0),max=Number(item.price_max??min); const priceText=(item.price_mode==="quote"||isCustom)?"เสนอราคา":(item.price_mode==="range"||max>min)?`฿${min.toLocaleString("th-TH")}–${max.toLocaleString("th-TH")}`:`เริ่มต้น ฿${min.toLocaleString("th-TH")}`;
           const unit=isCustom?"ตามรายละเอียด":isDelivery?"/ เที่ยว":(item.price_label||"/ งาน");
           return `<article class="service-card reveal visible">
             ${item.badge?`<div class="market-badge">${escapeHtml(item.badge)}</div>`:""}
@@ -1767,13 +1770,14 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
       data.forEach(item=>{
         const isCustom=!!item.is_custom||item.slug==="custom";
         const variable=!!item.requires_distance||item.slug==="delivery";
-        serviceMeta[item.slug]={th:item.name,en:item.name,price:isCustom?"เสนอราคา":variable?"฿30–100":`฿${Number(item.price||0).toLocaleString("th-TH")}`,credits:Number(item.price||0),customQuote:isCustom,variablePrice:variable,description:item.description||""};
+        serviceMeta[item.slug]={th:item.name,en:item.name,price:isCustom?"เสนอราคา":variable?"฿30–100":`฿${Number(item.price||0).toLocaleString("th-TH")}`,credits:Number(item.price_min ?? item.price ?? 0),priceMin:Number(item.price_min ?? item.price ?? 0),priceMax:Number(item.price_max ?? item.price_min ?? item.price ?? 0),customQuote:isCustom||item.price_mode==="quote",variablePrice:variable,description:item.description||""};
       });
       if(serviceSelect){
         const selected=serviceSelect.value;
         serviceSelect.innerHTML=data.map(x=>`<option value="${escapeHtml(x.slug)}">${escapeHtml(x.name)}</option>`).join("");
         if(data.some(x=>x.slug===selected)) serviceSelect.value=selected;
       }
+      document.getElementById("liveServiceCount")&&(document.getElementById("liveServiceCount").textContent=data.length);
       bindServiceButtons();
       updateServiceSummary();
     }
@@ -1783,6 +1787,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
       const {data,error}=await supabaseClient.from("announcements").select("id,title,summary,content,icon,published_at,is_pinned").eq("is_published",true).order("is_pinned",{ascending:false}).order("published_at",{ascending:false}).limit(12);
       if(error||!data) return;
       const grid=document.getElementById("newsGrid"); if(!grid) return;
+      document.getElementById("liveNewsCount")&&(document.getElementById("liveNewsCount").textContent=data.length);
       grid.innerHTML=data.map((item,index)=>`<article class="news-card reveal visible">
         <div class="news-cover">${escapeHtml(item.icon||"📣")}</div><div class="news-content">
         ${item.is_pinned?'<span class="announcement-pin">ประกาศสำคัญ</span>':''}
@@ -2396,23 +2401,17 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
       return data;
     }
 
-    document.getElementById("contactForm").addEventListener("submit", e => {
+    document.getElementById("contactForm").addEventListener("submit", async e => {
       e.preventDefault();
-
-      const name = document.getElementById("contactName").value.trim();
-      const reply = document.getElementById("contactEmail").value.trim();
-      const message = document.getElementById("contactMessage").value.trim();
-
-      if (!name || !reply || !message) {
-        showToast(translations[currentLang].modal.required);
-        return;
-      }
-
-      const text = currentLang === "th"
-        ? `ข้อความติดต่อ\nชื่อ: ${name}\nช่องทางติดต่อกลับ: ${reply}\nข้อความ: ${message}`
-        : `Contact message\nName: ${name}\nReply contact: ${reply}\nMessage: ${message}`;
-
-      copyText(text, translations[currentLang].modal.contactCopied);
+      try{
+        if(!supabaseClient) throw new Error("ยังไม่ได้เชื่อมต่อฐานข้อมูล");
+        const {data:{user}}=await supabaseClient.auth.getUser();
+        if(!user) throw new Error("กรุณาเข้าสู่ระบบก่อนส่งข้อความ เพื่อรับคำตอบจากแอดมิน");
+        const row={user_id:user.id,sender_name:document.getElementById("contactName").value.trim(),reply_contact:document.getElementById("contactEmail").value.trim(),message:document.getElementById("contactMessage").value.trim(),status:"pending"};
+        if(!row.sender_name||!row.reply_contact||!row.message) throw new Error("กรุณากรอกข้อมูลให้ครบ");
+        const {error}=await supabaseClient.from("contact_messages").insert(row); if(error) throw error;
+        showToast("ส่งข้อความถึงแอดมินแล้ว"); e.target.reset(); await loadMyContactMessages();
+      }catch(err){showToast(err.message||"ส่งข้อความไม่สำเร็จ")}
     });
 
     function initReveal() {
@@ -2464,6 +2463,15 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
     initReveal();
   </script>
 <button id="sfxToggle" class="sfx-toggle" title="เปิด/ปิดเสียง">🔊</button>
+
+    async function loadMyContactMessages(){
+      if(!supabaseClient)return; const {data:{user}}=await supabaseClient.auth.getUser(); const box=document.getElementById("contactHistory"); if(!box)return;
+      if(!user){box.innerHTML='<div class="notice">เข้าสู่ระบบเพื่อดูคำถามและคำตอบของคุณ</div>';return;}
+      const {data,error}=await supabaseClient.from("contact_messages").select("*").eq("user_id",user.id).order("created_at",{ascending:false}).limit(20);
+      if(error){box.innerHTML='';return;} box.innerHTML=(data||[]).map(x=>`<div class="contact-ticket"><b>${escapeHtml(x.message)}</b><small style="display:block;margin-top:6px">ส่งเมื่อ ${new Date(x.created_at).toLocaleString('th-TH')}</small>${x.admin_reply?`<div class="reply"><b>คำตอบแอดมิน</b><p>${escapeHtml(x.admin_reply)}</p><small>${x.answered_at?new Date(x.answered_at).toLocaleString('th-TH'):''}</small></div>`:'<small style="display:block;margin-top:9px">⏳ รอแอดมินตอบ</small>'}</div>`).join('');
+    }
+    function enableRealtimeV23(){if(!supabaseClient)return;supabaseClient.channel('store-live-v23').on('postgres_changes',{event:'*',schema:'public',table:'services'},loadPublicServices).on('postgres_changes',{event:'*',schema:'public',table:'announcements'},loadPublicAnnouncements).on('postgres_changes',{event:'*',schema:'public',table:'site_settings'},()=>location.reload()).on('postgres_changes',{event:'*',schema:'public',table:'contact_messages'},loadMyContactMessages).subscribe();}
+    loadMyContactMessages(); enableRealtimeV23();
 <script id="paw-click-v19">document.addEventListener('click',e=>{const t=e.target.closest('button,a,.service-card');if(!t)return;const p=document.createElement('span');p.className='paw-pop';p.textContent=Math.random()>.5?'🐾':'✦';p.style.left=(e.clientX-8)+'px';p.style.top=(e.clientY-8)+'px';document.body.appendChild(p);setTimeout(()=>p.remove(),700)});</script>
 <script id="site-settings-v20">
 (async()=>{try{const cfg=window.APP_CONFIG||{};if(!window.supabase||!cfg.supabaseUrl)return;const c=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);const {data}=await c.from('site_settings').select('key,value');const m=Object.fromEntries((data||[]).map(x=>[x.key,x.value]));if(m.hero_title)document.getElementById('siteHeroTitle').textContent=m.hero_title;if(m.hero_accent)document.getElementById('siteHeroAccent').textContent=m.hero_accent;if(m.site_name){document.querySelectorAll('.brand-name').forEach(x=>x.textContent=m.site_name);document.title=m.site_name+' • Digital Services'}}catch(e){console.warn('site settings',e)}})();
