@@ -947,7 +947,7 @@
 
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app-config.js?v=20"></script>
+  <script src="app-config.js?v=21"></script>
 
 
 
@@ -1181,11 +1181,38 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
 
           <article class="service-card reveal">
             <div class="market-badge">● พร้อมให้บริการ • ตัดเครดิตอัตโนมัติ</div><div class="service-icon">📦</div>
-            <h3 data-i18n="services.deliveryTitle">รับส่งของหรือสินค้า</h3>
-            <p data-i18n="services.deliveryDesc">บริการรับและส่งสิ่งของตามจุดที่กำหนด ราคาอ้างอิงจากระยะทาง ขนาด และรายละเอียดสินค้า</p>
-            <div class="price"><span data-i18n="services.start">เริ่มต้น</span> ฿99 <small data-i18n="services.perTrip">/ เที่ยว</small></div>
+            <h3 data-i18n="services.deliveryTitle">รับส่งของภายในตัวเมือง</h3>
+            <p data-i18n="services.deliveryDesc">รับของจากจุดหนึ่งไปส่งอีกจุดภายในตัวเมือง คิดราคา 30–100 บาทตามระยะทาง</p>
+            <div class="price">฿30–100 <small data-i18n="services.perTrip">/ เที่ยว</small></div>
             <button class="service-btn choose-service" data-service="delivery" data-i18n="services.select">เลือกบริการนี้</button>
             <button class="buy-credit-btn buy-now" data-service="delivery" data-i18n="services.buyCredit">ซื้อด้วยเครดิต</button>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="market-badge">● เหมาะกับนักเรียน • ส่งไฟล์พร้อมใช้</div><div class="service-icon">📊</div>
+            <h3>ออกแบบสไลด์นำเสนอ</h3>
+            <p>จัดสไลด์รายงาน โครงงาน หรือพรีเซนต์หน้าชั้นให้อ่านง่าย สวย และเป็นระเบียบ โดยลูกค้าต้องส่งเนื้อหามาเอง</p>
+            <div class="price"><span>เริ่มต้น</span> ฿149 <small>/ งาน</small></div>
+            <button class="service-btn choose-service" data-service="presentation">เลือกบริการนี้</button>
+            <button class="buy-credit-btn buy-now" data-service="presentation">ซื้อด้วยเครดิต</button>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="market-badge">● งานกิจกรรม • พร้อมโพสต์</div><div class="service-icon">🎨</div>
+            <h3>ออกแบบโปสเตอร์และโพสต์</h3>
+            <p>โปสเตอร์กิจกรรมโรงเรียน ป้ายประชาสัมพันธ์ เมนู หรือภาพโพสต์โซเชียล พร้อมไฟล์ภาพคุณภาพสูง</p>
+            <div class="price"><span>เริ่มต้น</span> ฿99 <small>/ ชิ้น</small></div>
+            <button class="service-btn choose-service" data-service="poster">เลือกบริการนี้</button>
+            <button class="buy-credit-btn buy-now" data-service="poster">ซื้อด้วยเครดิต</button>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="market-badge">● จัดหน้าเท่านั้น • ไม่รับทำการบ้านแทน</div><div class="service-icon">📝</div>
+            <h3>จัดรูปแบบรายงานและเอกสาร</h3>
+            <p>จัดหน้าปก สารบัญ เลขหน้า ฟอนต์ ระยะขอบ และความเรียบร้อยของเอกสารจากเนื้อหาที่ลูกค้าเตรียมไว้</p>
+            <div class="price"><span>เริ่มต้น</span> ฿79 <small>/ งาน</small></div>
+            <button class="service-btn choose-service" data-service="document">เลือกบริการนี้</button>
+            <button class="buy-credit-btn buy-now" data-service="document">ซื้อด้วยเครดิต</button>
           </article>
 
           <article class="service-card reveal">
@@ -1228,14 +1255,29 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
                 <label for="serviceSelect" data-i18n="hire.service">เลือกบริการ</label>
                 <select id="serviceSelect" required>
                   <option value="portfolio" data-i18n="hire.optPortfolio">รับทำ Portfolio</option>
-                  <option value="delivery" data-i18n="hire.optDelivery">รับส่งของหรือสินค้า</option>
+                  <option value="delivery" data-i18n="hire.optDelivery">รับส่งของภายในตัวเมือง</option>
+                  <option value="presentation">ออกแบบสไลด์นำเสนอ</option>
+                  <option value="poster">ออกแบบโปสเตอร์และโพสต์</option>
+                  <option value="document">จัดรูปแบบรายงานและเอกสาร</option>
                   <option value="custom" data-i18n="hire.optCustom">บริการสั่งทำพิเศษ</option>
                 </select>
               </div>
 
-              <div class="field">
-                <label for="budget" data-i18n="hire.budget">งบประมาณโดยประมาณ</label>
-                <input id="budget" type="number" min="0" data-i18n-placeholder="hire.budgetPh" placeholder="เช่น 500">
+              <div class="field" id="deliveryDistanceField" hidden>
+                <label for="deliveryDistance">ระยะทางรับส่งภายในตัวเมือง</label>
+                <select id="deliveryDistance">
+                  <option value="30">ไม่เกิน 2 กม. — 30 บาท</option>
+                  <option value="50">มากกว่า 2–5 กม. — 50 บาท</option>
+                  <option value="70">มากกว่า 5–8 กม. — 70 บาท</option>
+                  <option value="100">มากกว่า 8–12 กม. — 100 บาท</option>
+                </select>
+                <small style="display:block;color:var(--muted);margin-top:7px">ระยะทางเกิน 12 กม. กรุณาเลือก Custom request เพื่อคุยรายละเอียด</small>
+              </div>
+
+              <div class="field" id="customQuoteField" hidden>
+                <label for="proposedPrice">ราคาเสนอสำหรับ Custom request</label>
+                <input id="proposedPrice" type="number" min="1" step="1" placeholder="เช่น 300">
+                <small style="display:block;color:var(--muted);margin-top:7px">เป็นราคาที่คุณเสนอ แอดมินจะตรวจรายละเอียดและติดต่อกลับก่อนเริ่มงาน ยังไม่หักเครดิตทันที</small>
               </div>
 
               <div class="field">
@@ -1557,7 +1599,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           desc:"เลือกบริการที่ต้องการ แล้วระบบจะพาไปหน้ากรอกรายละเอียดทันที",
           portTitle:"รับทำ Portfolio",
           portDesc:"ออกแบบ Portfolio สำหรับสมัครเรียน สมัครงาน หรือแนะนำตัว พร้อมจัดหน้าให้ดูเป็นมืออาชีพ",
-          deliveryTitle:"รับส่งของหรือสินค้า",
+          deliveryTitle:"รับส่งของภายในตัวเมือง",
           deliveryDesc:"บริการรับและส่งสิ่งของตามจุดที่กำหนด ราคาอ้างอิงจากระยะทาง ขนาด และรายละเอียดสินค้า",
           customTitle:"บริการสั่งทำพิเศษ",
           customDesc:"สำหรับงานอื่น ๆ ที่ต้องการพูดคุยรายละเอียดเพิ่มเติม สามารถส่งข้อมูลเพื่อขอประเมินราคาได้",
@@ -1569,7 +1611,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           desc:"เลือกบริการ กรอกรายละเอียด และชำระด้วยเครดิตผ่านเว็บไซต์ได้ทันที",
           formTitle:"สั่งซื้อบริการผ่านเว็บไซต์",name:"ชื่อผู้ติดต่อ",namePh:"กรอกชื่อของคุณ",
           contact:"ช่องทางติดต่อ",contactPh:"เบอร์โทร / Line / Email",
-          service:"เลือกบริการ",optPortfolio:"รับทำ Portfolio",optDelivery:"รับส่งของหรือสินค้า",optCustom:"บริการสั่งทำพิเศษ",
+          service:"เลือกบริการ",optPortfolio:"รับทำ Portfolio",optDelivery:"รับส่งของภายในตัวเมือง",optCustom:"บริการสั่งทำพิเศษ",
           budget:"งบประมาณโดยประมาณ",budgetPh:"เช่น 500",deadline:"วันที่ต้องการงาน",
           details:"รายละเอียดงาน",detailsPh:"อธิบายรายละเอียด สิ่งที่ต้องการ จุดรับ-ส่ง หรือข้อมูลอื่น ๆ",
           submit:"ยืนยันซื้อบริการและหักเครดิต",summaryTitle:"สรุปเบื้องต้น",sumService:"บริการ",sumPrice:"ราคาเริ่มต้น",
@@ -1667,8 +1709,11 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
 
     const serviceMeta = {
       portfolio: { th: "รับทำ Portfolio", en: "Portfolio design", price: "฿499", credits: 499 },
-      delivery: { th: "รับส่งของหรือสินค้า", en: "Product delivery", price: "฿99", credits: 99 },
-      custom: { th: "บริการสั่งทำพิเศษ", en: "Custom request", price: "Custom" }
+      delivery: { th: "รับส่งของภายในตัวเมือง", en: "In-town delivery", price: "฿30", credits: 30, variablePrice: true },
+      presentation: { th: "ออกแบบสไลด์นำเสนอ", en: "Presentation design", price: "฿149", credits: 149 },
+      poster: { th: "ออกแบบโปสเตอร์และโพสต์", en: "Poster & social post", price: "฿99", credits: 99 },
+      document: { th: "จัดรูปแบบรายงานและเอกสาร", en: "Document formatting", price: "฿79", credits: 79 },
+      custom: { th: "บริการสั่งทำพิเศษ", en: "Custom request", price: "เสนอราคา", customQuote: true }
     };
 
     async function loadPublicServices(){
@@ -1676,13 +1721,15 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
       const {data,error}=await supabaseClient.from("services").select("slug,name,description,price,is_active,sort_order").eq("is_active",true).order("sort_order");
       if(error||!data) return;
       data.forEach(item=>{
+        if(item.slug === "custom") { serviceMeta.custom = { th:item.name, en:item.name, price:"เสนอราคา", customQuote:true }; return; }
+        if(item.slug === "delivery") { serviceMeta.delivery = { th:item.name, en:item.name, price:"฿30", credits:30, variablePrice:true }; return; }
         serviceMeta[item.slug] = { th:item.name, en:item.name, price:`฿${Number(item.price).toLocaleString("th-TH")}`, credits:Number(item.price) };
       });
       document.querySelectorAll("[data-service]").forEach(btn=>{
         const row=data.find(i=>i.slug===btn.dataset.service); const v=serviceMeta[btn.dataset.service];
         if(!row||!v) return;
         const card=btn.closest(".service-card");
-        if(card){ const title=card.querySelector("h3"); const desc=card.querySelector("p"); const price=card.querySelector(".price"); if(title)title.textContent=row.name; if(desc)desc.textContent=row.description; if(price)price.innerHTML=`เริ่มต้น ${v.price} <small>/ งาน</small>`; }
+        if(card){ const title=card.querySelector("h3"); const desc=card.querySelector("p"); const price=card.querySelector(".price"); if(title)title.textContent=row.name; if(desc)desc.textContent=row.description; if(price){ if(row.slug==="delivery") price.innerHTML=`฿30–100 <small>/ เที่ยว</small>`; else if(row.slug==="custom") price.innerHTML=`เสนอราคา <small>ตามรายละเอียด</small>`; else price.innerHTML=`เริ่มต้น ${v.price} <small>/ งาน</small>`; } }
       });
       if(serviceSelect){
         [...serviceSelect.options].forEach(opt=>{ const row=data.find(i=>i.slug===opt.value); if(row) opt.textContent=row.name; });
@@ -2009,12 +2056,24 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
     setInterval(updateClock, 1000);
 
     function updateServiceSummary() {
-      const meta = serviceMeta[serviceSelect.value];
+      const serviceId = serviceSelect.value;
+      const meta = serviceMeta[serviceId];
+      const deliveryField = document.getElementById("deliveryDistanceField");
+      const customField = document.getElementById("customQuoteField");
+      const distanceSelect = document.getElementById("deliveryDistance");
+      deliveryField.hidden = serviceId !== "delivery";
+      customField.hidden = serviceId !== "custom";
+      document.getElementById("proposedPrice").required = serviceId === "custom";
+      const deliveryPrice = Number(distanceSelect?.value || 30);
       document.getElementById("sumService").textContent = meta[currentLang];
-      document.getElementById("sumPrice").textContent = meta.price;
+      document.getElementById("sumPrice").textContent = serviceId === "delivery" ? `฿${deliveryPrice}` : meta.price;
+      document.getElementById("sumStatusText").textContent = serviceId === "custom" ? "รอแอดมินตรวจราคาเสนอ" : "พร้อมสั่งซื้อ";
+      const submit = document.querySelector('#hireForm button[type="submit"]');
+      if(submit) submit.textContent = serviceId === "custom" ? "ส่ง Custom request ให้แอดมิน" : "ยืนยันซื้อบริการและหักเครดิต";
     }
 
     serviceSelect.addEventListener("change", updateServiceSummary);
+    document.getElementById("deliveryDistance")?.addEventListener("change", updateServiceSummary);
 
     document.querySelectorAll(".choose-service").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -2088,8 +2147,10 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           if(uploadError) throw uploadError;
           avatarUrl=supabaseClient.storage.from("avatars").getPublicUrl(path).data.publicUrl;
         }
-        const {error}=await supabaseClient.from("profiles").upsert({id:currentUser.id,email:currentUser.email,nickname,avatar_url:avatarUrl},{onConflict:"id"});
-        if(error) throw error;
+        const profilePayload={nickname,avatar_url:avatarUrl};
+        let {error}=await supabaseClient.from("profiles").update(profilePayload).eq("id",currentUser.id);
+        if(error && error.code === "PGRST116") error=null;
+        if(error) throw new Error(error.message || "อัปเดตโปรไฟล์ไม่สำเร็จ");
         await supabaseClient.auth.updateUser({data:{display_name:nickname,avatar_url:avatarUrl}});
         await loadAccountCenter(); showToast("บันทึกโปรไฟล์แล้ว");
       }catch(error){showToast(error.message||"บันทึกไม่สำเร็จ");}
@@ -2237,17 +2298,29 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
         const serviceId = serviceSelect.value;
         const meta = serviceMeta[serviceId];
         if (!name || !contact || !details) throw new Error(translations[currentLang].modal.required);
-        if (!meta?.credits) throw new Error("บริการสั่งทำพิเศษต้องติดต่อเพื่อประเมินราคาก่อน");
-        if (creditBalance < meta.credits) { location.hash="wallet"; routeTo("wallet"); throw new Error("เครดิตไม่เพียงพอ กรุณาเติมเครดิตก่อน"); }
+        if(serviceId === "custom") {
+          const proposedPrice=Number(document.getElementById("proposedPrice").value);
+          if(!Number.isInteger(proposedPrice) || proposedPrice < 1) throw new Error("กรุณากรอกราคาเสนอเป็นจำนวนเต็มมากกว่า 0");
+          submit.disabled=true; submit.textContent="กำลังส่งคำขอ...";
+          const {data:order,error}=await supabaseClient.rpc("submit_custom_request",{p_payload:{service_id:"custom",customer_name:name,contact,deadline,details,proposed_price:proposedPrice}});
+          if(error) throw error;
+          modalTitle.textContent="ส่งคำขอสำเร็จ";
+          SFX.play("hire"); modalBody.innerHTML=`<div class="order-success"><div class="check">✓</div><h2>ส่ง Custom request แล้ว</h2><p style="color:var(--muted);margin:8px 0 16px">ออเดอร์ #${String(order.order_id).slice(0,8)} ถูกส่งให้แอดมินตรวจราคาเสนอแล้ว</p><div class="summary-box"><div class="summary-line"><span>ราคาเสนอ</span><strong>${formatMoney(proposedPrice)}</strong></div><div class="summary-line"><span>การชำระเงิน</span><strong>ยังไม่หักเครดิต</strong></div></div></div>`;
+          modal.classList.add("open"); e.target.reset(); serviceSelect.value="custom"; updateServiceSummary(); showToast("ส่ง Custom request เรียบร้อยแล้ว");
+          return;
+        }
+        const chosenPrice = serviceId === "delivery" ? Number(document.getElementById("deliveryDistance").value) : meta?.credits;
+        if (!chosenPrice) throw new Error("ไม่พบราคาบริการ");
+        if (creditBalance < chosenPrice) { location.hash="wallet"; routeTo("wallet"); throw new Error("เครดิตไม่เพียงพอ กรุณาเติมเครดิตก่อน"); }
         submit.disabled=true; submit.textContent="กำลังสร้างออเดอร์...";
-        const order = await purchaseService({service_id:serviceId,customer_name:name,contact,deadline,details});
+        const order = await purchaseService({service_id:serviceId,customer_name:name,contact,deadline,details,quoted_price:chosenPrice});
         modalTitle.textContent="สั่งซื้อสำเร็จ";
         SFX.play("hire"); modalBody.innerHTML=`<div class="order-success"><div class="check">✓</div><h2>ชำระด้วยเครดิตสำเร็จ</h2><p style="color:var(--muted);margin:8px 0 16px">ออเดอร์ #${String(order.order_id).slice(0,8)} ถูกส่งให้แอดมินแล้ว</p><div class="summary-box"><div class="summary-line"><span>บริการ</span><strong>${meta[currentLang]}</strong></div><div class="summary-line"><span>หักเครดิต</span><strong>${formatMoney(order.price)}</strong></div><div class="summary-line"><span>เครดิตคงเหลือ</span><strong>${formatMoney(order.remaining_balance)}</strong></div></div></div>`;
         modal.classList.add("open");
         e.target.reset(); serviceSelect.value=serviceId; updateServiceSummary();
         showToast("สร้างคำสั่งซื้อเรียบร้อยแล้ว");
       } catch(error) { showToast(error.message || "สั่งซื้อไม่สำเร็จ"); }
-      finally { submit.disabled=false; submit.textContent="ยืนยันซื้อบริการและหักเครดิต"; }
+      finally { submit.disabled=false; updateServiceSummary(); }
     });
 
     document.getElementById("contactForm").addEventListener("submit", e => {

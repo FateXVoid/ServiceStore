@@ -1,3 +1,7 @@
+# ServiceStore V.21
+
+อัปเดตหลัก: หน้า Login แบบ Cat Cosmos, บริการสำหรับนักเรียน, รับส่งในตัวเมือง 30–100 บาท, Custom request พร้อมราคาเสนอ, และแก้ HTTP 400 ตอนบันทึกโปรไฟล์
+
 # FateX Service Store — Simple Admin Backend
 
 เวอร์ชันนี้เปลี่ยนระบบหลังบ้านให้เรียบง่ายขึ้น โดย **ไม่ใช้ `admin-api` Edge Function** แล้ว
