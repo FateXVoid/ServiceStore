@@ -63,12 +63,13 @@ async function load() {
   const profiles = await safeLoad("ข้อมูลลูกค้า", () => sb.rpc("admin_list_users"));
   const emailById = new Map((profiles || []).map(item => [item.id || item.user_id, item.email]));
 
-  const [topupData, ledgerData, withdrawalData, orderData, serviceData] = await Promise.all([
+  const [topupData, ledgerData, withdrawalData, orderData, serviceData, siteData] = await Promise.all([
     safeLoad("รายการเติมเงิน", () => sb.from("topup_requests").select("*").order("created_at", {ascending:false}).limit(200)),
     safeLoad("บัญชีรายรับรายจ่าย", () => sb.from("admin_ledger").select("*").order("created_at", {ascending:false}).limit(300)),
     safeLoad("คำขอถอนเงิน", () => sb.from("withdrawal_requests").select("*").order("created_at", {ascending:false}).limit(200)),
     safeLoad("ออเดอร์", () => sb.from("service_orders").select("*").order("created_at", {ascending:false}).limit(300)),
     safeLoad("บริการ", () => sb.from("services").select("*").order("sort_order", {ascending:true})),
+    safeLoad("ตั้งค่าเว็บไซต์", () => sb.from("site_settings").select("key,value")),
   ]);
 
   const withdrawals=(withdrawalData||[]).map(x=>({...x,email:emailById.get(x.user_id)||null}));
@@ -80,7 +81,7 @@ async function load() {
   const approved=topups.filter(x=>x.status==="approved");
   const daily_income=[];
   for(let i=13;i>=0;i--){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);daily_income.push({day:key.slice(5),total:approved.filter(x=>x.reviewed_at?.slice(0,10)===key).reduce((a,x)=>a+Number(x.amount||0),0)});}
-  state={stats:{approved_income:approved.reduce((a,x)=>a+Number(x.amount||0),0),total_credit_balance:(profiles||[]).reduce((a,x)=>a+Number(x.credit_balance||0),0),pending_topups:topups.filter(x=>x.status==="pending").length,pending_withdrawals:withdrawals.filter(x=>x.status==="pending").length,users:(profiles||[]).length},daily_income,topups,users:profiles||[],ledger:ledgerData||[],withdrawals,orders:(orderData||[]).map(x=>({...x,email:emailById.get(x.user_id)||null})),services:serviceData||[]};
+  state={stats:{approved_income:approved.reduce((a,x)=>a+Number(x.amount||0),0),total_credit_balance:(profiles||[]).reduce((a,x)=>a+Number(x.credit_balance||0),0),pending_topups:topups.filter(x=>x.status==="pending").length,pending_withdrawals:withdrawals.filter(x=>x.status==="pending").length,users:(profiles||[]).length},daily_income,topups,users:profiles||[],ledger:ledgerData||[],withdrawals,orders:(orderData||[]).map(x=>({...x,email:emailById.get(x.user_id)||null})),services:serviceData||[],siteSettings:Object.fromEntries((siteData||[]).map(x=>[x.key,x.value]))};
   render();
 }
 
@@ -99,6 +100,7 @@ function render() {
   renderOrders();
   renderUsers();
   renderServices();
+  renderSiteSettings();
   renderLedger();
 }
 
@@ -173,7 +175,10 @@ function renderOrders() {
 }
 
 async function setOrderStatus(id,status){
-  try{const {error}=await sb.rpc("admin_update_order_status",{p_order_id:id,p_status:status,p_note:""});throwIfError(error,"อัปเดตออเดอร์ไม่สำเร็จ");toast("อัปเดตสถานะออเดอร์แล้ว");await load();}catch(error){toast(error.message);}
+  const labels={accepted:"รับงาน",working:"เริ่มทำงาน",completed:"ปิดงาน"};
+  const note=(prompt(`หมายเหตุสำหรับการ${labels[status]||"อัปเดตสถานะ"} (ไม่บังคับ)`)||"").trim();
+  if(!confirm(`ยืนยันการ${labels[status]||"อัปเดตสถานะ"}?`)) return;
+  try{const {error}=await sb.rpc("admin_update_order_status",{p_order_id:id,p_status:status,p_note:note});throwIfError(error,"อัปเดตออเดอร์ไม่สำเร็จ");toast("อัปเดตสถานะออเดอร์แล้ว");await load();}catch(error){toast(error.message);}
 }
 
 
@@ -232,6 +237,9 @@ async function saveService() {
 }
 function clearServiceForm(){ ["serviceId","serviceSlug","serviceName","serviceDescription","servicePrice","serviceSort"].forEach(id=>$("#"+id).value=""); $("#serviceActive").checked=true; }
 window.editService = editService;
+
+function renderSiteSettings(){const m=state.siteSettings||{};if($("#siteName"))$("#siteName").value=m.site_name||"FateX Service";if($("#siteHeroTitle"))$("#siteHeroTitle").value=m.hero_title||"บริการดิจิทัล";if($("#siteHeroAccent"))$("#siteHeroAccent").value=m.hero_accent||"ที่ดูดีและใช้งานได้จริง";}
+async function saveSiteSettings(){try{const rows=[{key:"site_name",value:$("#siteName").value.trim()},{key:"hero_title",value:$("#siteHeroTitle").value.trim()},{key:"hero_accent",value:$("#siteHeroAccent").value.trim()}];if(rows.some(x=>!x.value))throw new Error("กรอกข้อมูลให้ครบ");const {error}=await sb.from("site_settings").upsert(rows,{onConflict:"key"});throwIfError(error,"บันทึกตั้งค่าเว็บไซต์ไม่สำเร็จ");toast("เผยแพร่ข้อมูลเว็บไซต์แล้ว");await load();}catch(error){toast(error.message);}}
 
 function renderLedger() {
   const items = state.ledger || [];
@@ -321,6 +329,7 @@ $("#adjustBtn")?.addEventListener("click", adjust);
 $("#ledgerBtn")?.addEventListener("click", addLedger);
 $("#serviceSaveBtn")?.addEventListener("click", saveService);
 $("#serviceNewBtn")?.addEventListener("click", clearServiceForm);
+$("#siteSaveBtn")?.addEventListener("click", saveSiteSettings);
 $("#logoutBtn")?.addEventListener("click", async () => {
   await sb.auth.signOut();
   location.href = "index.html";
