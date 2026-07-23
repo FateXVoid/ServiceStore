@@ -63,13 +63,14 @@ async function load() {
   const profiles = await safeLoad("ข้อมูลลูกค้า", () => sb.rpc("admin_list_users"));
   const emailById = new Map((profiles || []).map(item => [item.id || item.user_id, item.email]));
 
-  const [topupData, ledgerData, withdrawalData, orderData, serviceData, siteData] = await Promise.all([
+  const [topupData, ledgerData, withdrawalData, orderData, serviceData, siteData, announcementData] = await Promise.all([
     safeLoad("รายการเติมเงิน", () => sb.from("topup_requests").select("*").order("created_at", {ascending:false}).limit(200)),
     safeLoad("บัญชีรายรับรายจ่าย", () => sb.from("admin_ledger").select("*").order("created_at", {ascending:false}).limit(300)),
     safeLoad("คำขอถอนเงิน", () => sb.from("withdrawal_requests").select("*").order("created_at", {ascending:false}).limit(200)),
     safeLoad("ออเดอร์", () => sb.from("service_orders").select("*").order("created_at", {ascending:false}).limit(300)),
     safeLoad("บริการ", () => sb.from("services").select("*").order("sort_order", {ascending:true})),
     safeLoad("ตั้งค่าเว็บไซต์", () => sb.from("site_settings").select("key,value")),
+    safeLoad("ประกาศเว็บไซต์", () => sb.from("announcements").select("*").order("published_at", {ascending:false})),
   ]);
 
   const withdrawals=(withdrawalData||[]).map(x=>({...x,email:emailById.get(x.user_id)||null}));
@@ -81,7 +82,7 @@ async function load() {
   const approved=topups.filter(x=>x.status==="approved");
   const daily_income=[];
   for(let i=13;i>=0;i--){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);daily_income.push({day:key.slice(5),total:approved.filter(x=>x.reviewed_at?.slice(0,10)===key).reduce((a,x)=>a+Number(x.amount||0),0)});}
-  state={stats:{approved_income:approved.reduce((a,x)=>a+Number(x.amount||0),0),total_credit_balance:(profiles||[]).reduce((a,x)=>a+Number(x.credit_balance||0),0),pending_topups:topups.filter(x=>x.status==="pending").length,pending_withdrawals:withdrawals.filter(x=>x.status==="pending").length,users:(profiles||[]).length},daily_income,topups,users:profiles||[],ledger:ledgerData||[],withdrawals,orders:(orderData||[]).map(x=>({...x,email:emailById.get(x.user_id)||null})),services:serviceData||[],siteSettings:Object.fromEntries((siteData||[]).map(x=>[x.key,x.value]))};
+  state={stats:{approved_income:approved.reduce((a,x)=>a+Number(x.amount||0),0),total_credit_balance:(profiles||[]).reduce((a,x)=>a+Number(x.credit_balance||0),0),pending_topups:topups.filter(x=>x.status==="pending").length,pending_withdrawals:withdrawals.filter(x=>x.status==="pending").length,users:(profiles||[]).length},daily_income,topups,users:profiles||[],ledger:ledgerData||[],withdrawals,orders:(orderData||[]).map(x=>({...x,email:emailById.get(x.user_id)||null})),services:serviceData||[],siteSettings:Object.fromEntries((siteData||[]).map(x=>[x.key,x.value])),announcements:announcementData||[]};
   render();
 }
 
@@ -101,6 +102,7 @@ function render() {
   renderUsers();
   renderServices();
   renderSiteSettings();
+  renderAnnouncements();
   renderLedger();
 }
 
@@ -215,6 +217,11 @@ function editService(item) {
   $("#servicePrice").value = item.price || 0;
   $("#serviceActive").checked = !!(item.is_active ?? item.active);
   $("#serviceSort").value = item.sort_order || 0;
+  $("#serviceIcon").value = item.icon || "✨";
+  $("#serviceBadge").value = item.badge || "";
+  $("#servicePriceLabel").value = item.price_label || "/ งาน";
+  $("#serviceDistance").checked = !!item.requires_distance;
+  $("#serviceCustom").checked = !!item.is_custom;
 }
 
 async function saveService() {
@@ -223,23 +230,39 @@ async function saveService() {
       p_id: $("#serviceId").value || null, p_slug: $("#serviceSlug").value.trim(),
       p_name: $("#serviceName").value.trim(), p_description: $("#serviceDescription").value.trim(),
       p_price: Number($("#servicePrice").value), p_is_active: $("#serviceActive").checked,
-      p_sort_order: Number($("#serviceSort").value || 0)
+      p_sort_order: Number($("#serviceSort").value || 0), p_icon: $("#serviceIcon").value.trim() || "✨", p_badge: $("#serviceBadge").value.trim(), p_price_label: $("#servicePriceLabel").value.trim() || "/ งาน", p_requires_distance: $("#serviceDistance").checked, p_is_custom: $("#serviceCustom").checked
     };
     if (!payload.p_slug || !payload.p_name || payload.p_price < 1) throw new Error("กรอกข้อมูลบริการให้ครบ");
     const { error } = await sb.rpc("admin_save_service", payload);
     if (error) {
-      const row = {slug:payload.p_slug,name:payload.p_name,description:payload.p_description,price:payload.p_price,is_active:payload.p_is_active,sort_order:payload.p_sort_order,updated_at:new Date().toISOString()};
+      const row = {slug:payload.p_slug,name:payload.p_name,description:payload.p_description,price:payload.p_price,is_active:payload.p_is_active,sort_order:payload.p_sort_order,icon:payload.p_icon,badge:payload.p_badge,price_label:payload.p_price_label,requires_distance:payload.p_requires_distance,is_custom:payload.p_is_custom,updated_at:new Date().toISOString()};
       const fallback = payload.p_id ? await sb.from("services").update(row).eq("id",payload.p_id) : await sb.from("services").insert(row);
       throwIfError(fallback.error, error.message || "บันทึกบริการไม่สำเร็จ");
     }
-    toast("บันทึกแล้ว หน้าร้านจะเปลี่ยนตามข้อมูลล่าสุด"); clearServiceForm(); await load();
+    await createAutoAnnouncement(`อัปเดตบริการ: ${payload.p_name}`, `รายละเอียดบริการ ${payload.p_name} บนเว็บไซต์ได้รับการอัปเดตแล้ว`, "🛠️");
+    toast("บันทึกแล้ว หน้าร้านและประกาศอัปเดตอัตโนมัติ"); clearServiceForm(); await load();
   } catch (error) { toast(error.message); }
 }
-function clearServiceForm(){ ["serviceId","serviceSlug","serviceName","serviceDescription","servicePrice","serviceSort"].forEach(id=>$("#"+id).value=""); $("#serviceActive").checked=true; }
+function clearServiceForm(){ ["serviceId","serviceSlug","serviceName","serviceDescription","servicePrice","serviceSort","serviceBadge"].forEach(id=>$("#"+id).value=""); $("#serviceIcon").value="✨"; $("#servicePriceLabel").value="/ งาน"; $("#serviceActive").checked=true; $("#serviceDistance").checked=false; $("#serviceCustom").checked=false; }
 window.editService = editService;
 
 function renderSiteSettings(){const m=state.siteSettings||{};if($("#siteName"))$("#siteName").value=m.site_name||"FateX Service";if($("#siteHeroTitle"))$("#siteHeroTitle").value=m.hero_title||"บริการดิจิทัล";if($("#siteHeroAccent"))$("#siteHeroAccent").value=m.hero_accent||"ที่ดูดีและใช้งานได้จริง";}
-async function saveSiteSettings(){try{const rows=[{key:"site_name",value:$("#siteName").value.trim()},{key:"hero_title",value:$("#siteHeroTitle").value.trim()},{key:"hero_accent",value:$("#siteHeroAccent").value.trim()}];if(rows.some(x=>!x.value))throw new Error("กรอกข้อมูลให้ครบ");const {error}=await sb.from("site_settings").upsert(rows,{onConflict:"key"});throwIfError(error,"บันทึกตั้งค่าเว็บไซต์ไม่สำเร็จ");toast("เผยแพร่ข้อมูลเว็บไซต์แล้ว");await load();}catch(error){toast(error.message);}}
+async function saveSiteSettings(){try{const rows=[{key:"site_name",value:$("#siteName").value.trim()},{key:"hero_title",value:$("#siteHeroTitle").value.trim()},{key:"hero_accent",value:$("#siteHeroAccent").value.trim()}];if(rows.some(x=>!x.value))throw new Error("กรอกข้อมูลให้ครบ");const {error}=await sb.from("site_settings").upsert(rows,{onConflict:"key"});throwIfError(error,"บันทึกตั้งค่าเว็บไซต์ไม่สำเร็จ");await createAutoAnnouncement("เว็บไซต์ได้รับการอัปเดต", "มีการปรับปรุงข้อมูลและรายละเอียดบนหน้าเว็บไซต์", "✨");toast("เผยแพร่ข้อมูลเว็บไซต์และสร้างประกาศแล้ว");await load();}catch(error){toast(error.message);}}
+
+
+async function createAutoAnnouncement(title,summary,icon="✨"){
+  const {error}=await sb.from("announcements").insert({title,summary,content:summary,icon,is_published:true,is_pinned:false,published_at:new Date().toISOString(),created_by:(await sb.auth.getUser()).data.user?.id||null,source:"automatic"});
+  if(error) console.warn("สร้างประกาศอัตโนมัติไม่สำเร็จ",error);
+}
+function renderAnnouncements(){
+  const box=$("#announcementRows"); if(!box)return;
+  box.innerHTML=(state.announcements||[]).map(x=>`<tr><td><b>${x.icon||"📣"} ${x.title}</b><small>${x.summary||""}</small></td><td><span class="status ${x.is_published?'approved':'rejected'}">${x.is_published?'เผยแพร่':'แบบร่าง'}</span>${x.is_pinned?'<small>📌 ปักหมุด</small>':''}</td><td>${new Date(x.published_at||x.created_at).toLocaleString("th-TH")}</td><td><button class="btn" onclick='editAnnouncement(${JSON.stringify(x)})'>แก้ไข</button> <button class="btn bad" onclick="deleteAnnouncement('${x.id}')">ลบ</button></td></tr>`).join("")||'<tr><td colspan="4">ยังไม่มีประกาศ</td></tr>';
+}
+function editAnnouncement(x){$("#announcementId").value=x.id||"";$("#announcementIcon").value=x.icon||"📣";$("#announcementTitle").value=x.title||"";$("#announcementSummary").value=x.summary||"";$("#announcementContent").value=x.content||"";$("#announcementPinned").checked=!!x.is_pinned;$("#announcementPublished").checked=!!x.is_published;}
+function clearAnnouncement(){["announcementId","announcementTitle","announcementSummary","announcementContent"].forEach(id=>$("#"+id).value="");$("#announcementIcon").value="📣";$("#announcementPinned").checked=false;$("#announcementPublished").checked=true;}
+async function saveAnnouncement(){try{const id=$("#announcementId").value;const row={title:$("#announcementTitle").value.trim(),summary:$("#announcementSummary").value.trim(),content:$("#announcementContent").value.trim(),icon:$("#announcementIcon").value.trim()||"📣",is_pinned:$("#announcementPinned").checked,is_published:$("#announcementPublished").checked,published_at:new Date().toISOString(),source:"manual"};if(!row.title||!row.content)throw new Error("กรอกหัวข้อและรายละเอียดประกาศ");const result=id?await sb.from("announcements").update(row).eq("id",id):await sb.from("announcements").insert(row);throwIfError(result.error,"บันทึกประกาศไม่สำเร็จ");toast("เผยแพร่ประกาศแล้ว");clearAnnouncement();await load();}catch(e){toast(e.message)}}
+async function deleteAnnouncement(id){if(!confirm("ลบประกาศนี้?"))return;const {error}=await sb.from("announcements").delete().eq("id",id);if(error)return toast(error.message);toast("ลบประกาศแล้ว");await load();}
+window.editAnnouncement=editAnnouncement;window.deleteAnnouncement=deleteAnnouncement;
 
 function renderLedger() {
   const items = state.ledger || [];
@@ -308,6 +331,7 @@ async function addLedger() {
 
 window.openSlip = (item) => {
   $("#modalSlip").src = item.slip_url;
+  $("#slipOpenOriginal").href = item.slip_url;
   $("#modalInfo").textContent = `${item.email || "ผู้ใช้"} • ${money(item.amount)} • ${item.transfer_reference || ""}`;
   $("#slipModal").classList.add("open");
 };
@@ -330,6 +354,8 @@ $("#ledgerBtn")?.addEventListener("click", addLedger);
 $("#serviceSaveBtn")?.addEventListener("click", saveService);
 $("#serviceNewBtn")?.addEventListener("click", clearServiceForm);
 $("#siteSaveBtn")?.addEventListener("click", saveSiteSettings);
+$("#announcementSaveBtn")?.addEventListener("click", saveAnnouncement);
+$("#announcementNewBtn")?.addEventListener("click", clearAnnouncement);
 $("#logoutBtn")?.addEventListener("click", async () => {
   await sb.auth.signOut();
   location.href = "index.html";

@@ -980,6 +980,10 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
 @media(max-width:780px){body:after{display:none}.hero-card,.service-card,.news-card,.wallet-card,.form-card,.summary-card{border-radius:22px!important}.nav-links{background:#0a1234!important}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 </style>
+
+<style id="v22-admin-content-css">
+.dynamic-empty{grid-column:1/-1;padding:38px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:24px}.service-card .service-icon{font-size:2.2rem}.news-card .news-cover{font-size:3rem}.wallet-card#withdrawWalletCard{border-color:rgba(139,120,255,.3)!important}.field-context{display:block;color:var(--muted);margin-top:7px}.announcement-pin{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(255,207,112,.12);color:#ffdc8a;font-size:.78rem;margin-bottom:8px}
+</style>
 </head>
 
 <body>
@@ -1127,7 +1131,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           <p data-i18n="news.desc">พื้นที่สำหรับแจ้งโปรโมชัน วันหยุด การเปิดรับงาน และข้อมูลสำคัญต่าง ๆ</p>
         </div>
 
-        <div class="news-grid">
+        <div class="news-grid" id="newsGrid">
           <article class="news-card reveal">
             <div class="news-cover">🎉</div>
             <div class="news-content">
@@ -1169,7 +1173,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
           <p data-i18n="services.desc">เลือกบริการที่ต้องการ แล้วระบบจะพาไปหน้ากรอกรายละเอียดทันที</p>
         </div>
 
-        <div class="service-grid">
+        <div class="service-grid" id="serviceGrid">
           <article class="service-card reveal">
             <div class="market-badge">● พร้อมรับงาน • ซื้อผ่านเว็บได้ทันที</div><div class="service-icon">💼</div>
             <h3 data-i18n="services.portTitle">รับทำ Portfolio</h3>
@@ -1280,14 +1284,14 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
                 <small style="display:block;color:var(--muted);margin-top:7px">เป็นราคาที่คุณเสนอ แอดมินจะตรวจรายละเอียดและติดต่อกลับก่อนเริ่มงาน ยังไม่หักเครดิตทันที</small>
               </div>
 
-              <div class="field">
+              <div class="field" id="deadlineField">
                 <label for="deadline" data-i18n="hire.deadline">วันที่ต้องการงาน</label>
                 <input id="deadline" type="date">
               </div>
 
               <div class="field">
                 <label for="details" data-i18n="hire.details">รายละเอียดงาน</label>
-                <textarea id="details" required data-i18n-placeholder="hire.detailsPh" placeholder="อธิบายรายละเอียด สิ่งที่ต้องการ จุดรับ-ส่ง หรือข้อมูลอื่น ๆ"></textarea>
+                <textarea id="details" required data-i18n-placeholder="hire.detailsPh" placeholder="อธิบายรายละเอียดงานที่ต้องการ"></textarea>
               </div>
 
               <button class="submit-btn" type="submit" data-i18n="hire.submit">ยืนยันซื้อบริการและหักเครดิต</button>
@@ -1342,6 +1346,21 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
               <h3 data-i18n="wallet.history">ประวัติรายการ</h3>
               <div class="history-list" id="historyList"></div>
             </div>
+            <div class="wallet-card reveal" id="withdrawWalletCard" style="margin-top:24px">
+              <h3>ถอนเครดิต</h3>
+              
+              <div class="withdraw-note">คำขอถอนจะถูกตรวจโดยแอดมิน และยอดเครดิตจะถูกหักเมื่อคำขอได้รับอนุมัติ</div>
+              <form id="withdrawForm">
+                <div class="field"><label for="withdrawAmount">จำนวนเครดิตที่ต้องการถอน</label><input id="withdrawAmount" type="number" min="50" max="50000" required placeholder="100"></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawChannel">ช่องทางรับเงิน</label><select id="withdrawChannel"><option value="bank">ธนาคาร</option><option value="truemoney">TrueMoney Wallet</option></select></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawAccount">เลขบัญชี / เบอร์ Wallet</label><input id="withdrawAccount" maxlength="60" required></div>
+                <div class="field" style="margin-top:12px"><label for="withdrawAccountName">ชื่อบัญชี</label><input id="withdrawAccountName" maxlength="80" required></div>
+                <button class="submit-btn" type="submit" style="width:100%;margin-top:16px">ส่งคำขอถอน</button>
+              </form>
+            </div>
+          
+            </div>
+
           </div>
           <div class="wallet-card reveal">
             <div id="loginRequiredPanel" class="login-required-panel"><h3>เข้าสู่ระบบเพื่อเติมเครดิต</h3><p>ระบบบัญชีแยกเป็นหน้าล็อกอินโดยเฉพาะ เพื่อใช้งานง่ายและปลอดภัยกว่าเดิม</p><button type="button" class="primary-btn" onclick="location.href='login.html?next=wallet'">เข้าสู่ระบบ / สมัครสมาชิก</button></div><div class="auth-box hidden" id="authBox" aria-hidden="true">
@@ -1455,7 +1474,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
             <div class="settings-tabs">
               <button class="settings-tab active" type="button" data-settings-tab="profile">โปรไฟล์</button>
               <button class="settings-tab" type="button" data-settings-tab="history">ประวัติ</button>
-              <button class="settings-tab" type="button" data-settings-tab="withdraw">ถอนเครดิต</button>
+              
             </div>
             <div class="settings-panel active" data-settings-panel="profile">
               <form id="profileForm">
@@ -1467,20 +1486,7 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
             <div class="settings-panel" data-settings-panel="history">
               <div class="timeline-list" id="fullHistoryList"><div class="notice">กำลังโหลด...</div></div>
             </div>
-            <div class="settings-panel" data-settings-panel="withdraw">
-              <div class="withdraw-note">คำขอถอนจะถูกตรวจโดยแอดมิน และยอดเครดิตจะถูกหักเมื่อคำขอได้รับอนุมัติ</div>
-              <form id="withdrawForm">
-                <div class="field"><label for="withdrawAmount">จำนวนเครดิตที่ต้องการถอน</label><input id="withdrawAmount" type="number" min="50" max="50000" required placeholder="100"></div>
-                <div class="field" style="margin-top:12px"><label for="withdrawChannel">ช่องทางรับเงิน</label><select id="withdrawChannel"><option value="bank">ธนาคาร</option><option value="truemoney">TrueMoney Wallet</option></select></div>
-                <div class="field" style="margin-top:12px"><label for="withdrawAccount">เลขบัญชี / เบอร์ Wallet</label><input id="withdrawAccount" maxlength="60" required></div>
-                <div class="field" style="margin-top:12px"><label for="withdrawAccountName">ชื่อบัญชี</label><input id="withdrawAccountName" maxlength="80" required></div>
-                <button class="submit-btn" type="submit" style="width:100%;margin-top:16px">ส่งคำขอถอน</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+            </div></div></section>
 
     <section class="page" id="contact">
       <div class="container">
@@ -1720,25 +1726,63 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
 
     async function loadPublicServices(){
       if(!supabaseClient) return;
-      const {data,error}=await supabaseClient.from("services").select("slug,name,description,price,is_active,sort_order").eq("is_active",true).order("sort_order");
+      const {data,error}=await supabaseClient.from("services")
+        .select("slug,name,description,price,is_active,sort_order,icon,badge,price_label,requires_distance,is_custom")
+        .eq("is_active",true).order("sort_order");
       if(error||!data) return;
+
+      const grid=document.getElementById("serviceGrid");
+      if(grid){
+        grid.innerHTML=data.map(item=>{
+          const isCustom=!!item.is_custom||item.slug==="custom";
+          const isDelivery=!!item.requires_distance||item.slug==="delivery";
+          const priceText=isCustom?"เสนอราคา":isDelivery?"฿30–100":`เริ่มต้น ฿${Number(item.price||0).toLocaleString("th-TH")}`;
+          const unit=isCustom?"ตามรายละเอียด":isDelivery?"/ เที่ยว":(item.price_label||"/ งาน");
+          return `<article class="service-card reveal visible">
+            ${item.badge?`<div class="market-badge">${escapeHtml(item.badge)}</div>`:""}
+            <div class="service-icon">${escapeHtml(item.icon||"✨")}</div>
+            <h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.description||"")}</p>
+            <div class="price">${priceText} <small>${escapeHtml(unit)}</small></div>
+            <button class="service-btn choose-service" data-service="${escapeHtml(item.slug)}">เลือกบริการนี้</button>
+            ${isCustom?"":`<button class="buy-credit-btn buy-now" data-service="${escapeHtml(item.slug)}">ซื้อด้วยเครดิต</button>`}
+          </article>`;
+        }).join("")||'<div class="dynamic-empty">ยังไม่มีบริการที่เปิดขาย</div>';
+      }
+
+      Object.keys(serviceMeta).forEach(k=>{ if(!data.some(x=>x.slug===k)) delete serviceMeta[k]; });
       data.forEach(item=>{
-        if(item.slug === "custom") { serviceMeta.custom = { th:item.name, en:item.name, price:"เสนอราคา", customQuote:true }; return; }
-        if(item.slug === "delivery") { serviceMeta.delivery = { th:item.name, en:item.name, price:"฿30", credits:30, variablePrice:true }; return; }
-        serviceMeta[item.slug] = { th:item.name, en:item.name, price:`฿${Number(item.price).toLocaleString("th-TH")}`, credits:Number(item.price) };
-      });
-      document.querySelectorAll("[data-service]").forEach(btn=>{
-        const row=data.find(i=>i.slug===btn.dataset.service); const v=serviceMeta[btn.dataset.service];
-        if(!row||!v) return;
-        const card=btn.closest(".service-card");
-        if(card){ const title=card.querySelector("h3"); const desc=card.querySelector("p"); const price=card.querySelector(".price"); if(title)title.textContent=row.name; if(desc)desc.textContent=row.description; if(price){ if(row.slug==="delivery") price.innerHTML=`฿30–100 <small>/ เที่ยว</small>`; else if(row.slug==="custom") price.innerHTML=`เสนอราคา <small>ตามรายละเอียด</small>`; else price.innerHTML=`เริ่มต้น ${v.price} <small>/ งาน</small>`; } }
+        const isCustom=!!item.is_custom||item.slug==="custom";
+        const variable=!!item.requires_distance||item.slug==="delivery";
+        serviceMeta[item.slug]={th:item.name,en:item.name,price:isCustom?"เสนอราคา":variable?"฿30–100":`฿${Number(item.price||0).toLocaleString("th-TH")}`,credits:Number(item.price||0),customQuote:isCustom,variablePrice:variable,description:item.description||""};
       });
       if(serviceSelect){
-        [...serviceSelect.options].forEach(opt=>{ const row=data.find(i=>i.slug===opt.value); if(row) opt.textContent=row.name; });
+        const selected=serviceSelect.value;
+        serviceSelect.innerHTML=data.map(x=>`<option value="${escapeHtml(x.slug)}">${escapeHtml(x.name)}</option>`).join("");
+        if(data.some(x=>x.slug===selected)) serviceSelect.value=selected;
       }
+      bindServiceButtons();
+      updateServiceSummary();
     }
 
-    loadPublicServices();
+    async function loadPublicAnnouncements(){
+      if(!supabaseClient) return;
+      const {data,error}=await supabaseClient.from("announcements").select("id,title,summary,content,icon,published_at,is_pinned").eq("is_published",true).order("is_pinned",{ascending:false}).order("published_at",{ascending:false}).limit(12);
+      if(error||!data) return;
+      const grid=document.getElementById("newsGrid"); if(!grid) return;
+      grid.innerHTML=data.map((item,index)=>`<article class="news-card reveal visible">
+        <div class="news-cover">${escapeHtml(item.icon||"📣")}</div><div class="news-content">
+        ${item.is_pinned?'<span class="announcement-pin">ประกาศสำคัญ</span>':''}
+        <div class="news-date">${new Date(item.published_at).toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})}</div>
+        <h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary||item.content||"")}</p>
+        <button class="read-more dynamic-news" data-title="${encodeURIComponent(item.title)}" data-content="${encodeURIComponent(item.content||item.summary||"")}">อ่านเพิ่มเติม →</button>
+        </div></article>`).join("")||'<div class="dynamic-empty">ยังไม่มีประกาศ</div>';
+      grid.querySelectorAll(".dynamic-news").forEach(btn=>btn.addEventListener("click",()=>{modalTitle.textContent=decodeURIComponent(btn.dataset.title);modalBody.textContent=decodeURIComponent(btn.dataset.content);modal.classList.add("open");}));
+    }
+
+    function escapeHtml(value){return String(value??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
+    function bindServiceButtons(){
+      document.querySelectorAll(".choose-service,.buy-now").forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound="1";btn.addEventListener("click",()=>{serviceSelect.value=btn.dataset.service;updateServiceSummary();showPage("hire");setTimeout(()=>serviceSelect.focus(),450);});});
+    }
 
     const newsDetails = {
       th: [
@@ -1773,6 +1817,8 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
     const supabaseClient = (appConfig.supabaseUrl && appConfig.supabaseAnonKey && window.supabase)
       ? window.supabase.createClient(appConfig.supabaseUrl, appConfig.supabaseAnonKey)
       : null;
+    loadPublicServices();
+    loadPublicAnnouncements();
     window.addEventListener("DOMContentLoaded", () => {
       const qr = document.getElementById("bankQrImage");
       if (qr && appConfig.bankQrImage) qr.src = appConfig.bankQrImage;
@@ -2058,34 +2104,31 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
     setInterval(updateClock, 1000);
 
     function updateServiceSummary() {
+      if(!serviceSelect) return;
       const serviceId = serviceSelect.value;
-      const meta = serviceMeta[serviceId];
-      const deliveryField = document.getElementById("deliveryDistanceField");
-      const customField = document.getElementById("customQuoteField");
+      const meta = serviceMeta[serviceId] || {th:"บริการ",en:"Service",price:"-",credits:0};
+      const isDelivery = !!meta.variablePrice;
+      const isCustom = !!meta.customQuote;
+      const distanceField = document.getElementById("deliveryDistanceField");
+      const quoteField = document.getElementById("customQuoteField");
       const distanceSelect = document.getElementById("deliveryDistance");
-      deliveryField.hidden = serviceId !== "delivery";
-      customField.hidden = serviceId !== "custom";
-      document.getElementById("proposedPrice").required = serviceId === "custom";
-      const deliveryPrice = Number(distanceSelect?.value || 30);
-      document.getElementById("sumService").textContent = meta[currentLang];
-      document.getElementById("sumPrice").textContent = serviceId === "delivery" ? `฿${deliveryPrice}` : meta.price;
-      document.getElementById("sumStatusText").textContent = serviceId === "custom" ? "รอแอดมินตรวจราคาเสนอ" : "พร้อมสั่งซื้อ";
+      const quoteInput = document.getElementById("proposedPrice");
+      if(distanceField) distanceField.hidden = !isDelivery;
+      if(quoteField) quoteField.hidden = !isCustom;
+      if(distanceSelect) distanceSelect.required = isDelivery;
+      if(quoteInput) quoteInput.required = isCustom;
+      const detailInput = document.getElementById("details");
+      if(detailInput) detailInput.placeholder = isDelivery ? "ระบุจุดรับ จุดส่ง ชนิดของ และเวลาที่สะดวก" : isCustom ? "อธิบายงานที่ต้องการให้ละเอียด เพื่อให้แอดมินพิจารณาราคาเสนอ" : "อธิบายรายละเอียดงานที่ต้องการ";
+      const deliveryPrice = Number(distanceSelect?.value || meta.credits || 30);
+      document.getElementById("sumService").textContent = meta[currentLang] || meta.th || "บริการ";
+      document.getElementById("sumPrice").textContent = isDelivery ? `฿${deliveryPrice}` : meta.price;
+      document.getElementById("sumStatusText").textContent = isCustom ? "รอแอดมินตรวจราคาเสนอ" : "พร้อมสั่งซื้อ";
       const submit = document.querySelector('#hireForm button[type="submit"]');
-      if(submit) submit.textContent = serviceId === "custom" ? "ส่ง Custom request ให้แอดมิน" : "ยืนยันซื้อบริการและหักเครดิต";
+      if(submit) submit.textContent = isCustom ? "ส่ง Custom request ให้แอดมิน" : "ยืนยันซื้อบริการและหักเครดิต";
     }
 
-    serviceSelect.addEventListener("change", updateServiceSummary);
+    serviceSelect?.addEventListener("change", updateServiceSummary);
     document.getElementById("deliveryDistance")?.addEventListener("change", updateServiceSummary);
-
-    document.querySelectorAll(".choose-service").forEach(btn => {
-      btn.addEventListener("click", () => {
-        serviceSelect.value = btn.dataset.service;
-        updateServiceSummary();
-        location.hash = "hire";
-        routeTo("hire");
-        setTimeout(() => serviceSelect.focus(), 450);
-      });
-    });
 
     document.querySelectorAll("[data-news]").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -2280,50 +2323,6 @@ input,textarea,select{background:#0d163e!important;border:1px solid rgba(184,196
       await Promise.all([loadWallet(), loadAccountCenter()]);
       return data;
     }
-
-    document.querySelectorAll(".buy-now").forEach(btn => btn.addEventListener("click", () => {
-      serviceSelect.value = btn.dataset.service;
-      updateServiceSummary();
-      location.hash = "hire"; routeTo("hire");
-      setTimeout(() => document.getElementById("customerName")?.focus(), 400);
-    }));
-
-    document.getElementById("hireForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const submit = e.submitter || e.target.querySelector('button[type="submit"]');
-      try {
-        if (!currentUser) { location.hash="wallet"; routeTo("wallet"); throw new Error("กรุณาเข้าสู่ระบบก่อนสั่งซื้อ"); }
-        const name = document.getElementById("customerName").value.trim();
-        const contact = document.getElementById("customerContact").value.trim();
-        const deadline = document.getElementById("deadline").value || null;
-        const details = document.getElementById("details").value.trim();
-        const serviceId = serviceSelect.value;
-        const meta = serviceMeta[serviceId];
-        if (!name || !contact || !details) throw new Error(translations[currentLang].modal.required);
-        if(serviceId === "custom") {
-          const proposedPrice=Number(document.getElementById("proposedPrice").value);
-          if(!Number.isInteger(proposedPrice) || proposedPrice < 1) throw new Error("กรุณากรอกราคาเสนอเป็นจำนวนเต็มมากกว่า 0");
-          submit.disabled=true; submit.textContent="กำลังส่งคำขอ...";
-          const {data:order,error}=await supabaseClient.rpc("submit_custom_request",{p_payload:{service_id:"custom",customer_name:name,contact,deadline,details,proposed_price:proposedPrice}});
-          if(error) throw error;
-          modalTitle.textContent="ส่งคำขอสำเร็จ";
-          SFX.play("hire"); modalBody.innerHTML=`<div class="order-success"><div class="check">✓</div><h2>ส่ง Custom request แล้ว</h2><p style="color:var(--muted);margin:8px 0 16px">ออเดอร์ #${String(order.order_id).slice(0,8)} ถูกส่งให้แอดมินตรวจราคาเสนอแล้ว</p><div class="summary-box"><div class="summary-line"><span>ราคาเสนอ</span><strong>${formatMoney(proposedPrice)}</strong></div><div class="summary-line"><span>การชำระเงิน</span><strong>ยังไม่หักเครดิต</strong></div></div></div>`;
-          modal.classList.add("open"); e.target.reset(); serviceSelect.value="custom"; updateServiceSummary(); showToast("ส่ง Custom request เรียบร้อยแล้ว");
-          return;
-        }
-        const chosenPrice = serviceId === "delivery" ? Number(document.getElementById("deliveryDistance").value) : meta?.credits;
-        if (!chosenPrice) throw new Error("ไม่พบราคาบริการ");
-        if (creditBalance < chosenPrice) { location.hash="wallet"; routeTo("wallet"); throw new Error("เครดิตไม่เพียงพอ กรุณาเติมเครดิตก่อน"); }
-        submit.disabled=true; submit.textContent="กำลังสร้างออเดอร์...";
-        const order = await purchaseService({service_id:serviceId,customer_name:name,contact,deadline,details,quoted_price:chosenPrice});
-        modalTitle.textContent="สั่งซื้อสำเร็จ";
-        SFX.play("hire"); modalBody.innerHTML=`<div class="order-success"><div class="check">✓</div><h2>ชำระด้วยเครดิตสำเร็จ</h2><p style="color:var(--muted);margin:8px 0 16px">ออเดอร์ #${String(order.order_id).slice(0,8)} ถูกส่งให้แอดมินแล้ว</p><div class="summary-box"><div class="summary-line"><span>บริการ</span><strong>${meta[currentLang]}</strong></div><div class="summary-line"><span>หักเครดิต</span><strong>${formatMoney(order.price)}</strong></div><div class="summary-line"><span>เครดิตคงเหลือ</span><strong>${formatMoney(order.remaining_balance)}</strong></div></div></div>`;
-        modal.classList.add("open");
-        e.target.reset(); serviceSelect.value=serviceId; updateServiceSummary();
-        showToast("สร้างคำสั่งซื้อเรียบร้อยแล้ว");
-      } catch(error) { showToast(error.message || "สั่งซื้อไม่สำเร็จ"); }
-      finally { submit.disabled=false; updateServiceSummary(); }
-    });
 
     document.getElementById("contactForm").addEventListener("submit", e => {
       e.preventDefault();
